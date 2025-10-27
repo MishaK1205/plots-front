@@ -5,6 +5,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatButtonModule } from '@angular/material/button';
+import { RouterOutlet, RouterModule } from '@angular/router';
+import { ADMIN_SIDEBAR_ITEMS } from '../constants/admin-sidebar-items';
 
 @Component({
   selector: 'app-admin',
@@ -15,25 +17,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatSidenavModule,
     MatListModule,
     MatButtonModule,
+    RouterOutlet,
+    RouterModule,
   ],
   templateUrl: './admin.html',
   styleUrl: './admin.scss',
 })
 export class Admin {
   isExpanded = true;
-  isShowing = false;
-  showSubmenu = false;
-  showSubSubMenu = false;
-
-  mouseenter() {
-    if (!this.isExpanded) {
-      this.isShowing = true;
-    }
-  }
-
-  mouseleave() {
-    if (!this.isExpanded) {
-      this.isShowing = false;
-    }
-  }
+  sidebarItems = ADMIN_SIDEBAR_ITEMS;
 }
