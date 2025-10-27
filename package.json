@@ -9,7 +9,8 @@
     "test": "ng test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "format:staged": "prettier --write --list-different"
+    "format:staged": "prettier --write --list-different",
+    "generate:api": "openapi-typescript http://localhost:3000/swagger-json -o src/app/api/types.ts"
   },
   "prettier": {
     "overrides": [
@@ -46,6 +47,7 @@
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "openapi-typescript": "^7.10.1",
     "prettier": "^3.6.2",
     "typescript": "~5.8.2"
   }
