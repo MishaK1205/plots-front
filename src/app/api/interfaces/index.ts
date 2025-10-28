@@ -3,9 +3,9 @@
  * Generated from Swagger documentation
  */
 
-export { CreateCompany } from './create-company.interface';
-export { Company } from './company.interface';
-export { UpdateCompany } from './update-company.interface';
-export { CreateProject } from './create-project.interface';
-export { Project } from './project.interface';
-export { UpdateProject } from './update-project.interface';
+export type { CreateCompany } from './create-company.interface';
+export type { Company } from './company.interface';
+export type { UpdateCompany } from './update-company.interface';
+export type { CreateProject } from './create-project.interface';
+export type { Project } from './project.interface';
+export type { UpdateProject } from './update-project.interface';
