@@ -179,7 +179,7 @@ export interface ${interfaceName} ${typeDefinition}
 function generateIndexFile(interfaces) {
   const exports = interfaces.map(({ fileName, interfaceName }) => {
     const importPath = `./${fileName.replace('.ts', '')}`;
-    return `export { ${interfaceName} } from '${importPath}';`;
+    return `export type { ${interfaceName} } from '${importPath}';`;
   }).join('\n');
 
   return `/**
