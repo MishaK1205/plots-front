@@ -10,7 +10,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "format:staged": "prettier --write --list-different",
-    "generate:api": "openapi-typescript http://localhost:3000/swagger-json -o src/app/api/types.ts"
+    "generate:interfaces": "node scripts/generate-individual-interfaces.js"
   },
   "prettier": {
     "overrides": [
