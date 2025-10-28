@@ -24,6 +24,6 @@ import { ADMIN_SIDEBAR_ITEMS } from '../constants/admin-sidebar-items';
   styleUrl: './admin.scss',
 })
 export class Admin {
-  isExpanded = true;
+  isExpanded = false;
   sidebarItems = ADMIN_SIDEBAR_ITEMS;
 }
