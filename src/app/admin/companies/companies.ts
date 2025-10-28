@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, ViewChild, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatPaginatorModule, MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -26,43 +26,41 @@ import { Company } from '../../api/interfaces/company.interface';
   styleUrl: './companies.scss',
 })
 export class Companies implements OnInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  private companiesService = inject(CompaniesService);
   
   displayedColumns: string[] = ['name', 'email', 'phone', 'city', 'status', 'createdAt', 'actions'];
   dataSource = new MatTableDataSource<Company>();
   
-  isLoading = false;
-  totalItems = 0;
-  pageSize = 10;
-  currentPage = 0;
-  
-  constructor(private companiesService: CompaniesService) {}
+  isLoading = signal(false);
+  totalItems = signal(0);
+  pageSize = signal(10);
+  currentPage = signal(0);
   
   ngOnInit(): void {
     this.loadCompanies();
   }
   
   loadCompanies(): void {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.companiesService.getAll({
-      page: this.currentPage + 1, // API uses 1-based pagination
-      limit: this.pageSize
+      page: this.currentPage() + 1, // API uses 1-based pagination
+      limit: this.pageSize()
     }).subscribe({
       next: (response: CompanyPaginatedResponse<Company>) => {
         this.dataSource.data = response.data;
-        this.totalItems = response.pagination.totalItems;
-        this.isLoading = false;
+        this.totalItems.set(response.pagination.totalItems);
+        this.isLoading.set(false);
       },
       error: (error) => {
         console.error('Error loading companies:', error);
-        this.isLoading = false;
+        this.isLoading.set(false);
       }
     });
   }
   
   onPageChange(event: PageEvent): void {
-    this.currentPage = event.pageIndex;
-    this.pageSize = event.pageSize;
+    this.currentPage.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
     this.loadCompanies();
   }
   

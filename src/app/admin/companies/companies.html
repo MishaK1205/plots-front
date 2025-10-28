@@ -9,7 +9,7 @@
 
   <mat-card class="table-card">
     <mat-card-content>
-      @if (!isLoading) {
+      @if (!isLoading()) {
         <div class="table-container">
           <table mat-table [dataSource]="dataSource" class="companies-table">
             <!-- Name Column -->
@@ -90,9 +90,9 @@
           </table>
 
           <mat-paginator
-            [length]="totalItems"
-            [pageIndex]="currentPage"
-            [pageSize]="pageSize"
+            [length]="totalItems()"
+            [pageIndex]="currentPage()"
+            [pageSize]="pageSize()"
             [pageSizeOptions]="[5, 10, 25, 50]"
             [showFirstLastButtons]="true"
             (page)="onPageChange($event)">
