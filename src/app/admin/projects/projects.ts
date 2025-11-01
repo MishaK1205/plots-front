@@ -8,11 +8,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterModule } from '@angular/router';
-import { CompaniesService } from '../../api/services/companies.service';
-import { CompanyResponseInterface, CompaniesResponseInterface } from '../../api/interfaces';
+import { ProjectsService } from '../../api/services/projects.service';
+import { ProjectResponseInterface, ProjectsResponseInterface } from '../../api/interfaces';
 
 @Component({
-  selector: 'app-companies',
+  selector: 'app-projects',
   imports: [
     CommonModule,
     MatTableModule,
@@ -24,14 +24,14 @@ import { CompanyResponseInterface, CompaniesResponseInterface } from '../../api/
     MatToolbarModule,
     RouterModule
   ],
-  templateUrl: './companies.html',
-  styleUrl: './companies.scss',
+  templateUrl: './projects.html',
+  styleUrl: './projects.scss',
 })
-export class Companies implements OnInit {
-  private companiesService = inject(CompaniesService);
+export class Projects implements OnInit {
+  private projectsService = inject(ProjectsService);
   
-  displayedColumns: string[] = ['name', 'email', 'phone', 'city', 'status', 'createdAt', 'actions'];
-  dataSource = new MatTableDataSource<CompanyResponseInterface>();
+  displayedColumns: string[] = ['name', 'developerCompanyName', 'locationName', 'propertyType', 'status', 'createdAt', 'actions'];
+  dataSource = new MatTableDataSource<ProjectResponseInterface>();
   
   isLoading = signal(false);
   totalItems = signal(0);
@@ -39,22 +39,22 @@ export class Companies implements OnInit {
   currentPage = signal(0);
   
   ngOnInit(): void {
-    this.loadCompanies();
+    this.loadProjects();
   }
   
-  loadCompanies(): void {
+  loadProjects(): void {
     this.isLoading.set(true);
-    this.companiesService.getAll({
+    this.projectsService.getAll({
       page: this.currentPage() + 1,
       limit: this.pageSize()
     }).subscribe({
-      next: (response: CompaniesResponseInterface) => {
+      next: (response: ProjectsResponseInterface) => {
         this.dataSource.data = response.data;
         this.totalItems.set(response.pagination.totalItems);
         this.isLoading.set(false);
       },
       error: (error) => {
-        console.error('Error loading companies:', error);
+        console.error('Error loading projects:', error);
         this.isLoading.set(false);
       }
     });
@@ -63,7 +63,7 @@ export class Companies implements OnInit {
   onPageChange(event: PageEvent): void {
     this.currentPage.set(event.pageIndex);
     this.pageSize.set(event.pageSize);
-    this.loadCompanies();
+    this.loadProjects();
   }
   
   formatDate(dateString: string): string {
@@ -76,10 +76,20 @@ export class Companies implements OnInit {
         return 'green';
       case 'INACTIVE':
         return 'gray';
-      case 'SUSPENDED':
-        return 'red';
       default:
         return 'gray';
     }
   }
+
+  getPropertyTypeLabel(propertyType: string): string {
+    switch (propertyType) {
+      case 'land':
+        return 'Land';
+      case 'land_with_house':
+        return 'Land with House';
+      default:
+        return propertyType;
+    }
+  }
 }
+

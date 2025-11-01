@@ -1,83 +1,68 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { 
-  Project, 
-  CreateProject, 
-  UpdateProject 
-} from '../interfaces';
-
-export interface ProjectQueryParams {
-  companyId?: string;
-  page?: number;
-  limit?: number;
-}
-
-export interface ProjectPaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    currentPage: number;
-    limit: number;
-    totalItems: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  };
-}
+import { ProjectResponseInterface } from '../interfaces/project/project-response.interface';
+import { CreateProjectInterface } from '../interfaces/project/create-project.interface';
+import { UpdateProjectInterface } from '../interfaces/project/update-project.interface';
+import { ProjectsResponseInterface } from '../interfaces/project/projects-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectsService {
-  private readonly baseUrl = 'http://localhost:3000/api';
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:3000/api';
 
   /**
-   * Get all projects with pagination or filter by company
+   * Get all projects with pagination and optional filtering
+   * @param params Query parameters (companyId, page, limit)
    */
-  getAll(queryParams?: ProjectQueryParams): Observable<ProjectPaginatedResponse<Project>> {
-    let params = new HttpParams();
-    if (queryParams) {
-      if (queryParams.companyId) {
-        params = params.set('companyId', queryParams.companyId);
-      }
-      if (queryParams.page !== undefined) {
-        params = params.set('page', queryParams.page.toString());
-      }
-      if (queryParams.limit !== undefined) {
-        params = params.set('limit', queryParams.limit.toString());
-      }
+  getAll(params?: { companyId?: string; page?: number; limit?: number }): Observable<ProjectsResponseInterface> {
+    let httpParams = new HttpParams();
+    if (params?.companyId) {
+      httpParams = httpParams.set('companyId', params.companyId);
     }
-    
-    return this.http.get<ProjectPaginatedResponse<Project>>(`${this.baseUrl}/projects`, { params });
+    if (params?.page) {
+      httpParams = httpParams.set('page', params.page.toString());
+    }
+    if (params?.limit) {
+      httpParams = httpParams.set('limit', params.limit.toString());
+    }
+
+    return this.http.get<ProjectsResponseInterface>(`${this.apiUrl}/projects`, { params: httpParams });
   }
 
   /**
    * Get a project by ID
+   * @param id Project UUID
    */
-  getById(id: string): Observable<Project> {
-    return this.http.get<Project>(`${this.baseUrl}/projects/${id}`);
+  getById(id: string): Observable<ProjectResponseInterface> {
+    return this.http.get<ProjectResponseInterface>(`${this.apiUrl}/projects/${id}`);
   }
 
   /**
    * Create a new project
+   * @param project Project data
    */
-  create(project: CreateProject): Observable<Project> {
-    return this.http.post<Project>(`${this.baseUrl}/projects`, project);
+  create(project: CreateProjectInterface): Observable<ProjectResponseInterface> {
+    return this.http.post<ProjectResponseInterface>(`${this.apiUrl}/projects`, project);
   }
 
   /**
    * Update a project by ID
+   * @param id Project UUID
+   * @param project Updated project data
    */
-  update(id: string, project: UpdateProject): Observable<Project> {
-    return this.http.put<Project>(`${this.baseUrl}/projects/${id}`, project);
+  update(id: string, project: UpdateProjectInterface): Observable<ProjectResponseInterface> {
+    return this.http.put<ProjectResponseInterface>(`${this.apiUrl}/projects/${id}`, project);
   }
 
   /**
    * Delete a project by ID
+   * @param id Project UUID
    */
   delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/projects/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/projects/${id}`);
   }
 }
+

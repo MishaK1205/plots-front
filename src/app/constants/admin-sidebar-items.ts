@@ -9,4 +9,9 @@ export const ADMIN_SIDEBAR_ITEMS = [
     icon: 'business',
     path: '/admin/companies',
   },
+  {
+    label: 'Projects',
+    icon: 'construction',
+    path: '/admin/projects',
+  }
 ];

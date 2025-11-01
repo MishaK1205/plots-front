@@ -1,79 +1,57 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { 
-  Company, 
-  CreateCompany, 
-  UpdateCompany 
-} from '../interfaces';
-
-export interface CompanyQueryParams {
-  page?: number;
-  limit?: number;
-}
-
-export interface CompanyPaginatedResponse<T> {
-  data: T[];
-  pagination: {
-    currentPage: number;
-    limit: number;
-    totalItems: number;
-    totalPages: number;
-    hasNextPage: boolean;
-    hasPreviousPage: boolean;
-  };
-}
+import { CompanyResponseInterface } from '../interfaces/company/company-response.interface';
+import { CreateCompanyInterface } from '../interfaces/company/create-company.interface';
+import { UpdateCompanyInterface } from '../interfaces/company/update-company.interface';
+import { CompaniesResponseInterface } from '../interfaces/company/companies-response.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CompaniesService {
-  private readonly baseUrl = 'http://localhost:3000/api';
-
-  constructor(private http: HttpClient) {}
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = 'http://localhost:3000/api';
 
   /**
    * Get all companies with pagination
+   * @param params Pagination parameters (page, limit)
    */
-  getAll(queryParams?: CompanyQueryParams): Observable<CompanyPaginatedResponse<Company>> {
-    let params = new HttpParams();
-    if (queryParams) {
-      if (queryParams.page !== undefined) {
-        params = params.set('page', queryParams.page.toString());
-      }
-      if (queryParams.limit !== undefined) {
-        params = params.set('limit', queryParams.limit.toString());
-      }
+  getAll(params?: { page?: number; limit?: number }): Observable<CompaniesResponseInterface> {
+    let httpParams = new HttpParams();
+    if (params?.page) {
+      httpParams = httpParams.set('page', params.page.toString());
     }
-    
-    return this.http.get<CompanyPaginatedResponse<Company>>(`${this.baseUrl}/companies`, { params });
+    if (params?.limit) {
+      httpParams = httpParams.set('limit', params.limit.toString());
+    }
+
+    return this.http.get<CompaniesResponseInterface>(`${this.apiUrl}/companies`, { params: httpParams });
   }
 
   /**
    * Get a company by ID
+   * @param id Company UUID
    */
-  getById(id: string): Observable<Company> {
-    return this.http.get<Company>(`${this.baseUrl}/companies/${id}`);
+  getById(id: string): Observable<CompanyResponseInterface> {
+    return this.http.get<CompanyResponseInterface>(`${this.apiUrl}/companies/${id}`);
   }
 
   /**
    * Create a new company
+   * @param company Company data
    */
-  create(company: CreateCompany): Observable<Company> {
-    return this.http.post<Company>(`${this.baseUrl}/companies`, company);
+  create(company: CreateCompanyInterface): Observable<CompanyResponseInterface> {
+    return this.http.post<CompanyResponseInterface>(`${this.apiUrl}/companies`, company);
   }
 
   /**
    * Update a company by ID
+   * @param id Company UUID
+   * @param company Updated company data
    */
-  update(id: string, company: UpdateCompany): Observable<Company> {
-    return this.http.put<Company>(`${this.baseUrl}/companies/${id}`, company);
-  }
-
-  /**
-   * Delete a company by ID
-   */
-  delete(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.baseUrl}/companies/${id}`);
+  update(id: string, company: UpdateCompanyInterface): Observable<CompanyResponseInterface> {
+    return this.http.put<CompanyResponseInterface>(`${this.apiUrl}/companies/${id}`, company);
   }
 }
+

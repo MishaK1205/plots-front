@@ -9,8 +9,7 @@
     "test": "ng test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "format:staged": "prettier --write --list-different",
-    "generate:interfaces": "node scripts/generate-individual-interfaces.js"
+    "format:staged": "prettier --write --list-different"
   },
   "prettier": {
     "overrides": [
