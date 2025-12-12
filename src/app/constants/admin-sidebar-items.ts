@@ -13,5 +13,10 @@ export const ADMIN_SIDEBAR_ITEMS = [
     label: 'Projects',
     icon: 'construction',
     path: '/admin/projects',
+  },
+  {
+    label: 'Lands',
+    icon: 'landscape',
+    path: '/admin/lands',
   }
 ];

@@ -20,6 +20,7 @@ import {
   CompanyResponseInterface
 } from '../../../api/interfaces';
 import { ImageUpload } from '../../../components/image-upload/image-upload';
+import { ImagesService } from '../../../api/services';
 
 @Component({
   selector: 'app-add-edit-project',
@@ -47,6 +48,7 @@ export class AddEditProject implements OnInit {
   private projectsService = inject(ProjectsService);
   private companiesService = inject(CompaniesService);
   private snackBar = inject(MatSnackBar);
+  private imagesService = inject(ImagesService);
 
   projectForm!: FormGroup;
   isEditMode = signal(false);
@@ -61,7 +63,7 @@ export class AddEditProject implements OnInit {
   }
 
   private loadCompanies(): void {
-    this.companiesService.getAll({ limit: 100 }).subscribe({
+    this.companiesService.getAll().subscribe({
       next: (response) => {
         this.companies.set(response.data);
       },
@@ -189,11 +191,27 @@ export class AddEditProject implements OnInit {
   }
 
   onCoverImageSelected(file: File): void {
-    this.projectForm.get('coverPhotoUrl')?.setValue(file);
+    this.imagesService.upload(file).subscribe({
+      next: (response) => {
+        this.projectForm.get('coverPhotoUrl')?.setValue(response.imageUrl);
+      },
+      error: (error) => {
+        console.error('Error uploading cover image:', error);
+        this.snackBar.open('Error uploading cover image', 'Close', { duration: 3000 });
+      }
+    });
   }
 
   onCoverImageRemoved(): void {
-    this.projectForm.get('coverPhotoUrl')?.setValue(null);
+    this.imagesService.delete(this.projectForm.get('coverPhotoUrl')?.value).subscribe({
+      next: () => {
+        this.projectForm.get('coverPhotoUrl')?.setValue(null);
+      },
+      error: (error) => {
+        console.error('Error deleting cover image:', error);
+        this.snackBar.open('Error deleting cover image', 'Close', { duration: 3000 });
+      }
+    });
   }
 }
 

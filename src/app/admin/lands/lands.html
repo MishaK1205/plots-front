@@ -1,0 +1,98 @@
+<div class="lands-container">
+  <mat-toolbar class="toolbar" color="primary">
+    <span>Lands Management</span>
+    <button mat-raised-button color="accent" routerLink="/admin/add-land">
+      <mat-icon>add</mat-icon>
+      Add Land
+    </button>
+  </mat-toolbar>
+
+  <mat-card class="table-card">
+    <mat-card-content>
+      @if (!isLoading()) {
+        <div class="table-container">
+          <table mat-table [dataSource]="dataSource" class="lands-table">
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+              <th mat-header-cell *matHeaderCellDef>Plot Name</th>
+              <td mat-cell *matCellDef="let land">
+                <strong>{{ land.name }}</strong>
+              </td>
+            </ng-container>
+
+            <!-- Cadastral Code Column -->
+            <ng-container matColumnDef="cadastralCode">
+              <th mat-header-cell *matHeaderCellDef>Cadastral Code</th>
+              <td mat-cell *matCellDef="let land">
+                {{ land.cadastralCode }}
+              </td>
+            </ng-container>
+
+            <!-- Square Meters Column -->
+            <ng-container matColumnDef="squareMeters">
+              <th mat-header-cell *matHeaderCellDef>Area (m²)</th>
+              <td mat-cell *matCellDef="let land">
+                {{ formatArea(land.squareMeters) }}
+              </td>
+            </ng-container>
+
+            <!-- Square Meter Price Column -->
+            <ng-container matColumnDef="squareMeterPrice">
+              <th mat-header-cell *matHeaderCellDef>Price/m²</th>
+              <td mat-cell *matCellDef="let land">
+                {{ formatPricePerSquareMeter(land.squareMeterPrice) }}
+              </td>
+            </ng-container>
+
+            <!-- Total Price Column -->
+            <ng-container matColumnDef="totalPrice">
+              <th mat-header-cell *matHeaderCellDef>Total Price</th>
+              <td mat-cell *matCellDef="let land">
+                {{ formatCurrency(land.totalPrice) }}
+              </td>
+            </ng-container>
+
+            <!-- Created At Column -->
+            <ng-container matColumnDef="createdAt">
+              <th mat-header-cell *matHeaderCellDef>Created</th>
+              <td mat-cell *matCellDef="let land">
+                {{ formatDate(land.createdAt) }}
+              </td>
+            </ng-container>
+
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let land">
+              <button mat-icon-button color="accent" title="Edit" [routerLink]="['/admin/edit-land', land.id]">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" title="Delete">
+                <mat-icon>delete</mat-icon>
+              </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+          <mat-paginator
+            [length]="totalItems()"
+            [pageIndex]="currentPage()"
+            [pageSize]="pageSize()"
+            [pageSizeOptions]="[5, 10, 25, 50]"
+            [showFirstLastButtons]="true"
+            (page)="onPageChange($event)">
+          </mat-paginator>
+        </div>
+      } @else {
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>Loading lands...</p>
+        </div>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>
+

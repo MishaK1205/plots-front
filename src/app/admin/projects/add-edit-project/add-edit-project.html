@@ -25,7 +25,7 @@
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Developer Company *</mat-label>
+              <mat-label>Developer Company</mat-label>
               <mat-select formControlName="companyId">
                 @for (company of companies(); track company.id) {
                   <mat-option [value]="company.id">
@@ -100,7 +100,9 @@
 
           <div class="form-row">
             <div class="form-field">
-              <app-image-upload 
+              <app-image-upload
+                label="Project Image"
+                [maxSizeMB]="5"
                 [existingImageUrl]="projectForm.get('coverPhotoUrl')?.value ? `http://localhost:3000${projectForm.get('coverPhotoUrl')?.value}` : undefined" 
                 (imageSelected)="onCoverImageSelected($event)"
                 (imageRemoved)="onCoverImageRemoved()"

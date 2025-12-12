@@ -8,5 +8,8 @@ export const adminRoutes: Routes = [
   { path: 'edit-company/:id', loadComponent: () => import('./companies/add-edit-company/add-edit-company').then(m => m.AddEditCompany) },
   { path: 'projects', loadComponent: () => import('./projects/projects').then(m => m.Projects) },
   { path: 'add-project', loadComponent: () => import('./projects/add-edit-project/add-edit-project').then(m => m.AddEditProject) },
-  { path: 'edit-project/:id', loadComponent: () => import('./projects/add-edit-project/add-edit-project').then(m => m.AddEditProject) }
+  { path: 'edit-project/:id', loadComponent: () => import('./projects/add-edit-project/add-edit-project').then(m => m.AddEditProject) },
+  { path: 'lands', loadComponent: () => import('./lands/lands').then(m => m.Lands) },
+  { path: 'add-land', loadComponent: () => import('./lands/add-edit-land/add-edit-land').then(m => m.AddEditLand) },
+  { path: 'edit-land/:id', loadComponent: () => import('./lands/add-edit-land/add-edit-land').then(m => m.AddEditLand) }
 ];
