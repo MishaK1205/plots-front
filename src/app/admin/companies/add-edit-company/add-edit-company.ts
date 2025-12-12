@@ -11,12 +11,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
-import { CompaniesService } from '../../../api/services/companies.service';
 import { 
   CompanyResponseInterface, 
   CreateCompanyInterface, 
   UpdateCompanyInterface 
 } from '../../../api/interfaces';
+import { ImageUpload } from '../../../components/image-upload/image-upload';
+import { ImagesService, CompaniesService } from '../../../api/services';
 
 @Component({
   selector: 'app-add-edit-company',
@@ -31,7 +32,8 @@ import {
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatSelectModule
+    MatSelectModule,
+    ImageUpload
   ],
   templateUrl: './add-edit-company.html',
   styleUrl: './add-edit-company.scss',
@@ -40,6 +42,7 @@ export class AddEditCompany implements OnInit {
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private imagesService = inject(ImagesService);
   private companiesService = inject(CompaniesService);
   private snackBar = inject(MatSnackBar);
 
@@ -47,6 +50,10 @@ export class AddEditCompany implements OnInit {
   isEditMode = signal(false);
   isLoading = signal(false);
   companyId = signal<string | null>(null);
+  logoFile = signal<File | null>(null);
+  coverImageFile = signal<File | null>(null);
+  logoImageId = signal<string | null>(null);
+  coverImageId = signal<string | null>(null);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -92,6 +99,60 @@ export class AddEditCompany implements OnInit {
         this.snackBar.open('Error loading company details', 'Close', { duration: 3000 });
         this.isLoading.set(false);
         this.router.navigate(['/admin/companies']);
+      }
+    });
+  }
+
+  onLogoSelected(file: File): void {
+    this.imagesService.upload(file).subscribe({
+      next: (response) => {
+        this.logoImageId.set(response.id);
+        const logoUrl = response.imageUrl;
+        this.companyForm.patchValue({ logoUrl });
+      },
+      error: (error) => {
+        console.error('Error uploading logo:', error);
+        this.snackBar.open('Error uploading logo', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  onLogoRemoved(): void {
+    this.imagesService.delete(this.logoImageId()!).subscribe({
+      next: () => {
+        this.logoImageId.set(null);
+        this.companyForm.patchValue({ logoUrl: '' });
+      },
+      error: (error) => {
+        console.error('Error deleting logo:', error);
+        this.snackBar.open('Error deleting logo', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  onCoverImageSelected(file: File): void {
+    this.imagesService.upload(file).subscribe({
+      next: (response) => {
+        this.coverImageId.set(response.id);
+        const coverImageUrl = response.imageUrl;
+        this.companyForm.patchValue({ coverImageUrl });
+      },
+      error: (error) => {
+        console.error('Error uploading cover image:', error);
+        this.snackBar.open('Error uploading cover image', 'Close', { duration: 3000 });
+      }
+    });
+  }
+
+  onCoverImageRemoved(): void {
+    this.imagesService.delete(this.coverImageId()!).subscribe({
+      next: () => {
+        this.coverImageId.set(null);
+        this.companyForm.patchValue({ coverImageUrl: '' });
+      },
+      error: (error) => {
+        console.error('Error deleting cover image:', error);
+        this.snackBar.open('Error deleting cover image', 'Close', { duration: 3000 });
       }
     });
   }

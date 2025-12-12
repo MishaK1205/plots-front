@@ -7,4 +7,5 @@ export * from './project/project-response.interface';
 export * from './project/projects-response.interface';
 export * from './project/create-project.interface';
 export * from './project/update-project.interface';
+export * from './images/image-response.interface';
 

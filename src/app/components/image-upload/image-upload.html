@@ -1,0 +1,50 @@
+<div class="image-upload-container">
+  <div class="upload-area">
+    @if (selectedImage()) {
+      <div class="image-preview">
+        <img [src]="getSafeImageUrl(selectedImage()!)" alt="Preview" class="preview-image">
+        <div class="image-overlay">
+          <button mat-icon-button color="primary" (click)="triggerFileInput()" title="Change Image">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="removeImage()" title="Remove Image">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+    } @else {
+      <div class="upload-placeholder" (click)="triggerFileInput()">
+        @if (isUploading()) {
+          <mat-spinner diameter="40"></mat-spinner>
+          <p>Uploading...</p>
+        } @else {
+          <mat-icon class="upload-icon">cloud_upload</mat-icon>
+          <p class="upload-text">{{ label() }}</p>
+          <p class="upload-hint">{{ 'Max size: ' + maxSizeMB() + 'MB' }}</p>
+        }
+      </div>
+    }
+  </div>
+
+  <input 
+    type="file" 
+    [id]="fileInputId"
+    style="display: none;" 
+    [accept]="acceptedFormats().join(',')"
+    (change)="onFileSelected($event)">
+
+  @if (errorMessage()) {
+    <div class="error-message">
+      <mat-icon>error</mat-icon>
+      <span>{{ errorMessage() }}</span>
+    </div>
+  }
+
+  @if (!selectedImage() && required()) {
+    <div class="required-hint">
+      <mat-icon>info</mat-icon>
+      <span>This field is required</span>
+    </div>
+  }
+</div>
+

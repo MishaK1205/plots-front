@@ -19,6 +19,7 @@ import {
   UpdateProjectInterface,
   CompanyResponseInterface
 } from '../../../api/interfaces';
+import { ImageUpload } from '../../../components/image-upload/image-upload';
 
 @Component({
   selector: 'app-add-edit-project',
@@ -33,7 +34,8 @@ import {
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatSelectModule
+    MatSelectModule,
+    ImageUpload
   ],
   templateUrl: './add-edit-project.html',
   styleUrl: './add-edit-project.scss',
@@ -184,6 +186,14 @@ export class AddEditProject implements OnInit {
       if (field.errors['minlength']) return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
     }
     return '';
+  }
+
+  onCoverImageSelected(file: File): void {
+    this.projectForm.get('coverPhotoUrl')?.setValue(file);
+  }
+
+  onCoverImageRemoved(): void {
+    this.projectForm.get('coverPhotoUrl')?.setValue(null);
   }
 }
 

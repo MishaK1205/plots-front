@@ -105,15 +105,25 @@
           </div>
 
           <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Logo URL</mat-label>
-              <input matInput formControlName="logoUrl" placeholder="https://example.com/logo.png">
-            </mat-form-field>
+            <div class="form-field">
+              <app-image-upload
+                label="Company Logo"
+                [maxSizeMB]="5"
+                [existingImageUrl]="companyForm.get('logoUrl')?.value ? `http://localhost:3000${companyForm.get('logoUrl')?.value}` : undefined"
+                (imageSelected)="onLogoSelected($event)"
+                (imageRemoved)="onLogoRemoved()">
+              </app-image-upload>
+            </div>
 
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Cover Image URL</mat-label>
-              <input matInput formControlName="coverImageUrl" placeholder="https://example.com/cover.jpg">
-            </mat-form-field>
+            <div class="form-field">
+              <app-image-upload
+                label="Cover Image"
+                [maxSizeMB]="5"
+                [existingImageUrl]="companyForm.get('coverImageUrl')?.value ? `http://localhost:3000${companyForm.get('coverImageUrl')?.value}` : undefined"
+                (imageSelected)="onCoverImageSelected($event)"
+                (imageRemoved)="onCoverImageRemoved()">
+              </app-image-upload>
+            </div>
           </div>
 
           <div class="form-actions">

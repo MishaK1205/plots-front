@@ -27,9 +27,11 @@
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Developer Company *</mat-label>
               <mat-select formControlName="companyId">
-                <mat-option *ngFor="let company of companies()" [value]="company.id">
-                  {{ company.name }}
-                </mat-option>
+                @for (company of companies(); track company.id) {
+                  <mat-option [value]="company.id">
+                    {{ company.name }}
+                  </mat-option>
+                }
               </mat-select>
               @if (getFieldError('companyId')) {
                 <mat-error>{{ getFieldError('companyId') }}</mat-error>
@@ -94,11 +96,16 @@
                 <mat-option value="INACTIVE">Inactive</mat-option>
               </mat-select>
             </mat-form-field>
+          </div>
 
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Cover Photo URL</mat-label>
-              <input matInput formControlName="coverPhotoUrl" placeholder="https://example.com/cover.jpg">
-            </mat-form-field>
+          <div class="form-row">
+            <div class="form-field">
+              <app-image-upload 
+                [existingImageUrl]="projectForm.get('coverPhotoUrl')?.value ? `http://localhost:3000${projectForm.get('coverPhotoUrl')?.value}` : undefined" 
+                (imageSelected)="onCoverImageSelected($event)"
+                (imageRemoved)="onCoverImageRemoved()"
+              ></app-image-upload>
+            </div>
           </div>
 
           <div class="form-row">
