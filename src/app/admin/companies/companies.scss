@@ -5,9 +5,9 @@
     gap: 24px;
     
     mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
+      font-size: 1.8rem;
+      width: 1.8rem;
+      height: 1.8rem;
     }
   }
 
@@ -41,7 +41,7 @@
       
       .slug {
         color: #666;
-        font-size: 0.8em;
+        font-size: 0.8rem;
         margin-top: 2px;
       }
     }
@@ -58,7 +58,7 @@
     .status-badge {
       font-weight: 600;
       text-transform: uppercase;
-      font-size: 0.8em;
+      font-size: 0.8rem;
       padding: 4px 8px;
       border-radius: 4px;
       background-color: rgba(0, 0, 0, 0.1);
