@@ -9,5 +9,24 @@ import { RouterModule } from '@angular/router';
   styleUrl: './header.scss',
 })
 export class Header {
+  headerItems = [
+    {
+      label: 'პროექტები',
+      path: '/projects',
+    },
+    {
+      label: 'სტატისტიკა',
+      path: '/statistics',
+    },
+    {
+      label: 'ბლოგი',
+      path: '/blog',
+    },
+    {
+      label: 'კონტაქტი',
+      path: '/contact',
+    },
+  ]
+  menuOpen = false;
 }
 

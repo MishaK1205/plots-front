@@ -1,0 +1,26 @@
+@use "sass:math";
+
+/**
+ * PX to REM Calculator Function
+ * 
+ * Converts pixel values to rem units based on the root font size (default: 16px)
+ * 
+ * @param {Number} $px - The pixel value to convert
+ * @param {Number} $base-font-size - The base font size in pixels (default: 16px)
+ * @return {Number} - The converted value in rem units
+ * 
+ * @example
+ *   font-size: px-to-rem(16); // 1rem
+ *   padding: px-to-rem(24); // 1.5rem
+ *   margin: px-to-rem(32, 16); // 2rem
+ */
+@function px-to-rem($px, $base-font-size: 16) {
+  @if math.is-unitless($px) {
+    @return math.div($px, $base-font-size) * 1rem;
+  } @else {
+    // If px value has unit, strip it and convert
+    $px-value: math.div($px, 1px);
+    @return math.div($px-value, $base-font-size) * 1rem;
+  }
+}
+

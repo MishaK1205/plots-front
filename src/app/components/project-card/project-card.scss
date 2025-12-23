@@ -1,0 +1,30 @@
+@use "../../tools/_px-to-rem.scss" as *;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.project-card {
+  width: 100%;
+
+  &__image {
+    width: px-to-rem(285px);
+    height: px-to-rem(200px);
+    object-fit: cover;
+    border-radius: px-to-rem(16px);
+  }
+
+  &__title {
+    font-size: px-to-rem(16px);
+    font-weight: 600;
+    color: #111111;
+  }
+
+  &__developer-company-name {
+    font-size: px-to-rem(12px);
+    font-weight: 400;
+    color: #484848;
+  }
+}
+

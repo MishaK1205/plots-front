@@ -1,6 +1,70 @@
 <footer class="footer">
-  <div class="footer-container">
-    <p>&copy; {{ currentYear }} Plots. All rights reserved.</p>
+  <div class="footer__container">
+    <!-- Logo -->
+    <div class="footer__logo">
+      <img src="assets/footer-logo.svg" alt="Plots" />
+    </div>
+
+    <!-- Top content -->
+    <div class="footer__content">
+      <!-- Description -->
+      <div class="footer__description">
+        <p>
+          მიწის ნაკვეთები, სააგარაკე მიწები, ურბან პროექტები ერთ სივრცეში
+        </p>
+      </div>
+
+      <!-- Platforms -->
+      <nav class="footer__column">
+        <h2 class="footer__title">პლატფორმები</h2>
+        <ul class="footer__list">
+          @for (platform of platforms; track platform.name) {
+            <li>
+              <a [href]="platform.link">{{ platform.name }}</a>
+            </li>
+          }
+        </ul>
+      </nav>
+
+      <!-- Company -->
+      <nav class="footer__column">
+        <h2 class="footer__title">კომპანია</h2>
+        <ul class="footer__list">
+          @for (item of company; track item.name) {
+            <li>
+              <a [href]="item.link">{{ item.name }}</a>
+            </li>
+          }
+        </ul>
+      </nav>
+
+      <!-- Contact -->
+      <div class="footer__column footer__contact">
+        <h2 class="footer__title">საკონტაქტო ინფორმაცია</h2>
+
+        <ul class="footer__list">
+          <li>+995 577 03 36 44</li>
+          <li>+995 32 2 290 492</li>
+          <li>
+            <a href="mailto:contact@plots.ge">contact@plots.ge</a>
+          </li>
+        </ul>
+
+        <ul class="footer__socials">
+          @for (social of socialLinks; track social.image) {
+            <li>
+              <a [href]="social.link" target="_blank" rel="noopener">
+                <img [src]="social.image" [alt]="social.alt" />
+              </a>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom -->
+    <div class="footer__bottom">
+      <!-- © {{ new Date().getFullYear() }} Plots. All rights reserved. -->
+    </div>
   </div>
 </footer>
-

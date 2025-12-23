@@ -1,0 +1,12 @@
+@use "../../tools/_px-to-rem.scss" as *;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.home-container {
+  width: 100%;
+  padding: px-to-rem(0px) px-to-rem(150px);
+}
+

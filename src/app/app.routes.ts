@@ -4,6 +4,13 @@ export const routes: Routes = [
   {
     path: '',
     loadComponent: () => import('./pages/layout/layout').then(m => m.Layout),
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        loadComponent: () => import('./pages/home/home').then(m => m.Home),
+      }
+    ]
   },
   {
     path: 'admin',

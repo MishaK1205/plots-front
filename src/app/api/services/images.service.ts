@@ -21,6 +21,6 @@ export class ImagesService {
   }
 
   delete(id: string): Observable<void> {
-    return this.api.delete<void>(`/images/${id}`);
+    return this.api.delete<void>(`${id}`);
   }
 }

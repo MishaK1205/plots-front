@@ -1,0 +1,43 @@
+<div class="google-maps-container">
+  <div class="map-search-container">
+    <mat-form-field appearance="outline" class="location-search-field">
+      <mat-label>Search for a location</mat-label>
+      <input
+        matInput
+        [formControl]="locationSearchControl"
+        [matAutocomplete]="locationAutocomplete"
+        placeholder="Type a place or street name..."
+        autocomplete="off">
+      <mat-icon matPrefix>search</mat-icon>
+      <mat-autocomplete
+        #locationAutocomplete="matAutocomplete"
+        [displayWith]="displayLocationFn"
+        (optionSelected)="onLocationSelected($event.option.value)">
+        @for (suggestion of locationSuggestions(); track suggestion.place_id || $index) {
+          <mat-option [value]="suggestion">
+            <div class="suggestion-option">
+              <mat-icon class="suggestion-icon">place</mat-icon>
+              <div class="suggestion-text">
+                <div class="suggestion-main">{{ suggestion.structured_formatting?.main_text || suggestion.description }}</div>
+                @if (suggestion.structured_formatting?.secondary_text) {
+                  <div class="suggestion-secondary">{{ suggestion.structured_formatting.secondary_text }}</div>
+                }
+              </div>
+            </div>
+          </mat-option>
+        }
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+  
+  <google-map
+    [height]="height()"
+    width="100%"
+    [center]="center"
+    [zoom]="zoom"
+    [options]="mapOptions"
+    (mapInitialized)="onMapInitialized($event)"
+    (mapClick)="onMapClick($event)">
+  </google-map>
+</div>
+

@@ -1,7 +1,9 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,44 +13,49 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
+
 import { ProjectsService } from '../../../api/services/projects.service';
 import { CompaniesService } from '../../../api/services/companies.service';
-import { 
-  ProjectResponseInterface, 
-  CreateProjectInterface, 
-  UpdateProjectInterface,
-  CompanyResponseInterface
-} from '../../../api/interfaces';
-import { ImageUpload } from '../../../components/image-upload/image-upload';
 import { ImagesService } from '../../../api/services';
+import { ProjectResponseInterface, CompanyResponseInterface } from '../../../api/interfaces';
+
+import { ImageUpload } from '../../../components/image-upload/image-upload';
+import { GoogleMaps, LocationSelectedEvent } from '../../../components/google-maps/google-maps';
+
+const MATERIAL_MODULES = [
+  MatCardModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatButtonModule,
+  MatIconModule,
+  MatToolbarModule,
+  MatProgressSpinnerModule,
+  MatSnackBarModule,
+  MatSelectModule,
+];
 
 @Component({
   selector: 'app-add-edit-project',
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    MatCardModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatProgressSpinnerModule,
-    MatSnackBarModule,
-    MatSelectModule,
-    ImageUpload
+    ImageUpload,
+    GoogleMaps,
+    ...MATERIAL_MODULES,
   ],
   templateUrl: './add-edit-project.html',
   styleUrl: './add-edit-project.scss',
 })
 export class AddEditProject implements OnInit {
-  private fb = inject(FormBuilder);
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private projectsService = inject(ProjectsService);
-  private companiesService = inject(CompaniesService);
-  private snackBar = inject(MatSnackBar);
-  private imagesService = inject(ImagesService);
+  private readonly fb = inject(FormBuilder);
+  private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly destroyRef$ = inject(DestroyRef);
+
+  private readonly projectsService = inject(ProjectsService);
+  private readonly companiesService = inject(CompaniesService);
+  private readonly imagesService = inject(ImagesService);
 
   projectForm!: FormGroup;
   isEditMode = signal(false);
@@ -57,20 +64,9 @@ export class AddEditProject implements OnInit {
   companies = signal<CompanyResponseInterface[]>([]);
 
   ngOnInit(): void {
-    this.loadCompanies();
     this.initializeForm();
+    this.loadCompanies();
     this.checkEditMode();
-  }
-
-  private loadCompanies(): void {
-    this.companiesService.getAll().subscribe({
-      next: (response) => {
-        this.companies.set(response.data);
-      },
-      error: (error) => {
-        console.error('Error loading companies:', error);
-      }
-    });
   }
 
   private initializeForm(): void {
@@ -84,7 +80,7 @@ export class AddEditProject implements OnInit {
       companyId: ['', [Validators.required]],
       status: ['ACTIVE', [Validators.required]],
       coverPhotoUrl: [''],
-      videoUrl: ['']
+      videoUrl: [''],
     });
   }
 
@@ -97,121 +93,147 @@ export class AddEditProject implements OnInit {
     }
   }
 
+  private loadCompanies(): void {
+    this.companiesService
+      .getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => this.companies.set(response.data),
+        error: () => this.showError('Failed to load companies'),
+      });
+  }
+
   private loadProject(id: string): void {
     this.isLoading.set(true);
-    this.projectsService.getById(id).subscribe({
-      next: (project: ProjectResponseInterface) => {
-        this.projectForm.patchValue({
-          name: project.name,
-          description: project.description,
-          latitude: project.latitude,
-          longitude: project.longitude,
-          locationName: project.locationName,
-          propertyType: project.propertyType,
-          companyId: project.companyId,
-          status: project.status,
-          coverPhotoUrl: project.coverPhotoUrl,
-          videoUrl: project.videoUrl
-        });
-        this.isLoading.set(false);
-      },
-      error: (error: any) => {
-        console.error('Error loading project:', error);
-        this.snackBar.open('Error loading project details', 'Close', { duration: 3000 });
-        this.isLoading.set(false);
-        this.router.navigate(['/admin/projects']);
-      }
+
+    this.projectsService
+      .getById(id)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (project) => {
+          this.populateForm(project);
+          this.isLoading.set(false);
+        },
+        error: () => {
+          this.showError('Failed to load project details');
+          this.isLoading.set(false);
+          this.router.navigate(['/admin/projects']);
+        },
+      });
+  }
+
+  private populateForm(project: ProjectResponseInterface): void {
+    this.projectForm.patchValue({
+      name: project.name,
+      description: project.description,
+      latitude: project.latitude,
+      longitude: project.longitude,
+      locationName: project.locationName,
+      propertyType: project.propertyType,
+      companyId: project.companyId,
+      status: project.status,
+      coverPhotoUrl: project.coverPhotoUrl,
+      videoUrl: project.videoUrl,
+    });
+  }
+
+  onLocationSelected(event: LocationSelectedEvent): void {
+    this.projectForm.patchValue({
+      latitude: event.position.lat,
+      longitude: event.position.lng,
+      locationName: event.formattedAddress,
     });
   }
 
   onSubmit(): void {
-    if (this.projectForm.valid) {
-      this.isLoading.set(true);
-      const formData = this.projectForm.value;
-
-      if (this.isEditMode()) {
-        this.updateProject(formData);
-      } else {
-        this.createProject(formData);
-      }
-    } else {
+    if (!this.projectForm.valid) {
       this.markFormGroupTouched();
+      return;
     }
-  }
 
-  private createProject(data: CreateProjectInterface): void {
-    this.projectsService.create(data).subscribe({
-      next: (project: ProjectResponseInterface) => {
-        this.snackBar.open('Project created successfully', 'Close', { duration: 3000 });
+    this.isLoading.set(true);
+
+    const operation$ = this.isEditMode()
+      ? this.projectsService.update(this.projectId()!, this.projectForm.value)
+      : this.projectsService.create(this.projectForm.value);
+
+    operation$.pipe(takeUntilDestroyed(this.destroyRef$)).subscribe({
+      next: () => {
+        this.showSuccess(this.isEditMode() ? 'Project updated successfully' : 'Project created successfully');
         this.router.navigate(['/admin/projects']);
       },
-      error: (error: any) => {
-        console.error('Error creating project:', error);
-        this.snackBar.open('Error creating project', 'Close', { duration: 3000 });
+      error: () => {
+        this.showError(this.isEditMode() ? 'Failed to update project' : 'Failed to create project');
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
-  private updateProject(data: UpdateProjectInterface): void {
-    const id = this.projectId();
-    if (id) {
-      this.projectsService.update(id, data).subscribe({
-        next: (project: ProjectResponseInterface) => {
-          this.snackBar.open('Project updated successfully', 'Close', { duration: 3000 });
-          this.router.navigate(['/admin/projects']);
+  onCoverImageSelected(file: File): void {
+    this.imagesService
+      .upload(file)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => {
+          this.projectForm.get('coverPhotoUrl')?.setValue(response.imageUrl);
+          this.showSuccess('Image uploaded successfully');
         },
-        error: (error: any) => {
-          console.error('Error updating project:', error);
-          this.snackBar.open('Error updating project', 'Close', { duration: 3000 });
-          this.isLoading.set(false);
-        }
+        error: () => this.showError('Failed to upload image'),
       });
+  }
+
+  onCoverImageRemoved(): void {
+    const imageUrl = this.projectForm.get('coverPhotoUrl')?.value;
+    if (!imageUrl) return;
+
+    this.imagesService
+      .delete(imageUrl)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: () => {
+          this.projectForm.get('coverPhotoUrl')?.setValue(null);
+          this.showSuccess('Image removed successfully');
+        },
+        error: () => this.showError('Failed to remove image'),
+      });
+  }
+
+  getFieldError(fieldName: string): string {
+    const field = this.projectForm.get(fieldName);
+    if (!field?.errors || !field.touched) return '';
+
+    if (field.errors['required']) {
+      return `${this.formatFieldName(fieldName)} is required`;
     }
+    if (field.errors['minlength']) {
+      return `${this.formatFieldName(fieldName)} must be at least ${field.errors['minlength'].requiredLength} characters`;
+    }
+    return '';
+  }
+
+  private formatFieldName(fieldName: string): string {
+    return fieldName.replace(/([A-Z])/g, ' $1').toLowerCase().trim();
   }
 
   private markFormGroupTouched(): void {
-    Object.keys(this.projectForm.controls).forEach(key => {
-      const control = this.projectForm.get(key);
-      control?.markAsTouched();
-    });
+    Object.values(this.projectForm.controls).forEach((control) => control.markAsTouched());
   }
 
   onCancel(): void {
     this.router.navigate(['/admin/projects']);
   }
 
-  getFieldError(fieldName: string): string {
-    const field = this.projectForm.get(fieldName);
-    if (field?.errors && field.touched) {
-      if (field.errors['required']) return `${fieldName} is required`;
-      if (field.errors['minlength']) return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
-    }
-    return '';
-  }
-
-  onCoverImageSelected(file: File): void {
-    this.imagesService.upload(file).subscribe({
-      next: (response) => {
-        this.projectForm.get('coverPhotoUrl')?.setValue(response.imageUrl);
-      },
-      error: (error) => {
-        console.error('Error uploading cover image:', error);
-        this.snackBar.open('Error uploading cover image', 'Close', { duration: 3000 });
-      }
+  private showSuccess(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['success-snackbar'],
     });
   }
 
-  onCoverImageRemoved(): void {
-    this.imagesService.delete(this.projectForm.get('coverPhotoUrl')?.value).subscribe({
-      next: () => {
-        this.projectForm.get('coverPhotoUrl')?.setValue(null);
-      },
-      error: (error) => {
-        console.error('Error deleting cover image:', error);
-        this.snackBar.open('Error deleting cover image', 'Close', { duration: 3000 });
-      }
+  private showError(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 3000,
+      panelClass: ['error-snackbar'],
     });
   }
 }
-

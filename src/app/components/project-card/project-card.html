@@ -1,0 +1,9 @@
+<div class="project-card">
+  <img class="project-card__image" [src]="project().coverPhotoUrl?.startsWith('/api') ? `http://localhost:3000${project().coverPhotoUrl}` : project().coverPhotoUrl" alt="Project Image">
+
+  <h1 class="project-card__title">{{ project().name }}</h1>
+  <p class="project-card__developer-company-name">დეველოპერი:{{ project().developerCompanyName }}</p>
+
+  <span></span>
+</div>
+

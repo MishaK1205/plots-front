@@ -1,13 +1,42 @@
 <header class="header">
-  <div class="header-container">
-    <div class="logo">
-      <a routerLink="/">
+  <div class="header__container">
+    <!-- Left -->
+    <div class="header__left">
+      <!-- Mobile menu button -->
+      <button
+        class="header__burger"
+        aria-label="Toggle menu"
+        (click)="menuOpen = !menuOpen"
+      >
+        ☰
+      </button>
+
+      <a class="header__logo" routerLink="/">
         <img src="assets/logo.svg" alt="Plots" />
       </a>
+
+      <nav class="nav" [class.nav--open]="menuOpen">
+        <ul class="nav__list">
+          @for (item of headerItems; track item.path) {
+            <li class="nav__item">
+              <a
+                class="nav__link"
+                routerLink="{{ item.path }}"
+                (click)="menuOpen = false"
+              >
+                {{ item.label }}
+              </a>
+            </li>
+          }
+        </ul>
+      </nav>
     </div>
-    <nav class="nav">
-     
-    </nav>
+
+    <!-- Right -->
+    <div class="header__right">
+      <button class="header__login-btn">
+        Login
+      </button>
+    </div>
   </div>
 </header>
-
