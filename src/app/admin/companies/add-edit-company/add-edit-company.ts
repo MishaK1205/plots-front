@@ -1,6 +1,11 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -11,10 +16,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
-import { 
-  CompanyResponseInterface, 
-  CreateCompanyInterface, 
-  UpdateCompanyInterface 
+import {
+  CompanyResponseInterface,
+  CreateCompanyInterface,
+  UpdateCompanyInterface,
 } from '../../../api/interfaces';
 import { ImageUpload } from '../../../components/image-upload/image-upload';
 import { ImagesService, CompaniesService } from '../../../api/services';
@@ -33,7 +38,7 @@ import { ImagesService, CompaniesService } from '../../../api/services';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatSelectModule,
-    ImageUpload
+    ImageUpload,
   ],
   templateUrl: './add-edit-company.html',
   styleUrl: './add-edit-company.scss',
@@ -74,7 +79,7 @@ export class AddEditCompany implements OnInit {
       description: [''],
       logoUrl: [''],
       coverImageUrl: [''],
-      status: ['ACTIVE', [Validators.required]]
+      status: ['ACTIVE', [Validators.required]],
     });
   }
 
@@ -96,10 +101,12 @@ export class AddEditCompany implements OnInit {
       },
       error: (error: any) => {
         console.error('Error loading company:', error);
-        this.snackBar.open('Error loading company details', 'Close', { duration: 3000 });
+        this.snackBar.open('Error loading company details', 'Close', {
+          duration: 3000,
+        });
         this.isLoading.set(false);
         this.router.navigate(['/admin/companies']);
-      }
+      },
     });
   }
 
@@ -113,7 +120,7 @@ export class AddEditCompany implements OnInit {
       error: (error) => {
         console.error('Error uploading logo:', error);
         this.snackBar.open('Error uploading logo', 'Close', { duration: 3000 });
-      }
+      },
     });
   }
 
@@ -126,7 +133,7 @@ export class AddEditCompany implements OnInit {
       error: (error) => {
         console.error('Error deleting logo:', error);
         this.snackBar.open('Error deleting logo', 'Close', { duration: 3000 });
-      }
+      },
     });
   }
 
@@ -139,8 +146,10 @@ export class AddEditCompany implements OnInit {
       },
       error: (error) => {
         console.error('Error uploading cover image:', error);
-        this.snackBar.open('Error uploading cover image', 'Close', { duration: 3000 });
-      }
+        this.snackBar.open('Error uploading cover image', 'Close', {
+          duration: 3000,
+        });
+      },
     });
   }
 
@@ -152,8 +161,10 @@ export class AddEditCompany implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting cover image:', error);
-        this.snackBar.open('Error deleting cover image', 'Close', { duration: 3000 });
-      }
+        this.snackBar.open('Error deleting cover image', 'Close', {
+          duration: 3000,
+        });
+      },
     });
   }
 
@@ -175,14 +186,18 @@ export class AddEditCompany implements OnInit {
   private createCompany(data: CreateCompanyInterface): void {
     this.companiesService.create(data).subscribe({
       next: (company: CompanyResponseInterface) => {
-        this.snackBar.open('Company created successfully', 'Close', { duration: 3000 });
+        this.snackBar.open('Company created successfully', 'Close', {
+          duration: 3000,
+        });
         this.router.navigate(['/admin/companies']);
       },
       error: (error: any) => {
         console.error('Error creating company:', error);
-        this.snackBar.open('Error creating company', 'Close', { duration: 3000 });
+        this.snackBar.open('Error creating company', 'Close', {
+          duration: 3000,
+        });
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
@@ -191,20 +206,24 @@ export class AddEditCompany implements OnInit {
     if (id) {
       this.companiesService.update(id, data).subscribe({
         next: (company: CompanyResponseInterface) => {
-          this.snackBar.open('Company updated successfully', 'Close', { duration: 3000 });
+          this.snackBar.open('Company updated successfully', 'Close', {
+            duration: 3000,
+          });
           this.router.navigate(['/admin/companies']);
         },
         error: (error: any) => {
           console.error('Error updating company:', error);
-          this.snackBar.open('Error updating company', 'Close', { duration: 3000 });
+          this.snackBar.open('Error updating company', 'Close', {
+            duration: 3000,
+          });
           this.isLoading.set(false);
-        }
+        },
       });
     }
   }
 
   private markFormGroupTouched(): void {
-    Object.keys(this.companyForm.controls).forEach(key => {
+    Object.keys(this.companyForm.controls).forEach((key) => {
       const control = this.companyForm.get(key);
       control?.markAsTouched();
     });
@@ -219,7 +238,8 @@ export class AddEditCompany implements OnInit {
     if (field?.errors && field.touched) {
       if (field.errors['required']) return `${fieldName} is required`;
       if (field.errors['email']) return 'Please enter a valid email';
-      if (field.errors['minlength']) return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
+      if (field.errors['minlength'])
+        return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
       if (field.errors['pattern']) return `${fieldName} format is invalid`;
     }
     return '';

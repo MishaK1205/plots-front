@@ -18,5 +18,5 @@ export const ADMIN_SIDEBAR_ITEMS = [
     label: 'Lands',
     icon: 'landscape',
     path: '/admin/lands',
-  }
+  },
 ];

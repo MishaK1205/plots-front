@@ -12,4 +12,3 @@ export * from './land/lands-response.interface';
 export * from './land/create-land.interface';
 export * from './land/update-land.interface';
 export * from './images/image-response.interface';
-

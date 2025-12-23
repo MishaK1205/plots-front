@@ -1,3 +1,3 @@
-import { CreateProjectInterface } from "./create-project.interface";
+import { CreateProjectInterface } from './create-project.interface';
 
 export interface UpdateProjectInterface extends CreateProjectInterface {}

@@ -14,4 +14,3 @@ export class ProjectCard implements OnInit {
     console.log(this.project());
   }
 }
-

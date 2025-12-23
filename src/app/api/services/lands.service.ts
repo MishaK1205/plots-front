@@ -7,12 +7,18 @@ import { LandsResponseInterface } from '../interfaces/land/lands-response.interf
 import { ApiService } from './api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class LandsService {
   private readonly api = inject(ApiService);
 
-  getAll(params?: { projectId?: string; currency?: string; status?: string; page?: number; limit?: number }): Observable<LandsResponseInterface> {
+  getAll(params?: {
+    projectId?: string;
+    currency?: string;
+    status?: string;
+    page?: number;
+    limit?: number;
+  }): Observable<LandsResponseInterface> {
     return this.api.get<LandsResponseInterface>('/lands', params);
   }
 
@@ -24,7 +30,10 @@ export class LandsService {
     return this.api.post<LandResponseInterface>('/lands', land);
   }
 
-  update(id: string, land: UpdateLandInterface): Observable<LandResponseInterface> {
+  update(
+    id: string,
+    land: UpdateLandInterface,
+  ): Observable<LandResponseInterface> {
     return this.api.put<LandResponseInterface>(`/lands/${id}`, land);
   }
 
@@ -32,4 +41,3 @@ export class LandsService {
     return this.api.delete<void>(`/lands/${id}`);
   }
 }
-

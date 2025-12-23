@@ -4,7 +4,7 @@ import { ImageResponseInterface } from '../interfaces/images/image-response.inte
 import { ApiService } from './api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ImagesService {
   private readonly api = inject(ApiService);
@@ -17,7 +17,9 @@ export class ImagesService {
   }
 
   getImage(id: string): Observable<Blob> {
-    return this.api.get<Blob>(`/images/${id}`, undefined, { responseType: 'blob' });
+    return this.api.get<Blob>(`/images/${id}`, undefined, {
+      responseType: 'blob',
+    });
   }
 
   delete(id: string): Observable<void> {

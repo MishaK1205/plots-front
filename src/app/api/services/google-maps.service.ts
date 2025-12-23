@@ -12,7 +12,7 @@ export interface PlaceResult {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GoogleMapsService {
   // Default center (Tbilisi, Georgia)
@@ -25,8 +25,11 @@ export class GoogleMapsService {
   // State
   private map: google.maps.Map | null = null;
   private currentMarker: google.maps.marker.AdvancedMarkerElement | null = null;
-  private AdvancedMarkerElement: typeof google.maps.marker.AdvancedMarkerElement | null = null;
-  private placeAutocomplete: google.maps.places.PlaceAutocompleteElement | null = null;
+  private AdvancedMarkerElement:
+    | typeof google.maps.marker.AdvancedMarkerElement
+    | null = null;
+  private placeAutocomplete: google.maps.places.PlaceAutocompleteElement | null =
+    null;
 
   // Signals for reactive state
   isMapReady = signal(false);
@@ -46,7 +49,9 @@ export class GoogleMapsService {
    */
   private async loadMarkerLibrary(): Promise<void> {
     try {
-      const { AdvancedMarkerElement } = await google.maps.importLibrary("marker") as google.maps.MarkerLibrary;
+      const { AdvancedMarkerElement } = (await google.maps.importLibrary(
+        'marker',
+      )) as google.maps.MarkerLibrary;
       this.AdvancedMarkerElement = AdvancedMarkerElement;
       this.isMarkerLibraryLoaded.set(true);
     } catch (error) {
@@ -60,10 +65,10 @@ export class GoogleMapsService {
    */
   async initializePlaceAutocomplete(
     containerId: string,
-    onPlaceSelect: (result: PlaceResult) => void
+    onPlaceSelect: (result: PlaceResult) => void,
   ): Promise<void> {
     try {
-      await google.maps.importLibrary("places");
+      await google.maps.importLibrary('places');
 
       const container = document.getElementById(containerId);
       if (!container) {
@@ -72,22 +77,30 @@ export class GoogleMapsService {
       }
 
       // Create the PlaceAutocompleteElement
-      this.placeAutocomplete = document.createElement('gmp-place-autocomplete') as google.maps.places.PlaceAutocompleteElement;
-      this.placeAutocomplete.setAttribute('placeholder', 'Search for a location...');
+      this.placeAutocomplete = document.createElement(
+        'gmp-place-autocomplete',
+      ) as google.maps.places.PlaceAutocompleteElement;
+      this.placeAutocomplete.setAttribute(
+        'placeholder',
+        'Search for a location...',
+      );
       this.placeAutocomplete.setAttribute('type', 'address');
 
       container.appendChild(this.placeAutocomplete);
 
       // Listen for place selection
-      this.placeAutocomplete.addEventListener('gmp-placeselect', async (event: any) => {
-        const place = event.place;
-        if (place) {
-          const result = await this.processPlaceSelection(place);
-          if (result) {
-            onPlaceSelect(result);
+      this.placeAutocomplete.addEventListener(
+        'gmp-placeselect',
+        async (event: any) => {
+          const place = event.place;
+          if (place) {
+            const result = await this.processPlaceSelection(place);
+            if (result) {
+              onPlaceSelect(result);
+            }
           }
-        }
-      });
+        },
+      );
     } catch (error) {
       console.error('Error initializing place autocomplete:', error);
       throw new Error('Failed to load place search');
@@ -97,10 +110,12 @@ export class GoogleMapsService {
   /**
    * Process a place selection and extract relevant data
    */
-  private async processPlaceSelection(place: google.maps.places.Place): Promise<PlaceResult | null> {
+  private async processPlaceSelection(
+    place: google.maps.places.Place,
+  ): Promise<PlaceResult | null> {
     try {
       await place.fetchFields({
-        fields: ['location', 'displayName', 'formattedAddress']
+        fields: ['location', 'displayName', 'formattedAddress'],
       });
 
       const location = place.location;
@@ -109,10 +124,10 @@ export class GoogleMapsService {
       return {
         position: {
           lat: location.lat(),
-          lng: location.lng()
+          lng: location.lng(),
         },
         formattedAddress: place.formattedAddress || place.displayName || '',
-        displayName: place.displayName ?? undefined
+        displayName: place.displayName ?? undefined,
       };
     } catch (error) {
       console.error('Error processing place selection:', error);
@@ -123,7 +138,10 @@ export class GoogleMapsService {
   /**
    * Add or update a marker on the map
    */
-  addMarker(position: MapPosition, title: string = 'Location'): google.maps.marker.AdvancedMarkerElement | null {
+  addMarker(
+    position: MapPosition,
+    title: string = 'Location',
+  ): google.maps.marker.AdvancedMarkerElement | null {
     if (!this.AdvancedMarkerElement || !this.map) {
       console.warn('Map or marker library not ready');
       return null;
@@ -136,7 +154,7 @@ export class GoogleMapsService {
     this.currentMarker = new this.AdvancedMarkerElement({
       position,
       map: this.map,
-      title
+      title,
     });
 
     return this.currentMarker;
@@ -167,7 +185,11 @@ export class GoogleMapsService {
   /**
    * Update map location with marker
    */
-  updateLocation(position: MapPosition, zoom: number = 15, markerTitle: string = 'Location'): void {
+  updateLocation(
+    position: MapPosition,
+    zoom: number = 15,
+    markerTitle: string = 'Location',
+  ): void {
     this.panTo(position, zoom);
     this.addMarker(position, markerTitle);
   }
@@ -192,12 +214,14 @@ export class GoogleMapsService {
   /**
    * Extract position from map click event
    */
-  extractPositionFromEvent(event: google.maps.MapMouseEvent): MapPosition | null {
+  extractPositionFromEvent(
+    event: google.maps.MapMouseEvent,
+  ): MapPosition | null {
     if (!event.latLng) return null;
 
     return {
       lat: event.latLng.lat(),
-      lng: event.latLng.lng()
+      lng: event.latLng.lng(),
     };
   }
 
@@ -220,12 +244,12 @@ export class GoogleMapsService {
    */
   cleanup(): void {
     this.removeMarker();
-    
+
     if (this.placeAutocomplete) {
       this.placeAutocomplete.remove();
       this.placeAutocomplete = null;
     }
-    
+
     this.map = null;
     this.isMapReady.set(false);
   }

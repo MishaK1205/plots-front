@@ -1,6 +1,11 @@
 import { Component, OnInit, signal, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -17,10 +22,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { ProjectsService } from '../../../api/services/projects.service';
 import { CompaniesService } from '../../../api/services/companies.service';
 import { ImagesService } from '../../../api/services';
-import { ProjectResponseInterface, CompanyResponseInterface } from '../../../api/interfaces';
+import {
+  ProjectResponseInterface,
+  CompanyResponseInterface,
+} from '../../../api/interfaces';
 
 import { ImageUpload } from '../../../components/image-upload/image-upload';
-import { GoogleMaps, LocationSelectedEvent } from '../../../components/google-maps/google-maps';
+import {
+  GoogleMaps,
+  LocationSelectedEvent,
+} from '../../../components/google-maps/google-maps';
 
 const MATERIAL_MODULES = [
   MatCardModule,
@@ -159,11 +170,19 @@ export class AddEditProject implements OnInit {
 
     operation$.pipe(takeUntilDestroyed(this.destroyRef$)).subscribe({
       next: () => {
-        this.showSuccess(this.isEditMode() ? 'Project updated successfully' : 'Project created successfully');
+        this.showSuccess(
+          this.isEditMode()
+            ? 'Project updated successfully'
+            : 'Project created successfully',
+        );
         this.router.navigate(['/admin/projects']);
       },
       error: () => {
-        this.showError(this.isEditMode() ? 'Failed to update project' : 'Failed to create project');
+        this.showError(
+          this.isEditMode()
+            ? 'Failed to update project'
+            : 'Failed to create project',
+        );
         this.isLoading.set(false);
       },
     });
@@ -212,11 +231,16 @@ export class AddEditProject implements OnInit {
   }
 
   private formatFieldName(fieldName: string): string {
-    return fieldName.replace(/([A-Z])/g, ' $1').toLowerCase().trim();
+    return fieldName
+      .replace(/([A-Z])/g, ' $1')
+      .toLowerCase()
+      .trim();
   }
 
   private markFormGroupTouched(): void {
-    Object.values(this.projectForm.controls).forEach((control) => control.markAsTouched());
+    Object.values(this.projectForm.controls).forEach((control) =>
+      control.markAsTouched(),
+    );
   }
 
   onCancel(): void {

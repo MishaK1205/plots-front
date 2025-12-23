@@ -1,4 +1,13 @@
-import { Component, input, output, signal, OnInit, OnDestroy, inject, DestroyRef } from '@angular/core';
+import {
+  Component,
+  input,
+  output,
+  signal,
+  OnInit,
+  OnDestroy,
+  inject,
+  DestroyRef,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -7,7 +16,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { GoogleMapsModule } from '@angular/google-maps';
-import { GoogleMapsService, MapPosition } from '../../api/services/google-maps.service';
+import {
+  GoogleMapsService,
+  MapPosition,
+} from '../../api/services/google-maps.service';
 
 export interface LocationSelectedEvent {
   position: MapPosition;
@@ -121,15 +133,19 @@ export class GoogleMaps implements OnInit, OnDestroy {
         } else {
           this.locationSuggestions.set([]);
         }
-      }
+      },
     );
   }
 
   private extractMainText(result: google.maps.GeocoderResult): string {
     const addressComponents = result.address_components || [];
-    const streetNumber = addressComponents.find((c) => c.types.includes('street_number'));
+    const streetNumber = addressComponents.find((c) =>
+      c.types.includes('street_number'),
+    );
     const route = addressComponents.find((c) => c.types.includes('route'));
-    const locality = addressComponents.find((c) => c.types.includes('locality'));
+    const locality = addressComponents.find((c) =>
+      c.types.includes('locality'),
+    );
 
     if (streetNumber && route) {
       return `${streetNumber.long_name} ${route.long_name}`;
@@ -144,7 +160,9 @@ export class GoogleMaps implements OnInit, OnDestroy {
   onLocationSelected(prediction: any): void {
     if (!prediction.geometry || !prediction.geometry.location) return;
 
-    this.locationSearchControl.setValue(prediction.description, { emitEvent: false });
+    this.locationSearchControl.setValue(prediction.description, {
+      emitEvent: false,
+    });
 
     const position: MapPosition = {
       lat: prediction.geometry.location.lat(),
@@ -166,7 +184,10 @@ export class GoogleMaps implements OnInit, OnDestroy {
     this.reverseGeocodeAndEmit(position);
   }
 
-  private handleLocationSelect(position: MapPosition, formattedAddress: string): void {
+  private handleLocationSelect(
+    position: MapPosition,
+    formattedAddress: string,
+  ): void {
     this.updateMapLocation(position, 15);
     this.locationSelected.emit({ position, formattedAddress });
   }
@@ -196,4 +217,3 @@ export class GoogleMaps implements OnInit, OnDestroy {
     }
   }
 }
-

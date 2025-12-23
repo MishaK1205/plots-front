@@ -8,4 +8,3 @@ export interface ImageResponseInterface {
   size: number;
   createdAt: string;
 }
-

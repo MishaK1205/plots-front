@@ -1,9 +1,14 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams, HttpHeaders, HttpContext } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpParams,
+  HttpHeaders,
+  HttpContext,
+} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -16,16 +21,16 @@ export class ApiService {
    */
   private buildHttpParams(params?: Record<string, any>): HttpParams {
     let httpParams = new HttpParams();
-    
+
     if (params) {
-      Object.keys(params).forEach(key => {
+      Object.keys(params).forEach((key) => {
         const value = params[key];
         if (value !== undefined && value !== null) {
           httpParams = httpParams.set(key, value.toString());
         }
       });
     }
-    
+
     return httpParams;
   }
 
@@ -35,17 +40,24 @@ export class ApiService {
    * @param params Optional query parameters
    * @param options Optional HTTP options (headers, responseType, etc.)
    */
-  get<T>(endpoint: string, params?: Record<string, any>, options?: {
-    headers?: HttpHeaders | { [header: string]: string | string[] };
-    context?: HttpContext;
-    responseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
-  }): Observable<T> {
+  get<T>(
+    endpoint: string,
+    params?: Record<string, any>,
+    options?: {
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      context?: HttpContext;
+      responseType?: 'json' | 'text' | 'blob' | 'arraybuffer';
+    },
+  ): Observable<T> {
     const httpParams = this.buildHttpParams(params);
     const httpOptions: any = {
       params: httpParams,
-      ...options
+      ...options,
     };
-    return this.http.get<T>(`${this.baseUrl}${endpoint}`, httpOptions) as Observable<T>;
+    return this.http.get<T>(
+      `${this.baseUrl}${endpoint}`,
+      httpOptions,
+    ) as Observable<T>;
   }
 
   /**
@@ -55,14 +67,19 @@ export class ApiService {
    * @param params Optional query parameters
    * @param options Optional HTTP options (headers, etc.)
    */
-  post<T>(endpoint: string, body: any, params?: Record<string, any>, options?: {
-    headers?: HttpHeaders | { [header: string]: string | string[] };
-    context?: HttpContext;
-  }): Observable<T> {
+  post<T>(
+    endpoint: string,
+    body: any,
+    params?: Record<string, any>,
+    options?: {
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      context?: HttpContext;
+    },
+  ): Observable<T> {
     const httpParams = this.buildHttpParams(params);
     return this.http.post<T>(`${this.baseUrl}${endpoint}`, body, {
       params: httpParams,
-      ...options
+      ...options,
     });
   }
 
@@ -73,14 +90,19 @@ export class ApiService {
    * @param params Optional query parameters
    * @param options Optional HTTP options (headers, etc.)
    */
-  put<T>(endpoint: string, body: any, params?: Record<string, any>, options?: {
-    headers?: HttpHeaders | { [header: string]: string | string[] };
-    context?: HttpContext;
-  }): Observable<T> {
+  put<T>(
+    endpoint: string,
+    body: any,
+    params?: Record<string, any>,
+    options?: {
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      context?: HttpContext;
+    },
+  ): Observable<T> {
     const httpParams = this.buildHttpParams(params);
     return this.http.put<T>(`${this.baseUrl}${endpoint}`, body, {
       params: httpParams,
-      ...options
+      ...options,
     });
   }
 
@@ -90,15 +112,18 @@ export class ApiService {
    * @param params Optional query parameters
    * @param options Optional HTTP options (headers, etc.)
    */
-  delete<T>(endpoint: string, params?: Record<string, any>, options?: {
-    headers?: HttpHeaders | { [header: string]: string | string[] };
-    context?: HttpContext;
-  }): Observable<T> {
+  delete<T>(
+    endpoint: string,
+    params?: Record<string, any>,
+    options?: {
+      headers?: HttpHeaders | { [header: string]: string | string[] };
+      context?: HttpContext;
+    },
+  ): Observable<T> {
     const httpParams = this.buildHttpParams(params);
     return this.http.delete<T>(`${this.baseUrl}${endpoint}`, {
       params: httpParams,
-      ...options
+      ...options,
     });
   }
 }
-

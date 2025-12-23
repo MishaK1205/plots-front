@@ -1,4 +1,4 @@
-@use '../../tools/px-to-rem' as *;
+@use "../../tools/px-to-rem" as *;
 
 .footer {
   background-color: #172021;
@@ -54,7 +54,7 @@
 
     li {
       font-size: px-to-rem(14px);
-      color: #5E6465;
+      color: #5e6465;
     }
 
     a {

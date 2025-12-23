@@ -15,7 +15,11 @@
   >
     <mat-nav-list>
       @for (item of sidebarItems; track item.path) {
-        <div class="list-item-content" [routerLink]="item.path" routerLinkActive="active">
+        <div
+          class="list-item-content"
+          [routerLink]="item.path"
+          routerLinkActive="active"
+        >
           @if (isExpanded) {
             <span>{{ item.label }}</span>
           }

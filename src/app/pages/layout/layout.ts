@@ -9,6 +9,4 @@ import { Footer } from '../../components/footer/footer';
   templateUrl: './layout.html',
   styleUrl: './layout.scss',
 })
-export class Layout {
-}
-
+export class Layout {}

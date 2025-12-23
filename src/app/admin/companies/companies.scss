@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     gap: 24px;
-    
+
     mat-icon {
       font-size: 1.8rem;
       width: 1.8rem;
@@ -38,7 +38,7 @@
     .company-name {
       display: flex;
       flex-direction: column;
-      
+
       .slug {
         color: #666;
         font-size: 0.8rem;
@@ -46,10 +46,11 @@
       }
     }
 
-    .email-link, .phone-link {
+    .email-link,
+    .phone-link {
       color: #1976d2;
       text-decoration: none;
-      
+
       &:hover {
         text-decoration: underline;
       }
@@ -66,7 +67,7 @@
 
     .mat-mdc-icon-button {
       margin: 0 4px;
-      
+
       mat-icon {
         font-size: 18px;
         width: 18px;
@@ -81,7 +82,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px;
-    
+
     p {
       margin-top: 16px;
       color: #666;

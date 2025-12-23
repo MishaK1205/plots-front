@@ -7,12 +7,16 @@ import { ProjectsResponseInterface } from '../interfaces/project/projects-respon
 import { ApiService } from './api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProjectsService {
   private readonly api = inject(ApiService);
 
-  getAll(params?: { companyId?: string; page?: number; limit?: number }): Observable<ProjectsResponseInterface> {
+  getAll(params?: {
+    companyId?: string;
+    page?: number;
+    limit?: number;
+  }): Observable<ProjectsResponseInterface> {
     return this.api.get<ProjectsResponseInterface>('/projects', params);
   }
 
@@ -20,11 +24,16 @@ export class ProjectsService {
     return this.api.get<ProjectResponseInterface>(`/projects/${id}`);
   }
 
-  create(project: CreateProjectInterface): Observable<ProjectResponseInterface> {
+  create(
+    project: CreateProjectInterface,
+  ): Observable<ProjectResponseInterface> {
     return this.api.post<ProjectResponseInterface>('/projects', project);
   }
 
-  update(id: string, project: UpdateProjectInterface): Observable<ProjectResponseInterface> {
+  update(
+    id: string,
+    project: UpdateProjectInterface,
+  ): Observable<ProjectResponseInterface> {
     return this.api.put<ProjectResponseInterface>(`/projects/${id}`, project);
   }
 
@@ -32,4 +41,3 @@ export class ProjectsService {
     return this.api.delete<void>(`/projects/${id}`);
   }
 }
-

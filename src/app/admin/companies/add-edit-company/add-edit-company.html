@@ -3,7 +3,7 @@
     <button mat-icon-button (click)="onCancel()">
       <mat-icon>arrow_back</mat-icon>
     </button>
-    <span>{{ isEditMode() ? 'Edit Company' : 'Add New Company' }}</span>
+    <span>{{ isEditMode() ? "Edit Company" : "Add New Company" }}</span>
   </mat-toolbar>
 
   <mat-card class="form-card">
@@ -11,24 +11,38 @@
       @if (isLoading()) {
         <div class="loading-container">
           <mat-spinner diameter="50"></mat-spinner>
-          <p>{{ isEditMode() ? 'Loading company details...' : 'Processing...' }}</p>
+          <p>
+            {{ isEditMode() ? "Loading company details..." : "Processing..." }}
+          </p>
         </div>
       } @else {
-        <form [formGroup]="companyForm" (ngSubmit)="onSubmit()" class="company-form">
+        <form
+          [formGroup]="companyForm"
+          (ngSubmit)="onSubmit()"
+          class="company-form"
+        >
           <div class="form-row">
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Company Name *</mat-label>
-              <input matInput formControlName="name" placeholder="Enter company name">
-              @if (getFieldError('name')) {
-                <mat-error>{{ getFieldError('name') }}</mat-error>
+              <input
+                matInput
+                formControlName="name"
+                placeholder="Enter company name"
+              />
+              @if (getFieldError("name")) {
+                <mat-error>{{ getFieldError("name") }}</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Slug *</mat-label>
-              <input matInput formControlName="slug" placeholder="company-slug">
-              @if (getFieldError('slug')) {
-                <mat-error>{{ getFieldError('slug') }}</mat-error>
+              <input
+                matInput
+                formControlName="slug"
+                placeholder="company-slug"
+              />
+              @if (getFieldError("slug")) {
+                <mat-error>{{ getFieldError("slug") }}</mat-error>
               }
             </mat-form-field>
           </div>
@@ -36,17 +50,26 @@
           <div class="form-row">
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Email *</mat-label>
-              <input matInput formControlName="email" type="email" placeholder="company@example.com">
-              @if (getFieldError('email')) {
-                <mat-error>{{ getFieldError('email') }}</mat-error>
+              <input
+                matInput
+                formControlName="email"
+                type="email"
+                placeholder="company@example.com"
+              />
+              @if (getFieldError("email")) {
+                <mat-error>{{ getFieldError("email") }}</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Phone *</mat-label>
-              <input matInput formControlName="phone" placeholder="+1 (555) 123-4567">
-              @if (getFieldError('phone')) {
-                <mat-error>{{ getFieldError('phone') }}</mat-error>
+              <input
+                matInput
+                formControlName="phone"
+                placeholder="+1 (555) 123-4567"
+              />
+              @if (getFieldError("phone")) {
+                <mat-error>{{ getFieldError("phone") }}</mat-error>
               }
             </mat-form-field>
           </div>
@@ -54,7 +77,11 @@
           <div class="form-row">
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Website</mat-label>
-              <input matInput formControlName="website" placeholder="https://www.company.com">
+              <input
+                matInput
+                formControlName="website"
+                placeholder="https://www.company.com"
+              />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
@@ -70,17 +97,21 @@
           <div class="form-row">
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Address *</mat-label>
-              <input matInput formControlName="address" placeholder="123 Main Street">
-              @if (getFieldError('address')) {
-                <mat-error>{{ getFieldError('address') }}</mat-error>
+              <input
+                matInput
+                formControlName="address"
+                placeholder="123 Main Street"
+              />
+              @if (getFieldError("address")) {
+                <mat-error>{{ getFieldError("address") }}</mat-error>
               }
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>City *</mat-label>
-              <input matInput formControlName="city" placeholder="New York">
-              @if (getFieldError('city')) {
-                <mat-error>{{ getFieldError('city') }}</mat-error>
+              <input matInput formControlName="city" placeholder="New York" />
+              @if (getFieldError("city")) {
+                <mat-error>{{ getFieldError("city") }}</mat-error>
               }
             </mat-form-field>
           </div>
@@ -88,19 +119,34 @@
           <div class="form-row">
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Latitude</mat-label>
-              <input matInput formControlName="latitude" type="number" placeholder="40.7128">
+              <input
+                matInput
+                formControlName="latitude"
+                type="number"
+                placeholder="40.7128"
+              />
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="form-field">
               <mat-label>Longitude</mat-label>
-              <input matInput formControlName="longitude" type="number" placeholder="-74.0060">
+              <input
+                matInput
+                formControlName="longitude"
+                type="number"
+                placeholder="-74.0060"
+              />
             </mat-form-field>
           </div>
 
           <div class="form-row">
             <mat-form-field appearance="outline" class="form-field full-width">
               <mat-label>Description</mat-label>
-              <textarea matInput formControlName="description" rows="3" placeholder="Company description"></textarea>
+              <textarea
+                matInput
+                formControlName="description"
+                rows="3"
+                placeholder="Company description"
+              ></textarea>
             </mat-form-field>
           </div>
 
@@ -109,9 +155,14 @@
               <app-image-upload
                 label="Company Logo"
                 [maxSizeMB]="5"
-                [existingImageUrl]="companyForm.get('logoUrl')?.value ? `http://localhost:3000${companyForm.get('logoUrl')?.value}` : undefined"
+                [existingImageUrl]="
+                  companyForm.get('logoUrl')?.value
+                    ? `http://localhost:3000${companyForm.get('logoUrl')?.value}`
+                    : undefined
+                "
                 (imageSelected)="onLogoSelected($event)"
-                (imageRemoved)="onLogoRemoved()">
+                (imageRemoved)="onLogoRemoved()"
+              >
               </app-image-upload>
             </div>
 
@@ -119,9 +170,14 @@
               <app-image-upload
                 label="Cover Image"
                 [maxSizeMB]="5"
-                [existingImageUrl]="companyForm.get('coverImageUrl')?.value ? `http://localhost:3000${companyForm.get('coverImageUrl')?.value}` : undefined"
+                [existingImageUrl]="
+                  companyForm.get('coverImageUrl')?.value
+                    ? `http://localhost:3000${companyForm.get('coverImageUrl')?.value}`
+                    : undefined
+                "
                 (imageSelected)="onCoverImageSelected($event)"
-                (imageRemoved)="onCoverImageRemoved()">
+                (imageRemoved)="onCoverImageRemoved()"
+              >
               </app-image-upload>
             </div>
           </div>
@@ -130,8 +186,13 @@
             <button mat-button type="button" (click)="onCancel()">
               Cancel
             </button>
-            <button mat-raised-button color="primary" type="submit" [disabled]="isLoading()">
-              {{ isEditMode() ? 'Update Company' : 'Create Company' }}
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="isLoading()"
+            >
+              {{ isEditMode() ? "Update Company" : "Create Company" }}
             </button>
           </div>
         </form>

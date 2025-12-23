@@ -3,7 +3,7 @@
     display: flex;
     align-items: center;
     gap: 24px;
-    
+
     mat-icon {
       font-size: 18px;
       width: 18px;
@@ -46,7 +46,7 @@
 
     .mat-mdc-icon-button {
       margin: 0 4px;
-      
+
       mat-icon {
         font-size: 18px;
         width: 18px;
@@ -61,7 +61,7 @@
     align-items: center;
     justify-content: center;
     padding: 40px;
-    
+
     p {
       margin-top: 16px;
       color: #666;
@@ -73,4 +73,3 @@
     border-top: 1px solid #e0e0e0;
   }
 }
-

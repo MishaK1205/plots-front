@@ -2,12 +2,26 @@
   <div class="upload-area">
     @if (selectedImage()) {
       <div class="image-preview">
-        <img [src]="getSafeImageUrl(selectedImage()!)" alt="Preview" class="preview-image">
+        <img
+          [src]="getSafeImageUrl(selectedImage()!)"
+          alt="Preview"
+          class="preview-image"
+        />
         <div class="image-overlay">
-          <button mat-icon-button color="primary" (click)="triggerFileInput()" title="Change Image">
+          <button
+            mat-icon-button
+            color="primary"
+            (click)="triggerFileInput()"
+            title="Change Image"
+          >
             <mat-icon>edit</mat-icon>
           </button>
-          <button mat-icon-button color="warn" (click)="removeImage()" title="Remove Image">
+          <button
+            mat-icon-button
+            color="warn"
+            (click)="removeImage()"
+            title="Remove Image"
+          >
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -20,18 +34,19 @@
         } @else {
           <mat-icon class="upload-icon">cloud_upload</mat-icon>
           <p class="upload-text">{{ label() }}</p>
-          <p class="upload-hint">{{ 'Max size: ' + maxSizeMB() + 'MB' }}</p>
+          <p class="upload-hint">{{ "Max size: " + maxSizeMB() + "MB" }}</p>
         }
       </div>
     }
   </div>
 
-  <input 
-    type="file" 
+  <input
+    type="file"
     [id]="fileInputId"
-    style="display: none;" 
+    style="display: none"
     [accept]="acceptedFormats().join(',')"
-    (change)="onFileSelected($event)">
+    (change)="onFileSelected($event)"
+  />
 
   @if (errorMessage()) {
     <div class="error-message">
@@ -47,4 +62,3 @@
     </div>
   }
 </div>
-

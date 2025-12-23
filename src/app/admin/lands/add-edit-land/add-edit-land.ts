@@ -1,6 +1,11 @@
 import { Component, OnInit, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+} from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -13,11 +18,11 @@ import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
 import { LandsService } from '../../../api/services/lands.service';
 import { ProjectsService } from '../../../api/services/projects.service';
-import { 
-  LandResponseInterface, 
-  CreateLandInterface, 
+import {
+  LandResponseInterface,
+  CreateLandInterface,
   UpdateLandInterface,
-  ProjectResponseInterface
+  ProjectResponseInterface,
 } from '../../../api/interfaces';
 import { ImageUpload } from '../../../components/image-upload/image-upload';
 import { ImagesService } from '../../../api/services';
@@ -36,7 +41,7 @@ import { ImagesService } from '../../../api/services';
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatSelectModule,
-    ImageUpload
+    ImageUpload,
   ],
   templateUrl: './add-edit-land.html',
   styleUrl: './add-edit-land.scss',
@@ -70,7 +75,7 @@ export class AddEditLand implements OnInit {
       },
       error: (error) => {
         console.error('Error loading projects:', error);
-      }
+      },
     });
   }
 
@@ -81,7 +86,7 @@ export class AddEditLand implements OnInit {
       squareMeterPrice: [null, [Validators.required, Validators.min(0)]],
       cadastralCode: ['', [Validators.required]],
       projectId: ['', [Validators.required]],
-      imageUrl: ['']
+      imageUrl: [''],
     });
   }
 
@@ -104,16 +109,18 @@ export class AddEditLand implements OnInit {
           squareMeterPrice: land.squareMeterPrice,
           cadastralCode: land.cadastralCode,
           projectId: land.projectId,
-          imageUrl: land.imageUrl
+          imageUrl: land.imageUrl,
         });
         this.isLoading.set(false);
       },
       error: (error: any) => {
         console.error('Error loading land:', error);
-        this.snackBar.open('Error loading land details', 'Close', { duration: 3000 });
+        this.snackBar.open('Error loading land details', 'Close', {
+          duration: 3000,
+        });
         this.isLoading.set(false);
         this.router.navigate(['/admin/lands']);
-      }
+      },
     });
   }
 
@@ -135,14 +142,16 @@ export class AddEditLand implements OnInit {
   private createLand(data: CreateLandInterface): void {
     this.landsService.create(data).subscribe({
       next: (land: LandResponseInterface) => {
-        this.snackBar.open('Land created successfully', 'Close', { duration: 3000 });
+        this.snackBar.open('Land created successfully', 'Close', {
+          duration: 3000,
+        });
         this.router.navigate(['/admin/lands']);
       },
       error: (error: any) => {
         console.error('Error creating land:', error);
         this.snackBar.open('Error creating land', 'Close', { duration: 3000 });
         this.isLoading.set(false);
-      }
+      },
     });
   }
 
@@ -151,20 +160,24 @@ export class AddEditLand implements OnInit {
     if (id) {
       this.landsService.update(id, data).subscribe({
         next: (land: LandResponseInterface) => {
-          this.snackBar.open('Land updated successfully', 'Close', { duration: 3000 });
+          this.snackBar.open('Land updated successfully', 'Close', {
+            duration: 3000,
+          });
           this.router.navigate(['/admin/lands']);
         },
         error: (error: any) => {
           console.error('Error updating land:', error);
-          this.snackBar.open('Error updating land', 'Close', { duration: 3000 });
+          this.snackBar.open('Error updating land', 'Close', {
+            duration: 3000,
+          });
           this.isLoading.set(false);
-        }
+        },
       });
     }
   }
 
   private markFormGroupTouched(): void {
-    Object.keys(this.landForm.controls).forEach(key => {
+    Object.keys(this.landForm.controls).forEach((key) => {
       const control = this.landForm.get(key);
       control?.markAsTouched();
     });
@@ -178,8 +191,10 @@ export class AddEditLand implements OnInit {
     const field = this.landForm.get(fieldName);
     if (field?.errors && field.touched) {
       if (field.errors['required']) return `${fieldName} is required`;
-      if (field.errors['minlength']) return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
-      if (field.errors['min']) return `${fieldName} must be greater than ${field.errors['min'].min}`;
+      if (field.errors['minlength'])
+        return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
+      if (field.errors['min'])
+        return `${fieldName} must be greater than ${field.errors['min'].min}`;
     }
     return '';
   }
@@ -192,8 +207,10 @@ export class AddEditLand implements OnInit {
       },
       error: (error) => {
         console.error('Error uploading cover image:', error);
-        this.snackBar.open('Error uploading cover image', 'Close', { duration: 3000 });
-      }
+        this.snackBar.open('Error uploading cover image', 'Close', {
+          duration: 3000,
+        });
+      },
     });
   }
 
@@ -207,8 +224,10 @@ export class AddEditLand implements OnInit {
         },
         error: (error) => {
           console.error('Error deleting cover image:', error);
-          this.snackBar.open('Error deleting cover image', 'Close', { duration: 3000 });
-        }
+          this.snackBar.open('Error deleting cover image', 'Close', {
+            duration: 3000,
+          });
+        },
       });
     } else {
       this.coverImageId.set(null);
@@ -216,4 +235,3 @@ export class AddEditLand implements OnInit {
     }
   }
 }
-

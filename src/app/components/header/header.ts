@@ -26,7 +26,6 @@ export class Header {
       label: 'კონტაქტი',
       path: '/contact',
     },
-  ]
+  ];
   menuOpen = false;
 }
-

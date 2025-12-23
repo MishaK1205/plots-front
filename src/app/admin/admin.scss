@@ -28,11 +28,11 @@
   padding: 0 16px;
   text-decoration: none;
   color: inherit;
-  
+
   &:hover {
     background-color: rgba(0, 0, 0, 0.04);
   }
-  
+
   &.active {
     background-color: rgba(0, 0, 0, 0.08);
     font-weight: 500;

@@ -13,7 +13,7 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   templateUrl: './image-upload.html',
   styleUrl: './image-upload.scss',
@@ -21,7 +21,12 @@ import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 export class ImageUpload implements OnInit {
   label = input<string>('Upload Image');
   maxSizeMB = input<number>(5);
-  acceptedFormats = input<string[]>(['image/jpeg', 'image/jpg', 'image/png', 'image/webp']);
+  acceptedFormats = input<string[]>([
+    'image/jpeg',
+    'image/jpg',
+    'image/png',
+    'image/webp',
+  ]);
   existingImageUrl = input<string | undefined>();
   required = input<boolean>(false);
 
@@ -52,7 +57,9 @@ export class ImageUpload implements OnInit {
 
     // Validate file type
     if (!this.acceptedFormats().includes(file.type)) {
-      this.errorMessage.set(`Invalid file format. Accepted formats: ${this.acceptedFormats().join(', ')}`);
+      this.errorMessage.set(
+        `Invalid file format. Accepted formats: ${this.acceptedFormats().join(', ')}`,
+      );
       return;
     }
 
@@ -94,18 +101,19 @@ export class ImageUpload implements OnInit {
   }
 
   triggerFileInput(): void {
-    const fileInput = document.getElementById(this.fileInputId) as HTMLInputElement;
+    const fileInput = document.getElementById(
+      this.fileInputId,
+    ) as HTMLInputElement;
     fileInput?.click();
   }
 
   getSafeImageUrl(imageUrl: string): SafeUrl | string {
     if (!imageUrl) return '';
-    
+
     if (imageUrl.startsWith('data:')) {
       return imageUrl;
     }
-    
+
     return this.sanitizer.sanitize(1, imageUrl) || imageUrl;
   }
 }
-

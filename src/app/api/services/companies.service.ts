@@ -7,12 +7,15 @@ import { CompaniesResponseInterface } from '../interfaces/company/companies-resp
 import { ApiService } from './api.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CompaniesService {
   private readonly api = inject(ApiService);
 
-  getAll(params?: { page?: number; limit?: number }): Observable<CompaniesResponseInterface> {
+  getAll(params?: {
+    page?: number;
+    limit?: number;
+  }): Observable<CompaniesResponseInterface> {
     return this.api.get<CompaniesResponseInterface>('/companies', params);
   }
 
@@ -20,12 +23,16 @@ export class CompaniesService {
     return this.api.get<CompanyResponseInterface>(`/companies/${id}`);
   }
 
-  create(company: CreateCompanyInterface): Observable<CompanyResponseInterface> {
+  create(
+    company: CreateCompanyInterface,
+  ): Observable<CompanyResponseInterface> {
     return this.api.post<CompanyResponseInterface>('/companies', company);
   }
 
-  update(id: string, company: UpdateCompanyInterface): Observable<CompanyResponseInterface> {
+  update(
+    id: string,
+    company: UpdateCompanyInterface,
+  ): Observable<CompanyResponseInterface> {
     return this.api.put<CompanyResponseInterface>(`/companies/${id}`, company);
   }
 }
-
