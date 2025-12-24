@@ -77,9 +77,15 @@ export class AddEditCompany implements OnInit {
       latitude: [null],
       longitude: [null],
       description: [''],
-      logoUrl: [''],
-      coverImageUrl: [''],
+      logoId: [''],
+      coverImageId: [''],
       status: ['ACTIVE', [Validators.required]],
+      socialAccounts: this.fb.group({
+        facebook: [''],
+        instagram: [''],
+        linkedin: [''],
+        tiktok: [''],
+      }),
     });
   }
 
@@ -113,9 +119,10 @@ export class AddEditCompany implements OnInit {
   onLogoSelected(file: File): void {
     this.imagesService.upload(file).subscribe({
       next: (response) => {
-        this.logoImageId.set(response.id);
-        const logoUrl = response.imageUrl;
-        this.companyForm.patchValue({ logoUrl });
+        const logoId = response.id;
+
+        this.logoImageId.set(logoId);
+        this.companyForm.patchValue({ logoId });
       },
       error: (error) => {
         console.error('Error uploading logo:', error);
@@ -125,10 +132,10 @@ export class AddEditCompany implements OnInit {
   }
 
   onLogoRemoved(): void {
-    this.imagesService.delete(this.logoImageId()!).subscribe({
+    this.imagesService.delete(this.companyForm.get('logoId')!.value).subscribe({
       next: () => {
         this.logoImageId.set(null);
-        this.companyForm.patchValue({ logoUrl: '' });
+        this.companyForm.patchValue({ logoId: '' });
       },
       error: (error) => {
         console.error('Error deleting logo:', error);
@@ -140,9 +147,10 @@ export class AddEditCompany implements OnInit {
   onCoverImageSelected(file: File): void {
     this.imagesService.upload(file).subscribe({
       next: (response) => {
-        this.coverImageId.set(response.id);
-        const coverImageUrl = response.imageUrl;
-        this.companyForm.patchValue({ coverImageUrl });
+        const coverImageId = response.id;
+
+        this.coverImageId.set(coverImageId);
+        this.companyForm.patchValue({ coverImageId });
       },
       error: (error) => {
         console.error('Error uploading cover image:', error);
@@ -154,10 +162,10 @@ export class AddEditCompany implements OnInit {
   }
 
   onCoverImageRemoved(): void {
-    this.imagesService.delete(this.coverImageId()!).subscribe({
+    this.imagesService.delete(this.companyForm.get('coverImageId')!.value).subscribe({
       next: () => {
         this.coverImageId.set(null);
-        this.companyForm.patchValue({ coverImageUrl: '' });
+        this.companyForm.patchValue({ coverImageId: '' });
       },
       error: (error) => {
         console.error('Error deleting cover image:', error);

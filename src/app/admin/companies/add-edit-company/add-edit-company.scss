@@ -1,3 +1,5 @@
+@use "../../../tools/_px-to-rem.scss" as *;
+
 .add-edit-container {
   width: 100%;
   height: 100%;
@@ -5,22 +7,26 @@
   flex-direction: column;
 
   .form-card {
-    margin: 20px;
+    margin: px-to-rem(20);
     flex: 1;
   }
 
   .company-form {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: px-to-rem(16);
+  }
+
+  .company-section__title {
+    margin-bottom: px-to-rem(20);
   }
 
   .form-row {
     display: flex;
-    gap: 16px;
+    gap: px-to-rem(16);
     align-items: flex-start;
 
-    @media (max-width: 768px) {
+    @media (max-width: px-to-rem(768)) {
       flex-direction: column;
     }
   }
@@ -37,9 +43,9 @@
   .form-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 16px;
-    margin-top: 24px;
-    padding-top: 16px;
+    gap: px-to-rem(16);
+    margin-top: px-to-rem(24);
+    padding-top: px-to-rem(16);
     border-top: 1px solid #e0e0e0;
   }
 
@@ -48,10 +54,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 40px;
+    padding: px-to-rem(40);
 
     p {
-      margin-top: 16px;
+      margin-top: px-to-rem(16);
       color: #666;
     }
   }
