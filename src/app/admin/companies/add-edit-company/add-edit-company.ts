@@ -23,6 +23,7 @@ import {
 } from '../../../api/interfaces';
 import { ImageUpload } from '../../../components/image-upload/image-upload';
 import { ImagesService, CompaniesService } from '../../../api/services';
+import { GoogleMaps, LocationSelectedEvent } from '../../../components';
 
 @Component({
   selector: 'app-add-edit-company',
@@ -39,6 +40,7 @@ import { ImagesService, CompaniesService } from '../../../api/services';
     MatSnackBarModule,
     MatSelectModule,
     ImageUpload,
+    GoogleMaps,
   ],
   templateUrl: './add-edit-company.html',
   styleUrl: './add-edit-company.scss',
@@ -113,6 +115,14 @@ export class AddEditCompany implements OnInit {
         this.isLoading.set(false);
         this.router.navigate(['/admin/companies']);
       },
+    });
+  }
+
+  onLocationSelected(event: LocationSelectedEvent): void {
+    this.companyForm.patchValue({
+      latitude: event.position.lat,
+      longitude: event.position.lng,
+      address: event.formattedAddress,
     });
   }
 

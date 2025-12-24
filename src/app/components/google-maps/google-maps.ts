@@ -169,6 +169,8 @@ export class GoogleMaps implements OnInit, OnDestroy {
       lng: prediction.geometry.location.lng(),
     };
 
+    console.log('Selected prediction:', prediction);
+
     this.handleLocationSelect(position, prediction.description || '');
   }
 

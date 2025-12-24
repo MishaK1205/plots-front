@@ -23,7 +23,7 @@
         >
           <section>
             <h1 class="company-section__title">Company Details</h1>
-            
+
             <div class="form-row">
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Company Name *</mat-label>
@@ -179,6 +179,20 @@
               </mat-form-field>
             </div>
           </section>
+
+          <section>
+            <h1 class="company-section__title">Location</h1>
+
+            <app-google-maps
+              [initialLatitude]="companyForm.get('latitude')?.value"
+              [initialLongitude]="companyForm.get('longitude')?.value"
+              height="500px"
+              markerTitle="Project Location"
+              (locationSelected)="onLocationSelected($event)"
+            >
+            </app-google-maps>
+          </section>
+
 
           <div class="form-row">
             <div class="form-field">
