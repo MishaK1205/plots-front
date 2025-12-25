@@ -74,14 +74,17 @@ export class AddEditCompany implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       website: [''],
-      address: ['', [Validators.required]],
-      city: ['', [Validators.required]],
-      latitude: [null],
-      longitude: [null],
       description: [''],
       logoId: [''],
       coverImageId: [''],
       status: ['ACTIVE', [Validators.required]],
+      location: this.fb.group({
+        streetName: [''],
+        city: [''],
+        district: [''],
+        latitude: [''],
+        longitude: [''],
+      }),
       socialAccounts: this.fb.group({
         facebook: [''],
         instagram: [''],
@@ -119,11 +122,17 @@ export class AddEditCompany implements OnInit {
   }
 
   onLocationSelected(event: LocationSelectedEvent): void {
-    this.companyForm.patchValue({
-      latitude: event.position.lat,
-      longitude: event.position.lng,
-      address: event.formattedAddress,
-    });
+    this.companyForm.patchValue(
+      {
+        location: {
+          streetName: event.streetName,
+          city: event.city,
+          district: event.district,
+          latitude: event.latitude,
+          longitude: event.longitude,
+        }
+      }
+    );
   }
 
   onLogoSelected(file: File): void {

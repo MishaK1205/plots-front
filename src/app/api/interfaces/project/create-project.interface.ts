@@ -1,18 +1,21 @@
+import { CommunicationType } from "../../../shared";
+
 export interface CreateProjectInterface {
   name: string;
   description: string;
-  latitude: number;
-  longitude: number;
-  locationName: string;
   photos?: string[];
-  coverPhotoUrl?: string;
+  cardPhotoId?: string;
+  coverPhotoId?: string;
   videoUrl?: string;
   propertyType: 'land' | 'land_with_house';
-  communications?: Array<{
-    type: string;
-    available: boolean;
-    description?: string;
-  }>;
+  location: {
+    streetName: string;
+    city: string;
+    district: string;
+    latitude: number;
+    longitude: number;
+  };
+  communications?: Array<CommunicationType>;
   status?: 'ACTIVE' | 'INACTIVE';
   companyId: string;
 }

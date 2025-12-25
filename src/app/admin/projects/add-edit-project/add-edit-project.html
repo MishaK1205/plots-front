@@ -21,107 +21,125 @@
           (ngSubmit)="onSubmit()"
           class="project-form"
         >
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Project Name *</mat-label>
-              <input
-                matInput
-                formControlName="name"
-                placeholder="Enter project name"
-              />
-              @if (getFieldError("name")) {
-                <mat-error>{{ getFieldError("name") }}</mat-error>
-              }
-            </mat-form-field>
+          <section>
+            <h1 class="project-section__title">Project Details</h1>
 
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Developer Company *</mat-label>
-              <mat-select formControlName="companyId">
-                @for (company of companies(); track company.id) {
-                  <mat-option [value]="company.id">
-                    {{ company.name }}
-                  </mat-option>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Project Name *</mat-label>
+                <input
+                  matInput
+                  formControlName="name"
+                  placeholder="Enter project name"
+                />
+                @if (getFieldError("name")) {
+                  <mat-error>{{ getFieldError("name") }}</mat-error>
                 }
-              </mat-select>
-              @if (getFieldError("companyId")) {
-                <mat-error>{{ getFieldError("companyId") }}</mat-error>
-              }
-            </mat-form-field>
-          </div>
+              </mat-form-field>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field full-width">
-              <mat-label>Description *</mat-label>
-              <textarea
-                matInput
-                formControlName="description"
-                rows="4"
-                placeholder="Enter project description"
-              >
-              </textarea>
-              @if (getFieldError("description")) {
-                <mat-error>{{ getFieldError("description") }}</mat-error>
-              }
-            </mat-form-field>
-          </div>
-
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Location Name *</mat-label>
-              <input
-                matInput
-                formControlName="locationName"
-                placeholder="Enter location address"
-              />
-              @if (getFieldError("locationName")) {
-                <mat-error>{{ getFieldError("locationName") }}</mat-error>
-              }
-            </mat-form-field>
-
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Property Type *</mat-label>
-              <mat-select formControlName="propertyType">
-                <mat-option value="land">Land</mat-option>
-                <mat-option value="land_with_house">Land with House</mat-option>
-              </mat-select>
-              @if (getFieldError("propertyType")) {
-                <mat-error>{{ getFieldError("propertyType") }}</mat-error>
-              }
-            </mat-form-field>
-          </div>
-
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field">
-              <mat-label>Status *</mat-label>
-              <mat-select formControlName="status">
-                <mat-option value="ACTIVE">Active</mat-option>
-                <mat-option value="INACTIVE">Inactive</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
-
-          <div class="form-row">
-            <div class="form-field full-width">
-              <app-image-upload
-                label="Project Cover Image"
-                [maxSizeMB]="5"
-                [existingImageUrl]="
-                  projectForm.get('coverPhotoUrl')?.value
-                    ? 'http://localhost:3000' +
-                      projectForm.get('coverPhotoUrl')?.value
-                    : undefined
-                "
-                (imageSelected)="onCoverImageSelected($event)"
-                (imageRemoved)="onCoverImageRemoved()"
-              >
-              </app-image-upload>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Developer Company *</mat-label>
+                <mat-select formControlName="companyId">
+                  @for (company of companies(); track company.id) {
+                    <mat-option [value]="company.id">
+                      {{ company.name }}
+                    </mat-option>
+                  }
+                </mat-select>
+                @if (getFieldError("companyId")) {
+                  <mat-error>{{ getFieldError("companyId") }}</mat-error>
+                }
+              </mat-form-field>
             </div>
-          </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Property Type *</mat-label>
+                <mat-select formControlName="propertyType">
+                  <mat-option value="land">Land</mat-option>
+                  <mat-option value="land_with_house">Land with House</mat-option>
+                </mat-select>
+                @if (getFieldError("propertyType")) {
+                  <mat-error>{{ getFieldError("propertyType") }}</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Status *</mat-label>
+                <mat-select formControlName="status">
+                  <mat-option value="ACTIVE">Active</mat-option>
+                  <mat-option value="INACTIVE">Inactive</mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field full-width">
+                <mat-label>Description *</mat-label>
+                <textarea
+                  matInput
+                  formControlName="description"
+                  rows="4"
+                  placeholder="Enter project description"
+                >
+                </textarea>
+                @if (getFieldError("description")) {
+                  <mat-error>{{ getFieldError("description") }}</mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </section>
+
+          <section>
+            <h1 class="project-section__title">Communications</h1>
+
+            <div class="form-row">
+              @for (communication of communicationTypes; track communication) {
+                <mat-checkbox [value]="communication" (change)="onCommunicationChange($event, communication)" [checked]="projectForm.get('communications')?.value?.includes(communication)">
+                  {{ communication | titlecase }}
+                </mat-checkbox>
+              }
+            </div>
+          </section>
+
+          <section>
+            <h1 class="project-section__title">Images</h1>
+
+            <div class="form-row">
+              <div class="form-field full-width">
+                <app-image-upload
+                  label="Project Card Image"
+                  [maxSizeMB]="5"
+                  [existingImageUrl]="
+                    projectForm.get('cardPhotoId')?.value
+                      ? `http://localhost:3000/api/images/${projectForm.get('cardPhotoId')?.value}`
+                      : undefined
+                  "
+                  (imageSelected)="onCardImageSelected($event)"
+                  (imageRemoved)="onCardImageRemoved()"
+                >
+                </app-image-upload>
+              </div>
+  
+              <div class="form-field full-width">
+                <app-image-upload
+                  label="Project Cover Image"
+                  [maxSizeMB]="5"
+                  [existingImageUrl]="projectForm.get('coverPhotoId')?.value
+                  ? `http://localhost:3000/api/images/${projectForm.get('coverPhotoId')?.value}`
+                  : undefined"
+                  (imageSelected)="onCoverImageSelected($event)"
+                  (imageRemoved)="onCoverImageRemoved()"
+                >
+                </app-image-upload>
+              </div>
+            </div>
+          </section>
 
           <div>
             <app-google-maps
-              [initialLatitude]="projectForm.get('latitude')?.value"
-              [initialLongitude]="projectForm.get('longitude')?.value"
+              [initialLatitude]="projectForm.get('location')?.value?.latitude"
+              [initialLongitude]="projectForm.get('location')?.value?.longitude"
               height="500px"
               markerTitle="Project Location"
               (locationSelected)="onLocationSelected($event)"

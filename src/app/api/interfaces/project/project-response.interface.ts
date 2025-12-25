@@ -1,3 +1,5 @@
+import { CommunicationType } from "../../../shared";
+
 export interface ProjectResponseInterface {
   id: string;
   name: string;
@@ -5,18 +7,19 @@ export interface ProjectResponseInterface {
   developerContactInfo: string;
   developerPhotoUrl?: string;
   description: string;
-  latitude: number;
-  longitude: number;
-  locationName: string;
   photos?: string[];
-  coverPhotoUrl?: string;
+  coverPhotoId?: string;
+  cardPhotoId?: string;
   videoUrl?: string;
   propertyType: 'land' | 'land_with_house';
-  communications: Array<{
-    type: string;
-    available: boolean;
-    description?: string;
-  }>;
+  communications: Array<CommunicationType>;
+  location: {
+    streetName: string;
+    city: string;
+    district: string;
+    latitude: number;
+    longitude: number;
+  }
   status: 'ACTIVE' | 'INACTIVE';
   createdAt: string;
   updatedAt: string;

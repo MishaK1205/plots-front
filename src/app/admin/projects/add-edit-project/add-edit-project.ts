@@ -5,6 +5,7 @@ import {
   FormGroup,
   Validators,
   ReactiveFormsModule,
+  FormArray,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -32,6 +33,8 @@ import {
   GoogleMaps,
   LocationSelectedEvent,
 } from '../../../components/google-maps/google-maps';
+import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { CommunicationType } from '../../../shared';
 
 const MATERIAL_MODULES = [
   MatCardModule,
@@ -43,6 +46,7 @@ const MATERIAL_MODULES = [
   MatProgressSpinnerModule,
   MatSnackBarModule,
   MatSelectModule,
+  MatCheckboxModule,
 ];
 
 @Component({
@@ -73,6 +77,7 @@ export class AddEditProject implements OnInit {
   isLoading = signal(false);
   projectId = signal<string | null>(null);
   companies = signal<CompanyResponseInterface[]>([]);
+  communicationTypes = Object.values(CommunicationType);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -84,13 +89,19 @@ export class AddEditProject implements OnInit {
     this.projectForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      latitude: [null, [Validators.required]],
-      longitude: [null, [Validators.required]],
-      locationName: ['', [Validators.required, Validators.minLength(5)]],
       propertyType: ['land', [Validators.required]],
       companyId: ['', [Validators.required]],
       status: ['ACTIVE', [Validators.required]],
-      coverPhotoUrl: [''],
+      cardPhotoId: [''],
+      coverPhotoId: [''],
+      communications: [[]],
+      location: this.fb.group({
+        streetName: [''],
+        city: [''],
+        district: [''],
+        latitude: [''],
+        longitude: [''],
+      }),
       videoUrl: [''],
     });
   }
@@ -137,23 +148,43 @@ export class AddEditProject implements OnInit {
     this.projectForm.patchValue({
       name: project.name,
       description: project.description,
-      latitude: project.latitude,
-      longitude: project.longitude,
-      locationName: project.locationName,
       propertyType: project.propertyType,
       companyId: project.companyId,
       status: project.status,
-      coverPhotoUrl: project.coverPhotoUrl,
+      coverPhotoId: project.coverPhotoId,
+      cardPhotoId: project.cardPhotoId,
       videoUrl: project.videoUrl,
+      communications: project.communications,
+      location: {
+        streetName: project.location.streetName,
+        city: project.location.city,
+        district: project.location.district,
+        latitude: project.location.latitude,
+        longitude: project.location.longitude,
+      }
     });
   }
 
   onLocationSelected(event: LocationSelectedEvent): void {
-    this.projectForm.patchValue({
-      latitude: event.position.lat,
-      longitude: event.position.lng,
-      locationName: event.formattedAddress,
-    });
+    this.projectForm.patchValue(
+      {
+        location: {
+          streetName: event.streetName,
+          city: event.city,
+          district: event.district,
+          latitude: event.latitude,
+          longitude: event.longitude,
+        }
+      }
+    );
+  }
+
+  onCommunicationChange(event: MatCheckboxChange, communication: string): void {
+    if (event && event.checked) {
+      this.projectForm.get('communications')?.value?.push(communication);
+    } else {
+      this.projectForm.get('communications')?.value?.splice(this.projectForm.get('communications')?.value?.indexOf(communication), 1);
+    }
   }
 
   onSubmit(): void {
@@ -194,7 +225,9 @@ export class AddEditProject implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
         next: (response) => {
-          this.projectForm.get('coverPhotoUrl')?.setValue(response.imageUrl);
+          const coverImageId = response.id;
+
+          this.projectForm.get('coverPhotoId')?.setValue(coverImageId);
           this.showSuccess('Image uploaded successfully');
         },
         error: () => this.showError('Failed to upload image'),
@@ -202,15 +235,45 @@ export class AddEditProject implements OnInit {
   }
 
   onCoverImageRemoved(): void {
-    const imageUrl = this.projectForm.get('coverPhotoUrl')?.value;
-    if (!imageUrl) return;
+    const imageId = this.projectForm.get('coverPhotoId')?.value;
+    if (!imageId) return;
 
     this.imagesService
-      .delete(imageUrl)
+      .delete(imageId)
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
         next: () => {
-          this.projectForm.get('coverPhotoUrl')?.setValue(null);
+          this.projectForm.get('coverPhotoId')?.setValue(null);
+          this.showSuccess('Image removed successfully');
+        },
+        error: () => this.showError('Failed to remove image'),
+      });
+  }
+
+  onCardImageSelected(file: File): void {
+    this.imagesService
+      .upload(file)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => {
+          const cardImageId = response.id;
+          this.projectForm.get('cardPhotoId')?.setValue(cardImageId);
+          this.showSuccess('Image uploaded successfully');
+        },
+        error: () => this.showError('Failed to upload image'),
+      });
+  }
+
+  onCardImageRemoved(): void {
+    const imageId = this.projectForm.get('cardPhotoId')?.value;
+    if (!imageId) return;
+
+    this.imagesService
+      .delete(imageId)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: () => {
+          this.projectForm.get('cardPhotoId')?.setValue(null);
           this.showSuccess('Image removed successfully');
         },
         error: () => this.showError('Failed to remove image'),

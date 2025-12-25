@@ -17,13 +17,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { GoogleMapsModule } from '@angular/google-maps';
 import {
+  debounceTime,
+  distinctUntilChanged,
+  switchMap,
+  of,
+  catchError,
+} from 'rxjs';
+import {
   GoogleMapsService,
   MapPosition,
 } from '../../api/services/google-maps.service';
 
 export interface LocationSelectedEvent {
-  position: MapPosition;
-  formattedAddress: string;
+  streetName: string;
+  city: string;
+  district: string;
+  longitude: number;
+  latitude: number;
 }
 
 @Component({
@@ -48,7 +58,6 @@ export class GoogleMaps implements OnInit, OnDestroy {
   // Inputs
   initialLatitude = input<number | null>(null);
   initialLongitude = input<number | null>(null);
-  height = input<string>('500px');
   markerTitle = input<string>('Location');
 
   // Outputs
@@ -61,122 +70,278 @@ export class GoogleMaps implements OnInit, OnDestroy {
   zoom = this.googleMapsService.defaultZoom;
   mapOptions: google.maps.MapOptions = this.googleMapsService.defaultMapOptions;
 
-  private geocoder: google.maps.Geocoder | null = null;
+  // Places API (New) - Cache and optimization
+  private placesLibrary: any = null;
+  private AutocompleteSuggestion: any = null;
+  private AutocompleteSessionToken: any = null;
+  private Place: any = null;
+  private sessionToken: any = null;
+  private geocodeCache = new Map<string, string>();
+  private readonly CACHE_SIZE_LIMIT = 100;
+  private readonly DEBOUNCE_TIME = 400; // ms
+  private readonly MIN_SEARCH_LENGTH = 3;
+  private isSearching = signal(false);
 
   ngOnInit(): void {
-    // Set initial center if coordinates are provided
-    if (this.initialLatitude() && this.initialLongitude()) {
-      this.center = {
-        lat: Number(this.initialLatitude()),
-        lng: Number(this.initialLongitude()),
-      };
-      this.zoom = 15;
-    }
+    this.initializeCenter();
   }
 
   ngOnDestroy(): void {
-    this.googleMapsService.cleanup();
+    this.cleanup();
+  }
+
+  private initializeCenter(): void {
+    const lat = this.initialLatitude();
+    const lng = this.initialLongitude();
+
+    if (lat !== null && lng !== null) {
+      this.center = { lat: Number(lat), lng: Number(lng) };
+      this.zoom = 15;
+    }
   }
 
   async onMapInitialized(map: google.maps.Map): Promise<void> {
     try {
       await this.googleMapsService.initializeMap(map);
-      await this.initializeGeocoder();
-      this.setupLocationSearch();
+      await this.initializePlacesAPI();
+      this.setupOptimizedLocationSearch();
       this.addInitialMarker();
     } catch (error) {
-      console.error('Error initializing map:', error);
+      throw error;
     }
   }
 
-  private async initializeGeocoder(): Promise<void> {
+  private async initializePlacesAPI(): Promise<void> {
     try {
-      this.geocoder = new google.maps.Geocoder();
+      this.placesLibrary = await google.maps.importLibrary('places');
+      this.AutocompleteSuggestion = (this.placesLibrary as any).AutocompleteSuggestion;
+      this.AutocompleteSessionToken = (this.placesLibrary as any).AutocompleteSessionToken;
+      this.Place = (this.placesLibrary as any).Place;
+      
+      this.createNewSessionToken();
     } catch (error) {
-      console.error('Error initializing geocoder:', error);
+      throw error;
     }
   }
 
-  private setupLocationSearch(): void {
+  private createNewSessionToken(): void {
+    if (this.AutocompleteSessionToken) {
+      this.sessionToken = new this.AutocompleteSessionToken();
+    }
+  }
+
+  private setupOptimizedLocationSearch(): void {
     this.locationSearchControl.valueChanges
-      .pipe(takeUntilDestroyed(this.destroyRef$))
-      .subscribe((value) => {
-        if (value && value.length > 2) {
-          this.searchLocations(value);
-        } else {
+      .pipe(
+        debounceTime(this.DEBOUNCE_TIME),
+        distinctUntilChanged(),
+        switchMap((value) => {
+          if (!value || typeof value !== 'string' || value.length < this.MIN_SEARCH_LENGTH) {
+            this.locationSuggestions.set([]);
+            return of(null);
+          }
+
+          const cacheKey = this.getCacheKey(value);
+          if (this.geocodeCache.has(cacheKey)) {
+            const cachedResults = this.geocodeCache.get(cacheKey);
+
+            if (cachedResults) {
+              this.locationSuggestions.set(JSON.parse(cachedResults));
+              return of(null);
+            }
+          }
+
+          this.isSearching.set(true);
+          return this.performGeocode(value);
+        }),
+        catchError(() => {
           this.locationSuggestions.set([]);
+          return of(null);
+        }),
+        takeUntilDestroyed(this.destroyRef$)
+      )
+      .subscribe((results) => {
+        this.isSearching.set(false);
+        
+        if (results) {
+          this.locationSuggestions.set(results);
         }
       });
   }
 
-  private searchLocations(query: string): void {
-    if (!this.geocoder) return;
-
-    this.geocoder.geocode(
-      {
-        address: query,
-        region: 'ge',
-        componentRestrictions: { country: 'ge' },
-      },
-      (results, status) => {
-        if (status === google.maps.GeocoderStatus.OK && results) {
-          const predictions = results.slice(0, 8).map((result) => ({
-            description: result.formatted_address || '',
-            place_id: result.place_id || '',
-            structured_formatting: {
-              main_text: this.extractMainText(result),
-              secondary_text: result.formatted_address || '',
-            },
-            geometry: result.geometry,
-          }));
-          this.locationSuggestions.set(predictions);
-        } else {
-          this.locationSuggestions.set([]);
-        }
-      },
-    );
-  }
-
-  private extractMainText(result: google.maps.GeocoderResult): string {
-    const addressComponents = result.address_components || [];
-    const streetNumber = addressComponents.find((c) =>
-      c.types.includes('street_number'),
-    );
-    const route = addressComponents.find((c) => c.types.includes('route'));
-    const locality = addressComponents.find((c) =>
-      c.types.includes('locality'),
-    );
-
-    if (streetNumber && route) {
-      return `${streetNumber.long_name} ${route.long_name}`;
-    } else if (route) {
-      return route.long_name;
-    } else if (locality) {
-      return locality.long_name;
+  private async performGeocode(query: string): Promise<any[]> {
+    if (!this.AutocompleteSuggestion || !this.sessionToken) {
+      return [];
     }
-    return result.formatted_address?.split(',')[0] || '';
+    
+    return this.fetchPlacePredictions(query);
   }
 
-  onLocationSelected(prediction: any): void {
-    if (!prediction.geometry || !prediction.geometry.location) return;
+  private async fetchPlacePredictions(query: string): Promise<any[]> {
+    try {
+      if (!this.AutocompleteSuggestion || !this.sessionToken) {
+        return [];
+      }
 
+      const request = {
+        input: query,
+        sessionToken: this.sessionToken,
+        includedRegionCodes: ['ge'],
+        includedPrimaryTypes: ['establishment', 'geocode'],
+        language: 'ka',
+      };
+
+      const response = await this.AutocompleteSuggestion.fetchAutocompleteSuggestions(request);
+      
+      if (response && response.suggestions) {
+        const predictions = this.processPlacePredictions(response.suggestions);
+        this.cacheResults(query, predictions);
+        return predictions;
+      }
+      
+      return [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  private processPlacePredictions(suggestions: any[]): any[] {
+    return suggestions
+      .filter((suggestion) => suggestion.placePrediction)
+      .slice(0, 8)
+      .map((suggestion) => {
+        const prediction = suggestion.placePrediction;
+        const text = prediction.text?.text || '';
+        
+        return {
+          description: text,
+          placePrediction: prediction,
+          suggestion: suggestion,
+        };
+      });
+  }
+
+
+  private getCacheKey(query: string): string {
+    return query.toLowerCase().trim();
+  }
+
+  private cacheResults(query: string, results: any[]): void {
+    const cacheKey = this.getCacheKey(query);
+    
+    if (this.geocodeCache.size >= this.CACHE_SIZE_LIMIT) {
+      const firstKey = this.geocodeCache.keys().next().value;
+      if (firstKey) {
+        this.geocodeCache.delete(firstKey);
+      }
+    }
+    
+    this.geocodeCache.set(cacheKey, JSON.stringify(results));
+  }
+
+  private clearCache(): void {
+    this.geocodeCache.clear();
+  }
+
+  async onLocationSelected(prediction: any): Promise<void> {
     this.locationSearchControl.setValue(prediction.description, {
       emitEvent: false,
     });
 
-    const position: MapPosition = {
-      lat: prediction.geometry.location.lat(),
-      lng: prediction.geometry.location.lng(),
+    if (prediction.placePrediction && this.Place && this.sessionToken) {
+      await this.handlePlaceSelection(prediction);
+    } else {
+      return;
+    }
+    
+    this.locationSuggestions.set([]);
+    
+    this.createNewSessionToken();
+  }
+
+  private async handlePlaceSelection(prediction: any): Promise<void> {
+    try {
+      if (!prediction.placePrediction || !this.Place) {
+        return;
+      }
+
+      const place = prediction.placePrediction.toPlace();
+      
+      await place.fetchFields({
+        fields: [
+          'displayName', 
+          'formattedAddress', 
+          'location',
+          'addressComponents',
+        ],
+      });
+
+      if (!place.location) {
+        return;
+      }
+
+      const addressInfo = this.extractAddressInfo(place);
+      
+      this.handleLocationSelect({
+        streetName: addressInfo.streetName,
+        city: addressInfo.city,
+        district: addressInfo.district,
+        longitude: place.location.lng(),
+        latitude: place.location.lat(),
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  private extractAddressInfo(place: any): { streetName: string; city: string; district: string } {
+    const components = place.addressComponents || [];
+    
+    const streetComponent = components.find((c: any) => 
+      c.types?.includes('route')
+    );
+    
+    const streetNumberComponent = components.find((c: any) => 
+      c.types?.includes('street_number')
+    );
+    
+    const cityComponent = components.find((c: any) => 
+      c.types?.includes('locality') || 
+      c.types?.includes('administrative_area_level_1')
+    );
+    
+    const districtComponent = components.find((c: any) => 
+      c.types?.includes('sublocality_level_1') ||
+      c.types?.includes('sublocality') ||
+      c.types?.includes('administrative_area_level_2')
+    );
+    
+    const getComponentText = (component: any) => {
+      if (!component) return '';
+      return component.longText || 
+             component.shortText || 
+             component.longName || 
+             component.shortName ||
+             component.text ||
+             '';
     };
-
-    console.log('Selected prediction:', prediction);
-
-    this.handleLocationSelect(position, prediction.description || '');
+    
+    const streetName = streetNumberComponent && streetComponent
+      ? `${getComponentText(streetNumberComponent)} ${getComponentText(streetComponent)}`
+      : getComponentText(streetComponent);
+    
+    return {
+      streetName: streetName || '',
+      city: getComponentText(cityComponent),
+      district: getComponentText(districtComponent),
+    };
   }
 
   displayLocationFn(prediction: any): string {
-    return prediction ? prediction.description : '';
+    return prediction?.description || '';
   }
+
+  // ==================== Map Interactions ====================
 
   onMapClick(event: google.maps.MapMouseEvent): void {
     const position = this.googleMapsService.extractPositionFromEvent(event);
@@ -186,19 +351,23 @@ export class GoogleMaps implements OnInit, OnDestroy {
     this.reverseGeocodeAndEmit(position);
   }
 
-  private handleLocationSelect(
-    position: MapPosition,
-    formattedAddress: string,
-  ): void {
+  private handleLocationSelect(event: LocationSelectedEvent): void {
+    const position: MapPosition = {
+      lat: event.latitude,
+      lng: event.longitude,
+    };
     this.updateMapLocation(position, 15);
-    this.locationSelected.emit({ position, formattedAddress });
+    this.locationSelected.emit(event);
   }
 
   private addInitialMarker(): void {
-    if (this.initialLatitude() && this.initialLongitude()) {
+    const lat = this.initialLatitude();
+    const lng = this.initialLongitude();
+
+    if (lat !== null && lng !== null) {
       const position: MapPosition = {
-        lat: Number(this.initialLatitude()),
-        lng: Number(this.initialLongitude()),
+        lat: Number(lat),
+        lng: Number(lng),
       };
       this.googleMapsService.addMarker(position, this.markerTitle());
     }
@@ -211,11 +380,93 @@ export class GoogleMaps implements OnInit, OnDestroy {
   }
 
   private async reverseGeocodeAndEmit(position: MapPosition): Promise<void> {
-    const address = await this.googleMapsService.reverseGeocode(position);
-    if (address) {
-      this.locationSelected.emit({ position, formattedAddress: address });
-    } else {
-      this.locationSelected.emit({ position, formattedAddress: '' });
+    try {
+      const geocoder = new google.maps.Geocoder();
+      
+      geocoder.geocode(
+        {
+          location: position,
+          language: 'ka',
+        },
+        (results, status) => {
+          if (status === google.maps.GeocoderStatus.OK && results && results[0]) {
+            const result = results[0];
+            
+            const addressInfo = this.extractAddressInfoFromGeocoder(result);
+            
+            this.locationSelected.emit({
+              streetName: addressInfo.streetName,
+              city: addressInfo.city,
+              district: addressInfo.district,
+              latitude: position.lat,
+              longitude: position.lng,
+            });
+          } else {
+            this.locationSelected.emit({
+              streetName: '',
+              city: '',
+              district: '',
+              latitude: position.lat,
+              longitude: position.lng,
+            });
+          }
+        }
+      );
+    } catch (error) {
+      this.locationSelected.emit({
+        streetName: '',
+        city: '',
+        district: '',
+        latitude: position.lat,
+        longitude: position.lng,
+      });
     }
+  }
+
+  private extractAddressInfoFromGeocoder(result: google.maps.GeocoderResult): {
+    streetName: string;
+    city: string;
+    district: string;
+  } {
+    const components = result.address_components || [];
+    
+    // Find street name (route)
+    const streetComponent = components.find((c) => c.types.includes('route'));
+    const streetNumberComponent = components.find((c) =>
+      c.types.includes('street_number')
+    );
+    
+    // Find city - try multiple types
+    const cityComponent = 
+      components.find((c) => c.types.includes('locality')) ||
+      components.find((c) => c.types.includes('administrative_area_level_1')) ||
+      components.find((c) => c.types.includes('administrative_area_level_2'));
+    
+    // Find district - try multiple types
+    const districtComponent = 
+      components.find((c) => c.types.includes('sublocality_level_1')) ||
+      components.find((c) => c.types.includes('sublocality')) ||
+      components.find((c) => c.types.includes('administrative_area_level_2')) ||
+      components.find((c) => c.types.includes('neighborhood'));
+    
+    // Build street name
+    let streetName = '';
+    if (streetNumberComponent && streetComponent) {
+      streetName = `${streetNumberComponent.long_name} ${streetComponent.long_name}`;
+    } else if (streetComponent) {
+      streetName = streetComponent.long_name || '';
+    }
+    
+    return {
+      streetName: streetName.trim(),
+      city: cityComponent?.long_name || '',
+      district: districtComponent?.long_name || '',
+    };
+  }
+
+  private cleanup(): void {
+    this.googleMapsService.cleanup();
+    this.clearCache();
+    this.locationSuggestions.set([]);
   }
 }

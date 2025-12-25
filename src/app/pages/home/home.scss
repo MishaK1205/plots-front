@@ -8,4 +8,25 @@
 .home-container {
   width: 100%;
   padding: px-to-rem(0px) px-to-rem(150px);
+
+  &__favourite-projects-header {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(12px);
+
+    margin-bottom: px-to-rem(32px);
+
+    span {
+      font-size: px-to-rem(11px);
+      color: #0090E3;
+    }
+  }
+
+  &__favourite-projects-list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    gap: px-to-rem(20px);
+  }
 }

@@ -17,23 +17,15 @@
       >
         @for (
           suggestion of locationSuggestions();
-          track suggestion.place_id || $index
+          track suggestion.placePrediction?.placeId || $index
         ) {
           <mat-option [value]="suggestion">
             <div class="suggestion-option">
               <mat-icon class="suggestion-icon">place</mat-icon>
               <div class="suggestion-text">
                 <div class="suggestion-main">
-                  {{
-                    suggestion.structured_formatting?.main_text ||
-                      suggestion.description
-                  }}
+                  {{ suggestion.description }}
                 </div>
-                @if (suggestion.structured_formatting?.secondary_text) {
-                  <div class="suggestion-secondary">
-                    {{ suggestion.structured_formatting.secondary_text }}
-                  </div>
-                }
               </div>
             </div>
           </mat-option>
@@ -43,7 +35,6 @@
   </div>
 
   <google-map
-    [height]="height()"
     width="100%"
     [center]="center"
     [zoom]="zoom"

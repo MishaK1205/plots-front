@@ -1,12 +1,14 @@
 <div class="home-container">
-  <section class="home__favourite-projects">
-    <div>
+  <section class="home-container__favourite-projects">
+    <div class="home-container__favourite-projects-header">
       <h2>რჩეული პროექტები</h2>
       <span>ყველას ნახვა</span>
     </div>
 
-    @for (project of favouriteProjects; track project.id) {
-      <app-project-card [project]="project"></app-project-card>
-    }
+    <div class="home-container__favourite-projects-list">
+      @for (project of favouriteProjects; track project.id) {
+        <app-project-card [project]="project"></app-project-card>
+      }
+    </div>
   </section>
 </div>

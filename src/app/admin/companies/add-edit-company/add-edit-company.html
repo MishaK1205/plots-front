@@ -98,28 +98,6 @@
             </div>
 
             <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Address *</mat-label>
-                <input
-                  matInput
-                  formControlName="address"
-                  placeholder="123 Main Street"
-                />
-                @if (getFieldError("address")) {
-                  <mat-error>{{ getFieldError("address") }}</mat-error>
-                }
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>City *</mat-label>
-                <input matInput formControlName="city" placeholder="New York" />
-                @if (getFieldError("city")) {
-                  <mat-error>{{ getFieldError("city") }}</mat-error>
-                }
-              </mat-form-field>
-            </div>
-
-            <div class="form-row">
               <mat-form-field appearance="outline" class="form-field full-width">
                 <mat-label>Description</mat-label>
                 <textarea
@@ -184,8 +162,8 @@
             <h1 class="company-section__title">Location</h1>
 
             <app-google-maps
-              [initialLatitude]="companyForm.get('latitude')?.value"
-              [initialLongitude]="companyForm.get('longitude')?.value"
+              [initialLatitude]="companyForm.get('location.latitude')?.value"
+              [initialLongitude]="companyForm.get('location.longitude')?.value"
               height="500px"
               markerTitle="Project Location"
               (locationSelected)="onLocationSelected($event)"

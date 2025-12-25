@@ -16,7 +16,7 @@ export class Home {
 
   ngOnInit() {
     this.projectsService.getAll().subscribe((projects) => {
-      this.favouriteProjects = projects.data.slice(1, 2);
+      this.favouriteProjects = projects.data;
       console.log(this.favouriteProjects);
     });
   }

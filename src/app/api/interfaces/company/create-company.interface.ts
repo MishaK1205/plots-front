@@ -4,14 +4,17 @@ export interface CreateCompanyInterface {
   email: string;
   phone: string;
   website?: string;
-  address: string;
-  city: string;
-  latitude?: number;
-  longitude?: number;
   description?: string;
-  logoUrl?: string;
-  coverImageUrl?: string;
+  logoId?: string;
+  coverImageId?: string;
   status?: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+  location: {
+    streetName: string;
+    city: string;
+    district: string;
+    latitude: number;
+    longitude: number;
+  };
   socialAccounts?: {
     facebook?: string;
     instagram?: string;
