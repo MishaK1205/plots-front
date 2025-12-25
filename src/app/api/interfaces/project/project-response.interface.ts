@@ -13,6 +13,8 @@ export interface ProjectResponseInterface {
   videoUrl?: string;
   propertyType: 'land' | 'land_with_house';
   communications: Array<CommunicationType>;
+  lowestLandTotalPrice: number;
+  lowestLandSquareMeterPrice: number;
   location: {
     streetName: string;
     city: string;

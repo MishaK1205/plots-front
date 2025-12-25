@@ -6,10 +6,10 @@
 }
 
 .project-card {
-  width: 100%;
+  width: px-to-rem(285px);
 
   &__image {
-    width: px-to-rem(285px);
+    width: 100%;
     height: px-to-rem(200px);
     object-fit: cover;
     border-radius: px-to-rem(16px);
@@ -27,5 +27,40 @@
     font-weight: 400;
     color: #484848;
     margin-top: px-to-rem(8px);
+  }
+
+  &__price-container {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-top: px-to-rem(16px);
+  }
+
+  &__total-price {
+    font-size: px-to-rem(14px);
+    font-weight: 600;
+    color: #111111;
+  }
+
+  &__square-meter-price {
+    font-size: px-to-rem(12px);
+    font-weight: 500;
+    color: #606060;
+  }
+
+  &__location {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(4px);
+    font-size: px-to-rem(12px);
+    font-weight: 400;
+    color: #484848;
+    margin-top: px-to-rem(12px);
+    cursor: pointer;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #16BC2E;
+    }
   }
 }

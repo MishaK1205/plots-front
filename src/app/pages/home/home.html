@@ -6,7 +6,7 @@
     </div>
 
     <div class="home-container__favourite-projects-list">
-      @for (project of favouriteProjects; track project.id) {
+      @for (project of favouriteProjects(); track project.id) {
         <app-project-card [project]="project"></app-project-card>
       }
     </div>

@@ -10,5 +10,22 @@
     დეველოპერი: {{ project().developerCompanyName }}
   </p>
 
-  <span></span>
+  <div class="project-card__price-container">
+    <div>
+      <p class="project-card__total-price">${{ project().lowestLandTotalPrice }}<span>-დან</span></p>
+      <p class="project-card__square-meter-price">1მ<sup>2</sup> - $ {{ project().lowestLandSquareMeterPrice }}</p>
+    </div>
+
+    <app-currency-toggle
+      (currencyChanged)="onCurrencyChange($event)"
+    ></app-currency-toggle>
+  </div>
+
+  <div 
+    class="project-card__location"
+    (click)="onLocationClick()"
+  >
+    <img src="assets/icons/location.svg" alt="Location Icon" /> 
+    <span>{{ project().location.city }}</span>
+  </div>
 </div>

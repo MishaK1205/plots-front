@@ -1,0 +1,20 @@
+<div class="currency-toggle" [attr.data-active]="activeCurrency()">
+  <button
+    type="button"
+    class="currency-toggle__option"
+    [class.currency-toggle__option--active]="activeCurrency() === 'GEL'"
+    (click)="onCurrencyClick('GEL')"
+  >
+    <span class="currency-toggle__symbol">₾</span>
+  </button>
+  
+  <button
+    type="button"
+    class="currency-toggle__option"
+    [class.currency-toggle__option--active]="activeCurrency() === 'USD'"
+    (click)="onCurrencyClick('USD')"
+  >
+    <span class="currency-toggle__symbol">$</span>
+  </button>
+</div>
+
