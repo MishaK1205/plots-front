@@ -26,6 +26,9 @@ import { ImagesService } from '../../../api/services';
 import {
   ProjectResponseInterface,
   CompanyResponseInterface,
+  CreateProjectInterface,
+  ProjectCommunication,
+  ProjectCommunicationType,
 } from '../../../api/interfaces';
 
 import { ImageUpload } from '../../../components/image-upload/image-upload';
@@ -33,8 +36,17 @@ import {
   GoogleMaps,
   LocationSelectedEvent,
 } from '../../../components/google-maps/google-maps';
-import { MatCheckboxChange, MatCheckboxModule } from '@angular/material/checkbox';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommunicationType } from '../../../shared';
+
+const COMMUNICATION_DEFAULT_DESCRIPTIONS: Record<string, string> = {
+  [CommunicationType.GAS]: 'Natural gas connection',
+  [CommunicationType.WATER]: 'Water supply connection',
+  [CommunicationType.SEWERAGE]: 'Sewerage system',
+  [CommunicationType.ROAD]: 'Road access',
+  [CommunicationType.ELECTRICITY]: 'Electrical connection',
+  [CommunicationType.INTERNET]: 'Internet connection',
+};
 
 const MATERIAL_MODULES = [
   MatCardModule,
@@ -77,7 +89,6 @@ export class AddEditProject implements OnInit {
   isLoading = signal(false);
   projectId = signal<string | null>(null);
   companies = signal<CompanyResponseInterface[]>([]);
-  communicationTypes = Object.values(CommunicationType);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -85,16 +96,33 @@ export class AddEditProject implements OnInit {
     this.checkEditMode();
   }
 
+  get communicationsFormArray(): FormArray {
+    return this.projectForm.get('communications') as FormArray;
+  }
+
+  private createCommunicationsFormArray(): FormArray {
+    return this.fb.array(
+      Object.values(CommunicationType).map((type) =>
+        this.fb.group({
+          type: [type],
+          available: [false],
+          description: [COMMUNICATION_DEFAULT_DESCRIPTIONS[type] ?? ''],
+        }),
+      ),
+    );
+  }
+
   private initializeForm(): void {
     this.projectForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       description: ['', [Validators.required, Validators.minLength(10)]],
-      propertyType: ['land', [Validators.required]],
       companyId: ['', [Validators.required]],
       status: ['ACTIVE', [Validators.required]],
       cardPhotoId: [''],
       coverPhotoId: [''],
-      communications: [[]],
+      photosText: [''],
+      tagsText: [''],
+      communications: this.createCommunicationsFormArray(),
       location: this.fb.group({
         streetName: [''],
         city: [''],
@@ -144,47 +172,117 @@ export class AddEditProject implements OnInit {
       });
   }
 
+  private patchCommunicationsFromProject(
+    comms: ProjectResponseInterface['communications'] | undefined,
+  ): void {
+    const arr = this.communicationsFormArray;
+    if (!comms?.length) return;
+    const first = comms[0];
+    const isNewFormat =
+      typeof first === 'object' &&
+      first !== null &&
+      'available' in first;
+
+    if (isNewFormat) {
+      const byType = new Map(
+        (comms as ProjectCommunication[]).map((c) => [c.type, c]),
+      );
+      arr.controls.forEach((ctrl) => {
+        const g = ctrl as FormGroup;
+        const t = g.get('type')!.value as ProjectCommunicationType;
+        const item = byType.get(t);
+        if (item) {
+          g.patchValue({
+            available: item.available,
+            description: item.description ?? '',
+          });
+        }
+      });
+    } else {
+      const selected = new Set(comms as unknown as string[]);
+      arr.controls.forEach((ctrl) => {
+        const g = ctrl as FormGroup;
+        const t = g.get('type')!.value as CommunicationType;
+        g.patchValue({
+          available: selected.has(t),
+          description: COMMUNICATION_DEFAULT_DESCRIPTIONS[t] ?? '',
+        });
+      });
+    }
+  }
+
   private populateForm(project: ProjectResponseInterface): void {
     this.projectForm.patchValue({
       name: project.name,
       description: project.description,
-      propertyType: project.propertyType,
       companyId: project.companyId,
       status: project.status,
       coverPhotoId: project.coverPhotoId,
       cardPhotoId: project.cardPhotoId,
       videoUrl: project.videoUrl,
-      communications: project.communications,
+      photosText: (project.photos ?? []).join('\n'),
+      tagsText: (project.tags ?? []).join(', '),
       location: {
         streetName: project.location.streetName,
         city: project.location.city,
         district: project.location.district,
         latitude: project.location.latitude,
         longitude: project.location.longitude,
-      }
+      },
     });
+    this.patchCommunicationsFromProject(project.communications);
   }
 
   onLocationSelected(event: LocationSelectedEvent): void {
-    this.projectForm.patchValue(
-      {
-        location: {
-          streetName: event.streetName,
-          city: event.city,
-          district: event.district,
-          latitude: event.latitude,
-          longitude: event.longitude,
-        }
-      }
-    );
+    this.projectForm.patchValue({
+      location: {
+        streetName: event.streetName,
+        city: event.city,
+        district: event.district,
+        latitude: event.latitude,
+        longitude: event.longitude,
+      },
+    });
   }
 
-  onCommunicationChange(event: MatCheckboxChange, communication: string): void {
-    if (event && event.checked) {
-      this.projectForm.get('communications')?.value?.push(communication);
-    } else {
-      this.projectForm.get('communications')?.value?.splice(this.projectForm.get('communications')?.value?.indexOf(communication), 1);
-    }
+  private toApiPayload(): CreateProjectInterface {
+    const v = this.projectForm.getRawValue();
+    const photos = (v.photosText as string)
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const tags = (v.tagsText as string)
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
+    const lat = Number(v.location.latitude);
+    const lng = Number(v.location.longitude);
+
+    return {
+      name: v.name,
+      description: v.description,
+      location: {
+        streetName: v.location.streetName ?? '',
+        city: v.location.city ?? '',
+        district: v.location.district ?? '',
+        latitude: Number.isFinite(lat) ? lat : 0,
+        longitude: Number.isFinite(lng) ? lng : 0,
+      },
+      cardPhotoId: v.cardPhotoId || undefined,
+      coverPhotoId: v.coverPhotoId || undefined,
+      photos: photos.length ? photos : undefined,
+      videoUrl: v.videoUrl || undefined,
+      communications: (v.communications as ProjectCommunication[]).map(
+        (c) => ({
+          type: c.type,
+          available: !!c.available,
+          description: (c.description ?? '').toString(),
+        }),
+      ),
+      tags: tags.length ? tags : undefined,
+      status: v.status,
+      companyId: v.companyId,
+    };
   }
 
   onSubmit(): void {
@@ -194,10 +292,11 @@ export class AddEditProject implements OnInit {
     }
 
     this.isLoading.set(true);
+    const payload = this.toApiPayload();
 
     const operation$ = this.isEditMode()
-      ? this.projectsService.update(this.projectId()!, this.projectForm.value)
-      : this.projectsService.create(this.projectForm.value);
+      ? this.projectsService.update(this.projectId()!, payload)
+      : this.projectsService.create(payload);
 
     operation$.pipe(takeUntilDestroyed(this.destroyRef$)).subscribe({
       next: () => {
@@ -304,6 +403,7 @@ export class AddEditProject implements OnInit {
     Object.values(this.projectForm.controls).forEach((control) =>
       control.markAsTouched(),
     );
+    this.communicationsFormArray.controls.forEach((c) => c.markAsTouched());
   }
 
   onCancel(): void {

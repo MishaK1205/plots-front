@@ -1,0 +1,77 @@
+@use "../../tools/_px-to-rem.scss" as *;
+
+:host {
+  display: block;
+  flex-shrink: 0;
+  width: 100%;
+  max-width: px-to-rem(590);
+}
+
+.sponsored-project-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+
+  gap: px-to-rem(16);
+
+  width: 100%;
+  height: px-to-rem(400);
+  padding: px-to-rem(32);
+
+  color: #ffffff;
+  border-radius: px-to-rem(16);
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: linear-gradient(180deg, #172021 0%, rgba(23, 32, 33, 0) 100%);
+    border-radius: px-to-rem(16);
+    z-index: -1;
+  }
+
+  &__title {
+    font-size: px-to-rem(24);
+    font-weight: bold;
+
+    text-transform: uppercase;
+    margin-bottom: px-to-rem(8);
+  }
+
+  &__project-info {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(4);
+  }
+
+  &__project-name {
+    font-size: px-to-rem(16);
+    font-weight: 600;
+  }
+
+  &__developer-name {
+    font-size: px-to-rem(12);
+  }
+
+  &__btn {
+    padding: px-to-rem(18) px-to-rem(16);
+
+    font-size: px-to-rem(12);
+    font-weight: bold;
+    background-color: #16BC2E;
+    color: #ffffff;
+
+    border-radius: px-to-rem(8);
+
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,31 @@
+<div class="project-detailed-card__container">
+    <div class="project-detailed-card__container__card-image__container">
+        <img class="project-detailed-card__container__card-image" [src]="cardImageUrl" alt="Project Image" />
+    </div>
+    
+    <div class="project-detailed-card__container__details">
+        <h2 class="project-detailed-card__container__title">{{ project().name }}</h2>
+        <p class="project-detailed-card__container__developer">დეველოპერი: {{ project().developerCompanyName }}</p>
+
+        <div class="project-detailed-card__container__price-details">
+            <div>
+                <p class="project-detailed-card__container__total-price">${{ project().lowestLandTotalPrice }}<span>-დან</span></p>
+                <p class="project-detailed-card__container__square-meter-price">1მ<sup>2</sup> - $ {{ project().lowestLandSquareMeterPrice }}</p>
+            </div>
+
+            <app-currency-toggle
+                (currencyChanged)="onCurrencyChange($event)"
+            ></app-currency-toggle>
+        </div>
+        
+        <p>{{ project().description }}</p>
+
+        <div 
+            class="project-detailed-card__container__location"
+            (click)="onLocationClick()"
+        >
+            <img  class="project-detailed-card__container__location__icon" src="assets/icons/location.svg" alt="Location Icon" /> 
+            <span>{{ project().location.city }}</span>
+        </div>
+    </div>
+</div>

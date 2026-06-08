@@ -1,4 +1,4 @@
-import { CommunicationType } from "../../../shared";
+import { ProjectCommunication } from './create-project.interface';
 
 export interface ProjectResponseInterface {
   id: string;
@@ -11,8 +11,9 @@ export interface ProjectResponseInterface {
   coverPhotoId?: string;
   cardPhotoId?: string;
   videoUrl?: string;
-  propertyType: 'land' | 'land_with_house';
-  communications: Array<CommunicationType>;
+  propertyType?: 'land' | 'land_with_house';
+  communications: ProjectCommunication[];
+  tags?: string[];
   lowestLandTotalPrice: number;
   lowestLandSquareMeterPrice: number;
   location: {
@@ -21,7 +22,8 @@ export interface ProjectResponseInterface {
     district: string;
     latitude: number;
     longitude: number;
-  }
+  };
+  locationName?: string;
   status: 'ACTIVE' | 'INACTIVE';
   createdAt: string;
   updatedAt: string;

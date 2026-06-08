@@ -27,6 +27,34 @@
     gap: px-to-rem(16);
   }
 
+  .section-hint {
+    margin: px-to-rem(-12) 0 px-to-rem(16);
+    color: #666;
+    font-size: px-to-rem(14);
+  }
+
+  .communications-list {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(12);
+  }
+
+  .communication-row {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(16);
+    flex-wrap: wrap;
+
+    mat-checkbox {
+      flex: 0 0 px-to-rem(140);
+    }
+
+    .flex-grow {
+      flex: 1 1 px-to-rem(200);
+      min-width: 0;
+    }
+  }
+
   .form-row {
     display: flex;
     gap: px-to-rem(16);

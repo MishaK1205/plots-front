@@ -32,4 +32,16 @@
 
     gap: px-to-rem(20px);
   }
+
+  &__sponsored-projects {
+    width: 100%;
+    margin-top: px-to-rem(40px);
+
+    &-list {
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: px-to-rem(20px);
+    }
+  }
 }

@@ -1,0 +1,70 @@
+@use "../../tools/_px-to-rem.scss" as *;
+
+:host {
+  display: block;
+
+  width: 100%;
+  height: px-to-rem(280);
+
+  padding: px-to-rem(8) px-to-rem(192);
+}
+
+.project-detailed-card__container {
+    display: flex;
+    padding: px-to-rem(8);
+    transition: all 0.1s ease;
+    cursor: pointer;
+
+    &:hover {
+        background: #16BC2E0D;
+        border: 1px solid #16BC2E;
+        box-shadow: 0px -1px 0px 4px #16BC2E40;
+        border-radius: px-to-rem(8);
+        transition: all 0.5s ease;
+
+        .project-detailed-card__container__card-image__container {
+            width: px-to-rem(500);
+            height: px-to-rem(280);
+            transition: all 0.5s ease;
+        }
+    }
+
+    &__card-image__container {
+        width: px-to-rem(400);
+        height: px-to-rem(280);
+        border-radius: px-to-rem(8);
+        transition: all 0.5s ease;
+    }
+
+    &__details {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    // &__card-image {
+    //     width: px-to-rem(400);
+    //     height: px-to-rem(280);
+    //     border-radius: px-to-rem(8);
+    // }
+
+    &__title {
+        font-size: px-to-rem(18);
+        font-weight: 600;
+    }
+
+    &__developer {
+        font-size: px-to-rem(12);
+        color: #484848;
+    }
+
+    &__price-details {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    &__location {
+        display: flex;
+    }
+}

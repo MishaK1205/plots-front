@@ -11,4 +11,12 @@
       }
     </div>
   </section>
+
+  <section class="home-container__sponsored-projects">
+    <div class="home-container__sponsored-projects-list">
+      @for (project of sponsoredProjects(); track project.id) {
+        <app-sponsored-project-card [project]="project"></app-sponsored-project-card>
+      }
+    </div>
+  </section>
 </div>

@@ -1,23 +1,24 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { ProjectsService } from '../../api/services';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { ProjectResponseInterface } from '../../api/interfaces';
-import { ProjectCard } from '../../components';
+import { ProjectCard, SponsoredProjectCard } from '../../components';
+import { DUMMY_PROJECTS_RESPONSE } from '../dummy-projects';
 
 @Component({
   selector: 'app-home',
-  imports: [ProjectCard],
+  imports: [ProjectCard, SponsoredProjectCard],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home {
-  private projectsService = inject(ProjectsService);
+  favouriteProjects = signal<ProjectResponseInterface[]>(
+    DUMMY_PROJECTS_RESPONSE.data,
+  );
+  sponsoredProjects = signal<ProjectResponseInterface[]>(
+    DUMMY_PROJECTS_RESPONSE.data,
+  );
 
-  favouriteProjects = signal<ProjectResponseInterface[]>([]);
-
-  ngOnInit() {
-    this.projectsService.getAll().subscribe((projects) => {
-      this.favouriteProjects.set(projects.data);
-    });
+  something() {
+    return 'something';
   }
 }

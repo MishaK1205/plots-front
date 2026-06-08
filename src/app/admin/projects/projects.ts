@@ -94,7 +94,8 @@ export class Projects implements OnInit {
     }
   }
 
-  getPropertyTypeLabel(propertyType: string): string {
+  getPropertyTypeLabel(propertyType: string | undefined): string {
+    if (!propertyType) return '—';
     switch (propertyType) {
       case 'land':
         return 'Land';

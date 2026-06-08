@@ -1,7 +1,11 @@
-import { Component, model, output, ChangeDetectionStrategy } from '@angular/core';
+import { Component, output, ChangeDetectionStrategy, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  CurrencyStateService,
+  CurrencyType,
+} from '../../shared/currency-state.service';
 
-export type CurrencyType = 'GEL' | 'USD';
+export type { CurrencyType } from '../../shared/currency-state.service';
 
 @Component({
   selector: 'app-currency-toggle',
@@ -11,12 +15,14 @@ export type CurrencyType = 'GEL' | 'USD';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CurrencyToggle {
-  activeCurrency = model<CurrencyType>('GEL');
+  private readonly currencyState = inject(CurrencyStateService);
+
+  activeCurrency = this.currencyState.currency;
   currencyChanged = output<CurrencyType>();
 
   onCurrencyClick(currency: CurrencyType): void {
     if (currency !== this.activeCurrency()) {
-      this.activeCurrency.set(currency);
+      this.currencyState.setCurrency(currency);
       this.currencyChanged.emit(currency);
     }
   }

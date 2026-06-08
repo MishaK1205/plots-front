@@ -54,17 +54,6 @@
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Property Type *</mat-label>
-                <mat-select formControlName="propertyType">
-                  <mat-option value="land">Land</mat-option>
-                  <mat-option value="land_with_house">Land with House</mat-option>
-                </mat-select>
-                @if (getFieldError("propertyType")) {
-                  <mat-error>{{ getFieldError("propertyType") }}</mat-error>
-                }
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Status *</mat-label>
                 <mat-select formControlName="status">
                   <mat-option value="ACTIVE">Active</mat-option>
@@ -92,13 +81,56 @@
 
           <section>
             <h1 class="project-section__title">Communications</h1>
-
-            <div class="form-row">
-              @for (communication of communicationTypes; track communication) {
-                <mat-checkbox [value]="communication" (change)="onCommunicationChange($event, communication)" [checked]="projectForm.get('communications')?.value?.includes(communication)">
-                  {{ communication | titlecase }}
-                </mat-checkbox>
+            <p class="section-hint">
+              Toggle availability and describe each utility for the project.
+            </p>
+            <div formArrayName="communications" class="communications-list">
+              @for (
+                comm of communicationsFormArray.controls;
+                track comm;
+                let i = $index
+              ) {
+                <div class="communication-row" [formGroupName]="i">
+                  <mat-checkbox formControlName="available">
+                    {{ comm.value?.type | titlecase }}
+                  </mat-checkbox>
+                  <mat-form-field appearance="outline" class="form-field flex-grow">
+                    <mat-label>Description</mat-label>
+                    <input
+                      matInput
+                      formControlName="description"
+                      placeholder="e.g. Natural gas connection"
+                    />
+                  </mat-form-field>
+                </div>
               }
+            </div>
+          </section>
+
+          <section>
+            <h1 class="project-section__title">Gallery & tags</h1>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field full-width">
+                <mat-label>Photo URLs</mat-label>
+                <textarea
+                  matInput
+                  formControlName="photosText"
+                  rows="4"
+                  placeholder="One image URL per line"
+                ></textarea>
+                <mat-hint>Full URLs for gallery images (e.g. CDN links)</mat-hint>
+              </mat-form-field>
+            </div>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field full-width">
+                <mat-label>Tags</mat-label>
+                <input
+                  matInput
+                  formControlName="tagsText"
+                  placeholder="residential, prime-location, amenities"
+                />
+                <mat-hint>Comma-separated tags</mat-hint>
+              </mat-form-field>
             </div>
           </section>
 

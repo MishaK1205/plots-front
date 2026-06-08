@@ -70,7 +70,6 @@ export class AddEditCompany implements OnInit {
   private initializeForm(): void {
     this.companyForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      slug: ['', [Validators.required, Validators.pattern(/^[a-z0-9-]+$/)]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       website: [''],

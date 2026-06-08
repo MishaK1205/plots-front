@@ -25,7 +25,7 @@
             <h1 class="company-section__title">Company Details</h1>
 
             <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
+              <mat-form-field appearance="outline" class="form-field full-width">
                 <mat-label>Company Name *</mat-label>
                 <input
                   matInput
@@ -34,18 +34,6 @@
                 />
                 @if (getFieldError("name")) {
                   <mat-error>{{ getFieldError("name") }}</mat-error>
-                }
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Slug *</mat-label>
-                <input
-                  matInput
-                  formControlName="slug"
-                  placeholder="company-slug"
-                />
-                @if (getFieldError("slug")) {
-                  <mat-error>{{ getFieldError("slug") }}</mat-error>
                 }
               </mat-form-field>
             </div>
