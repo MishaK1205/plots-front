@@ -3,9 +3,9 @@ import { CommonModule } from '@angular/common';
 import {
   CurrencyStateService,
   CurrencyType,
-} from '../../shared/currency-state.service';
+} from '../../shared/services/currency-state.service';
 
-export type { CurrencyType } from '../../shared/currency-state.service';
+export type { CurrencyType } from '../../shared/services/currency-state.service';
 
 @Component({
   selector: 'app-currency-toggle',

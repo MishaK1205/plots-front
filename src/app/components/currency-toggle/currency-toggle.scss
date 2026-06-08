@@ -7,62 +7,50 @@
 .currency-toggle {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: px-to-rem(56);
+  gap: 0;
   height: px-to-rem(28);
+  padding: px-to-rem(2);
   border: 1px solid #EEEEEE;
   border-radius: px-to-rem(99);
-  overflow: hidden;
   background-color: #FFFFFF;
-  position: relative;
-  contain: layout style paint;
-  
-  &::before {
-    content: '';
-    position: absolute;
-    left: px-to-rem(2);
-    top: 50%;
-    transform: translateY(-50%);
-    width: px-to-rem(25);
-    height: px-to-rem(22);
-    background-color: #16BC2E;
-    border-radius: px-to-rem(99);
-    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 0;
-    pointer-events: none;
-  }
-  
-  &[data-active="USD"]::before {
-    transform: translate(px-to-rem(27), -50%);
-  }
 }
 
 .currency-toggle__option {
-  width: px-to-rem(25);
-  height: px-to-rem(22);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: px-to-rem(24);
+  height: px-to-rem(24);
+  padding: 0;
   background-color: transparent;
   border: none;
-  border-radius: px-to-rem(99);
+  border-radius: 50%;
   cursor: pointer;
   font-family: inherit;
-  font-size: px-to-rem(14px);
-  font-weight: 500;
+  line-height: 1;
   color: #111111;
-  position: relative;
-  z-index: 1;
-  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:hover:not(&--active) {
-    background-color: rgba(245, 245, 245, 0.5);
+  &:hover:not(.currency-toggle__option--active) {
+    background-color: rgba(245, 245, 245, 0.8);
   }
 
   &--active {
+    background-color: #16BC2E;
     color: #FFFFFF;
   }
 }
 
 .currency-toggle__symbol {
-  font-size: px-to-rem(12px);
-  font-weight: 400;
+  display: block;
+  font-size: px-to-rem(12);
+  font-weight: 500;
+  line-height: 1;
 }
 
+.currency-toggle__option--gel {
+  span {
+    transform: translateX(px-to-rem(-1));
+  }
+}
