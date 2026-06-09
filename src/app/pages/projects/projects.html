@@ -1,5 +1,9 @@
 <section class="projects-container">
-    @for (project of (projects$ | async)?.data; track $index) {
-        <app-detailed-project-card [project]="project"></app-detailed-project-card>
-    }
+  @for (project of favouriteProjects(); track project.id) {
+    <app-detailed-project-card [project]="project"></app-detailed-project-card>
+  }
+
+  @for (project of sponsoredProjects(); track project.id) {
+    <app-detailed-project-card [project]="project"></app-detailed-project-card>
+  }
 </section>

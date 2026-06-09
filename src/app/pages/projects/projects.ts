@@ -1,17 +1,47 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { ProjectsResponseInterface } from '../../api/interfaces';
-import { AsyncPipe } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  OnInit,
+  inject,
+  signal,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ProjectResponseInterface } from '../../api/interfaces';
 import { DetailedProjectCard } from '../../components';
-import { DUMMY_PROJECTS_RESPONSE } from '../dummy-projects';
+import { ProjectsService } from '../../api/services/projects.service';
 
 @Component({
   selector: 'app-projects',
-  imports: [AsyncPipe, DetailedProjectCard],
+  imports: [DetailedProjectCard],
   templateUrl: './projects.html',
   styleUrl: './projects.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class Projects {
-  projects$: Observable<ProjectsResponseInterface> = of(DUMMY_PROJECTS_RESPONSE);
+export class Projects implements OnInit {
+  private readonly projectsService = inject(ProjectsService);
+  private readonly destroyRef$ = inject(DestroyRef);
+
+  favouriteProjects = signal<ProjectResponseInterface[]>([]);
+  sponsoredProjects = signal<ProjectResponseInterface[]>([]);
+
+  ngOnInit(): void {
+    this.projectsService
+      .getFavourites()
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (projects) => this.favouriteProjects.set(projects),
+        error: (error) =>
+          console.error('Error loading favourite projects:', error),
+      });
+
+    this.projectsService
+      .getSponsored()
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (projects) => this.sponsoredProjects.set(projects),
+        error: (error) =>
+          console.error('Error loading sponsored projects:', error),
+      });
+  }
 }

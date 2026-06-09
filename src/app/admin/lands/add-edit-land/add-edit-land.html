@@ -89,16 +89,48 @@
             </mat-form-field>
           </div>
 
+          <section formGroupName="tag">
+            <h2 class="form-section__title">Tag</h2>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Georgian</mat-label>
+                <input matInput formControlName="geo" placeholder="საუკეთესო ხედი" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>English</mat-label>
+                <input matInput formControlName="eng" placeholder="Best view" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Russian</mat-label>
+                <input matInput formControlName="rus" placeholder="Лучший вид" />
+              </mat-form-field>
+            </div>
+          </section>
+
+          <section formGroupName="promoOffers">
+            <h2 class="form-section__title">Promo Offers</h2>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Georgian</mat-label>
+                <textarea matInput formControlName="geo" rows="2"></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>English</mat-label>
+                <textarea matInput formControlName="eng" rows="2"></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Russian</mat-label>
+                <textarea matInput formControlName="rus" rows="2"></textarea>
+              </mat-form-field>
+            </div>
+          </section>
+
           <div class="form-row">
             <div class="form-field">
               <app-image-upload
                 label="Land Image"
                 [maxSizeMB]="5"
-                [existingImageUrl]="
-                  landForm.get('imageUrl')?.value
-                    ? `http://localhost:3000${landForm.get('imageUrl')?.value}`
-                    : undefined
-                "
+                [existingImageUrl]="coverImageUrl()"
                 (imageSelected)="onCoverImageSelected($event)"
                 (imageRemoved)="onCoverImageRemoved()"
               >

@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { LandsService } from '../../api/services/lands.service';
 import {
@@ -25,6 +26,7 @@ import {
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    MatSnackBarModule,
     RouterModule,
   ],
   templateUrl: './lands.html',
@@ -32,6 +34,7 @@ import {
 })
 export class Lands implements OnInit {
   private landsService = inject(LandsService);
+  private snackBar = inject(MatSnackBar);
 
   displayedColumns: string[] = [
     'name',
@@ -71,6 +74,27 @@ export class Lands implements OnInit {
           this.isLoading.set(false);
         },
       });
+  }
+
+  onDelete(land: LandResponseInterface): void {
+    if (!confirm(`Delete land "${land.name}"?`)) {
+      return;
+    }
+
+    this.landsService.delete(land.id).subscribe({
+      next: () => {
+        this.snackBar.open('Land deleted successfully', 'Close', {
+          duration: 3000,
+        });
+        this.loadLands();
+      },
+      error: (error) => {
+        console.error('Error deleting land:', error);
+        this.snackBar.open('Error deleting land', 'Close', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   onPageChange(event: PageEvent): void {

@@ -14,8 +14,6 @@ export class LandsService {
 
   getAll(params?: {
     projectId?: string;
-    currency?: string;
-    status?: string;
     page?: number;
     limit?: number;
   }): Observable<LandsResponseInterface> {

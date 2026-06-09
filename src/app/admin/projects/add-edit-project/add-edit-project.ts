@@ -41,8 +41,9 @@ import {
   GoogleMaps,
   LocationSelectedEvent,
 } from '../../../components/google-maps/google-maps';
+import { environment } from '../../../../environments/environment';
 
-const IMAGE_BASE_URL = 'http://localhost:3000/api/images';
+const IMAGE_BASE_URL = `${environment.apiUrl}/images`;
 
 type FaqLanguage = 'geo' | 'eng' | 'rus';
 
@@ -138,6 +139,7 @@ export class AddEditProject implements OnInit {
         longitude: [null as number | null],
       }),
       isFavourite: [false],
+      isSponsored: [false],
       isActive: [false],
     });
   }
@@ -236,6 +238,7 @@ export class AddEditProject implements OnInit {
         longitude: project.location?.longitude ?? null,
       },
       isFavourite: project.isFavourite ?? false,
+      isSponsored: project.isSponsored ?? false,
       isActive: project.isActive ?? false,
     });
 
@@ -305,6 +308,7 @@ export class AddEditProject implements OnInit {
         longitude: Number.isFinite(lng) ? lng : 0,
       },
       isFavourite: !!v.isFavourite,
+      isSponsored: !!v.isSponsored,
       isActive: !!v.isActive,
       companyId: v.companyId,
     };

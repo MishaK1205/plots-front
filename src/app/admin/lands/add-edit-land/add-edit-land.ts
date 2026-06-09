@@ -1,5 +1,6 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, DestroyRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormBuilder,
   FormGroup,
@@ -26,6 +27,7 @@ import {
 } from '../../../api/interfaces';
 import { ImageUpload } from '../../../components/image-upload/image-upload';
 import { ImagesService } from '../../../api/services';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-add-edit-land',
@@ -54,6 +56,7 @@ export class AddEditLand implements OnInit {
   private projectsService = inject(ProjectsService);
   private snackBar = inject(MatSnackBar);
   private imagesService = inject(ImagesService);
+  private destroyRef$ = inject(DestroyRef);
 
   landForm!: FormGroup;
   isEditMode = signal(false);
@@ -69,14 +72,40 @@ export class AddEditLand implements OnInit {
   }
 
   private loadProjects(): void {
-    this.projectsService.getAll().subscribe({
-      next: (response) => {
-        this.projects.set(response.data);
-      },
-      error: (error) => {
-        console.error('Error loading projects:', error);
-      },
+    this.projectsService
+      .getAll()
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => {
+          this.projects.set(response.data);
+        },
+        error: (error) => {
+          console.error('Error loading projects:', error);
+        },
+      });
+  }
+
+  coverImageUrl(): string | undefined {
+    const path = this.landForm.get('imageUrl')?.value;
+    return path ? `${environment.serverUrl}${path}` : undefined;
+  }
+
+  private localizedGroup(): FormGroup {
+    return this.fb.group({
+      geo: [''],
+      eng: [''],
+      rus: [''],
     });
+  }
+
+  private localizedValue(
+    value: { geo?: string; eng?: string; rus?: string } | undefined,
+  ): { geo: string; eng: string; rus: string } {
+    return {
+      geo: value?.geo ?? '',
+      eng: value?.eng ?? '',
+      rus: value?.rus ?? '',
+    };
   }
 
   private initializeForm(): void {
@@ -85,6 +114,8 @@ export class AddEditLand implements OnInit {
       squareMeters: [null, [Validators.required, Validators.min(1)]],
       squareMeterPrice: [null, [Validators.required, Validators.min(0)]],
       cadastralCode: ['', [Validators.required]],
+      tag: this.localizedGroup(),
+      promoOffers: this.localizedGroup(),
       projectId: ['', [Validators.required]],
       imageUrl: [''],
     });
@@ -101,38 +132,57 @@ export class AddEditLand implements OnInit {
 
   private loadLand(id: string): void {
     this.isLoading.set(true);
-    this.landsService.getById(id).subscribe({
-      next: (land: LandResponseInterface) => {
-        this.landForm.patchValue({
-          name: land.name,
-          squareMeters: land.squareMeters,
-          squareMeterPrice: land.squareMeterPrice,
-          cadastralCode: land.cadastralCode,
-          projectId: land.projectId,
-          imageUrl: land.imageUrl,
-        });
-        this.isLoading.set(false);
-      },
-      error: (error: any) => {
-        console.error('Error loading land:', error);
-        this.snackBar.open('Error loading land details', 'Close', {
-          duration: 3000,
-        });
-        this.isLoading.set(false);
-        this.router.navigate(['/admin/lands']);
-      },
-    });
+    this.landsService
+      .getById(id)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (land: LandResponseInterface) => {
+          this.landForm.patchValue({
+            name: land.name,
+            squareMeters: land.squareMeters,
+            squareMeterPrice: land.squareMeterPrice,
+            cadastralCode: land.cadastralCode,
+            tag: this.localizedValue(land.tag),
+            promoOffers: this.localizedValue(land.promoOffers),
+            projectId: land.projectId,
+            imageUrl: land.imageUrl,
+          });
+          this.isLoading.set(false);
+        },
+        error: (error: any) => {
+          console.error('Error loading land:', error);
+          this.snackBar.open('Error loading land details', 'Close', {
+            duration: 3000,
+          });
+          this.isLoading.set(false);
+          this.router.navigate(['/admin/lands']);
+        },
+      });
+  }
+
+  private toApiPayload(): CreateLandInterface {
+    const v = this.landForm.value;
+    return {
+      name: v.name,
+      squareMeters: v.squareMeters,
+      squareMeterPrice: v.squareMeterPrice,
+      cadastralCode: v.cadastralCode,
+      tag: v.tag,
+      promoOffers: v.promoOffers,
+      projectId: v.projectId,
+      imageUrl: v.imageUrl || undefined,
+    };
   }
 
   onSubmit(): void {
     if (this.landForm.valid) {
       this.isLoading.set(true);
-      const formData = this.landForm.value;
+      const payload = this.toApiPayload();
 
       if (this.isEditMode()) {
-        this.updateLand(formData);
+        this.updateLand(payload);
       } else {
-        this.createLand(formData);
+        this.createLand(payload);
       }
     } else {
       this.markFormGroupTouched();
@@ -140,39 +190,47 @@ export class AddEditLand implements OnInit {
   }
 
   private createLand(data: CreateLandInterface): void {
-    this.landsService.create(data).subscribe({
-      next: (land: LandResponseInterface) => {
-        this.snackBar.open('Land created successfully', 'Close', {
-          duration: 3000,
-        });
-        this.router.navigate(['/admin/lands']);
-      },
-      error: (error: any) => {
-        console.error('Error creating land:', error);
-        this.snackBar.open('Error creating land', 'Close', { duration: 3000 });
-        this.isLoading.set(false);
-      },
-    });
-  }
-
-  private updateLand(data: UpdateLandInterface): void {
-    const id = this.landId();
-    if (id) {
-      this.landsService.update(id, data).subscribe({
-        next: (land: LandResponseInterface) => {
-          this.snackBar.open('Land updated successfully', 'Close', {
+    this.landsService
+      .create(data)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: () => {
+          this.snackBar.open('Land created successfully', 'Close', {
             duration: 3000,
           });
           this.router.navigate(['/admin/lands']);
         },
         error: (error: any) => {
-          console.error('Error updating land:', error);
-          this.snackBar.open('Error updating land', 'Close', {
+          console.error('Error creating land:', error);
+          this.snackBar.open('Error creating land', 'Close', {
             duration: 3000,
           });
           this.isLoading.set(false);
         },
       });
+  }
+
+  private updateLand(data: UpdateLandInterface): void {
+    const id = this.landId();
+    if (id) {
+      this.landsService
+        .update(id, data)
+        .pipe(takeUntilDestroyed(this.destroyRef$))
+        .subscribe({
+          next: () => {
+            this.snackBar.open('Land updated successfully', 'Close', {
+              duration: 3000,
+            });
+            this.router.navigate(['/admin/lands']);
+          },
+          error: (error: any) => {
+            console.error('Error updating land:', error);
+            this.snackBar.open('Error updating land', 'Close', {
+              duration: 3000,
+            });
+            this.isLoading.set(false);
+          },
+        });
     }
   }
 
@@ -200,35 +258,41 @@ export class AddEditLand implements OnInit {
   }
 
   onCoverImageSelected(file: File): void {
-    this.imagesService.upload(file).subscribe({
-      next: (response) => {
-        this.coverImageId.set(response.id);
-        this.landForm.patchValue({ imageUrl: response.imageUrl });
-      },
-      error: (error) => {
-        console.error('Error uploading cover image:', error);
-        this.snackBar.open('Error uploading cover image', 'Close', {
-          duration: 3000,
-        });
-      },
-    });
+    this.imagesService
+      .upload(file)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => {
+          this.coverImageId.set(response.id);
+          this.landForm.patchValue({ imageUrl: response.imageUrl });
+        },
+        error: (error) => {
+          console.error('Error uploading cover image:', error);
+          this.snackBar.open('Error uploading cover image', 'Close', {
+            duration: 3000,
+          });
+        },
+      });
   }
 
   onCoverImageRemoved(): void {
     const imageId = this.coverImageId();
     if (imageId) {
-      this.imagesService.delete(imageId).subscribe({
-        next: () => {
-          this.coverImageId.set(null);
-          this.landForm.patchValue({ imageUrl: '' });
-        },
-        error: (error) => {
-          console.error('Error deleting cover image:', error);
-          this.snackBar.open('Error deleting cover image', 'Close', {
-            duration: 3000,
-          });
-        },
-      });
+      this.imagesService
+        .delete(imageId)
+        .pipe(takeUntilDestroyed(this.destroyRef$))
+        .subscribe({
+          next: () => {
+            this.coverImageId.set(null);
+            this.landForm.patchValue({ imageUrl: '' });
+          },
+          error: (error) => {
+            console.error('Error deleting cover image:', error);
+            this.snackBar.open('Error deleting cover image', 'Close', {
+              duration: 3000,
+            });
+          },
+        });
     } else {
       this.coverImageId.set(null);
       this.landForm.patchValue({ imageUrl: '' });

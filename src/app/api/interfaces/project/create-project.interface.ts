@@ -30,6 +30,7 @@ export interface CreateProjectInterface {
   gallery: string[];
   location: ProjectCoordinates;
   isFavourite: boolean;
+  isSponsored: boolean;
   isActive: boolean;
   companyId: string;
 }

@@ -28,6 +28,7 @@ export interface ProjectResponseInterface {
   gallery: string[];
   location: ProjectResponseLocation;
   isFavourite: boolean;
+  isSponsored: boolean;
   isActive: boolean;
   status: string;
   createdAt: string;

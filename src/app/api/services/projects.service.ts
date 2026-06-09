@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProjectResponseInterface } from '../interfaces/project/project-response.interface';
-import { CreateProjectInterface } from '../interfaces/project/create-project.interface';
-import { UpdateProjectInterface } from '../interfaces/project/update-project.interface';
-import { ProjectsResponseInterface } from '../interfaces/project/projects-response.interface';
+import { ProjectResponseInterface } from '../interfaces';
+import { CreateProjectInterface } from '../interfaces';
+import { UpdateProjectInterface } from '../interfaces';
+import { ProjectsResponseInterface } from '../interfaces';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -18,6 +18,14 @@ export class ProjectsService {
     limit?: number;
   }): Observable<ProjectsResponseInterface> {
     return this.api.get<ProjectsResponseInterface>('/projects', params);
+  }
+
+  getFavourites(): Observable<ProjectResponseInterface[]> {
+    return this.api.get<ProjectResponseInterface[]>('/projects/favourites');
+  }
+
+  getSponsored(): Observable<ProjectResponseInterface[]> {
+    return this.api.get<ProjectResponseInterface[]>('/projects/sponsored');
   }
 
   getById(id: string): Observable<ProjectResponseInterface> {
