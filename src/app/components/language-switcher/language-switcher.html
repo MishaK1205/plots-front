@@ -1,0 +1,44 @@
+<div class="language-switcher">
+  <button
+    class="language-switcher__trigger"
+    type="button"
+    aria-label="Select language"
+    [attr.aria-expanded]="languageMenuOpen"
+    (click)="languageMenuOpen = !languageMenuOpen"
+  >
+    <img
+      class="language-switcher__icon"
+      src="assets/icons/globe.svg"
+      alt=""
+      aria-hidden="true"
+    />
+
+    <span>{{ selectedLanguage }}</span>
+
+    <img
+      class="language-switcher__chevron"
+      src="assets/icons/arrow-down.svg"
+      alt=""
+      aria-hidden="true"
+    />
+  </button>
+
+  @if (languageMenuOpen) {
+    <ul class="language-switcher__menu">
+      @for (language of languages; track language) {
+        <li>
+          <button
+            class="language-switcher__option"
+            type="button"
+            [class.language-switcher__option--active]="
+              language === selectedLanguage
+            "
+            (click)="selectLanguage(language)"
+          >
+            {{ language }}
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

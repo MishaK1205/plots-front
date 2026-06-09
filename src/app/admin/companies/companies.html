@@ -13,11 +13,11 @@
         <div class="table-container">
           <table mat-table [dataSource]="dataSource" class="companies-table">
             <!-- Name Column -->
-            <ng-container matColumnDef="name">
+            <ng-container matColumnDef="companyName">
               <th mat-header-cell *matHeaderCellDef>Company Name</th>
               <td mat-cell *matCellDef="let company">
                 <div class="company-name">
-                  <strong>{{ company.name }}</strong>
+                  <strong>{{ company.companyName.geo }}</strong>
                   <small class="slug">{{ company.slug }}</small>
                 </div>
               </td>
@@ -43,24 +43,11 @@
               </td>
             </ng-container>
 
-            <!-- City Column -->
-            <ng-container matColumnDef="city">
-              <th mat-header-cell *matHeaderCellDef>City</th>
+            <!-- Address Column -->
+            <ng-container matColumnDef="address">
+              <th mat-header-cell *matHeaderCellDef>Address</th>
               <td mat-cell *matCellDef="let company">
-                {{ company.city }}, {{ company.address }}
-              </td>
-            </ng-container>
-
-            <!-- Status Column -->
-            <ng-container matColumnDef="status">
-              <th mat-header-cell *matHeaderCellDef>Status</th>
-              <td mat-cell *matCellDef="let company">
-                <span
-                  class="status-badge"
-                  [style.color]="getStatusColor(company.status)"
-                >
-                  {{ company.status }}
-                </span>
+                {{ company.address.geo }}
               </td>
             </ng-container>
 

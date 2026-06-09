@@ -22,21 +22,62 @@
           class="company-form"
         >
           <section>
-            <h1 class="company-section__title">Company Details</h1>
+            <h1 class="company-section__title">Company Name</h1>
 
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field full-width">
-                <mat-label>Company Name *</mat-label>
-                <input
-                  matInput
-                  formControlName="name"
-                  placeholder="Enter company name"
-                />
-                @if (getFieldError("name")) {
-                  <mat-error>{{ getFieldError("name") }}</mat-error>
-                }
-              </mat-form-field>
+            <div formGroupName="companyName">
+              <div class="form-row">
+                <mat-form-field
+                  appearance="outline"
+                  class="form-field full-width"
+                >
+                  <mat-label>Company Name (Georgian) *</mat-label>
+                  <input
+                    matInput
+                    formControlName="geo"
+                    placeholder="კომპანიის სახელი"
+                  />
+                  @if (getFieldError("companyName.geo", "Company name (Georgian)")) {
+                    <mat-error>{{
+                      getFieldError("companyName.geo", "Company name (Georgian)")
+                    }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+
+              <div class="form-row">
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Company Name (English) *</mat-label>
+                  <input
+                    matInput
+                    formControlName="eng"
+                    placeholder="Company name"
+                  />
+                  @if (getFieldError("companyName.eng", "Company name (English)")) {
+                    <mat-error>{{
+                      getFieldError("companyName.eng", "Company name (English)")
+                    }}</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Company Name (Russian) *</mat-label>
+                  <input
+                    matInput
+                    formControlName="rus"
+                    placeholder="Название компании"
+                  />
+                  @if (getFieldError("companyName.rus", "Company name (Russian)")) {
+                    <mat-error>{{
+                      getFieldError("companyName.rus", "Company name (Russian)")
+                    }}</mat-error>
+                  }
+                </mat-form-field>
+              </div>
             </div>
+          </section>
+
+          <section>
+            <h1 class="company-section__title">Contact Details</h1>
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="form-field">
@@ -47,8 +88,8 @@
                   type="email"
                   placeholder="company@example.com"
                 />
-                @if (getFieldError("email")) {
-                  <mat-error>{{ getFieldError("email") }}</mat-error>
+                @if (getFieldError("email", "Email")) {
+                  <mat-error>{{ getFieldError("email", "Email") }}</mat-error>
                 }
               </mat-form-field>
 
@@ -59,14 +100,14 @@
                   formControlName="phone"
                   placeholder="+1 (555) 123-4567"
                 />
-                @if (getFieldError("phone")) {
-                  <mat-error>{{ getFieldError("phone") }}</mat-error>
+                @if (getFieldError("phone", "Phone")) {
+                  <mat-error>{{ getFieldError("phone", "Phone") }}</mat-error>
                 }
               </mat-form-field>
             </div>
 
             <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field">
+              <mat-form-field appearance="outline" class="form-field full-width">
                 <mat-label>Website</mat-label>
                 <input
                   matInput
@@ -74,26 +115,55 @@
                   placeholder="https://www.company.com"
                 />
               </mat-form-field>
+            </div>
+          </section>
 
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Status *</mat-label>
-                <mat-select formControlName="status">
-                  <mat-option value="ACTIVE">Active</mat-option>
-                  <mat-option value="INACTIVE">Inactive</mat-option>
-                  <mat-option value="SUSPENDED">Suspended</mat-option>
-                </mat-select>
+          <section formGroupName="address">
+            <h1 class="company-section__title">Address</h1>
+
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field full-width">
+                <mat-label>Address (Georgian) *</mat-label>
+                <input
+                  matInput
+                  formControlName="geo"
+                  placeholder="თბილისი, პალმის ქუჩა 12"
+                />
+                @if (getFieldError("address.geo", "Address (Georgian)")) {
+                  <mat-error>{{
+                    getFieldError("address.geo", "Address (Georgian)")
+                  }}</mat-error>
+                }
               </mat-form-field>
             </div>
 
             <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field full-width">
-                <mat-label>Description</mat-label>
-                <textarea
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Address (English) *</mat-label>
+                <input
                   matInput
-                  formControlName="description"
-                  rows="3"
-                  placeholder="Company description"
-                ></textarea>
+                  formControlName="eng"
+                  placeholder="Tbilisi, Palm Street 12"
+                />
+                @if (getFieldError("address.eng", "Address (English)")) {
+                  <mat-error>{{
+                    getFieldError("address.eng", "Address (English)")
+                  }}</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Address (Russian) *</mat-label>
+                <input
+                  matInput
+                  formControlName="rus"
+                  placeholder="Тбилиси, Палм-стрит 12"
+                />
+                @if (getFieldError("address.rus", "Address (Russian)")) {
+                  <mat-error>{{
+                    getFieldError("address.rus", "Address (Russian)")
+                  }}</mat-error>
+                }
               </mat-form-field>
             </div>
           </section>
@@ -146,20 +216,6 @@
             </div>
           </section>
 
-          <section>
-            <h1 class="company-section__title">Location</h1>
-
-            <app-google-maps
-              [initialLatitude]="companyForm.get('location.latitude')?.value"
-              [initialLongitude]="companyForm.get('location.longitude')?.value"
-              height="500px"
-              markerTitle="Project Location"
-              (locationSelected)="onLocationSelected($event)"
-            >
-            </app-google-maps>
-          </section>
-
-
           <div class="form-row">
             <div class="form-field">
               <app-image-upload
@@ -172,21 +228,6 @@
                 "
                 (imageSelected)="onLogoSelected($event)"
                 (imageRemoved)="onLogoRemoved()"
-              >
-              </app-image-upload>
-            </div>
-
-            <div class="form-field">
-              <app-image-upload
-                label="Cover Image"
-                [maxSizeMB]="5"
-                [existingImageUrl]="
-                  companyForm.get('coverImageId')?.value
-                    ? `http://localhost:3000/api/images/${companyForm.get('coverImageId')?.value}`
-                    : undefined
-                "
-                (imageSelected)="onCoverImageSelected($event)"
-                (imageRemoved)="onCoverImageRemoved()"
               >
               </app-image-upload>
             </div>

@@ -1,4 +1,5 @@
 export * from './pagination-response.interface';
+export * from './localized-text.interface';
 export * from './company/company-response.interface';
 export * from './company/companies-response.interface';
 export * from './company/create-company.interface';

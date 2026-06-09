@@ -15,7 +15,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
-import { MatSelectModule } from '@angular/material/select';
 import {
   CompanyResponseInterface,
   CreateCompanyInterface,
@@ -23,7 +22,6 @@ import {
 } from '../../../api/interfaces';
 import { ImageUpload } from '../../../components/image-upload/image-upload';
 import { ImagesService, CompaniesService } from '../../../api/services';
-import { GoogleMaps, LocationSelectedEvent } from '../../../components';
 
 @Component({
   selector: 'app-add-edit-company',
@@ -38,9 +36,7 @@ import { GoogleMaps, LocationSelectedEvent } from '../../../components';
     MatToolbarModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatSelectModule,
     ImageUpload,
-    GoogleMaps,
   ],
   templateUrl: './add-edit-company.html',
   styleUrl: './add-edit-company.scss',
@@ -57,10 +53,7 @@ export class AddEditCompany implements OnInit {
   isEditMode = signal(false);
   isLoading = signal(false);
   companyId = signal<string | null>(null);
-  logoFile = signal<File | null>(null);
-  coverImageFile = signal<File | null>(null);
   logoImageId = signal<string | null>(null);
-  coverImageId = signal<string | null>(null);
 
   ngOnInit(): void {
     this.initializeForm();
@@ -69,20 +62,19 @@ export class AddEditCompany implements OnInit {
 
   private initializeForm(): void {
     this.companyForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(2)]],
+      companyName: this.fb.group({
+        geo: ['', [Validators.required, Validators.minLength(2)]],
+        eng: ['', [Validators.required, Validators.minLength(2)]],
+        rus: ['', [Validators.required, Validators.minLength(2)]],
+      }),
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       website: [''],
-      description: [''],
       logoId: [''],
-      coverImageId: [''],
-      status: ['ACTIVE', [Validators.required]],
-      location: this.fb.group({
-        streetName: [''],
-        city: [''],
-        district: [''],
-        latitude: [''],
-        longitude: [''],
+      address: this.fb.group({
+        geo: ['', [Validators.required]],
+        eng: ['', [Validators.required]],
+        rus: ['', [Validators.required]],
       }),
       socialAccounts: this.fb.group({
         facebook: [''],
@@ -106,7 +98,18 @@ export class AddEditCompany implements OnInit {
     this.isLoading.set(true);
     this.companiesService.getById(id).subscribe({
       next: (company: CompanyResponseInterface) => {
-        this.companyForm.patchValue(company);
+        // The API returns already-localized strings for companyName/address,
+        // so we seed the primary (geo) language fields and the flat fields.
+        this.companyForm.patchValue({
+      companyName: { geo: company.companyName.geo, eng: company.companyName.eng, rus: company.companyName.rus },
+          address: { geo: company.address.geo, eng: company.address.eng, rus: company.address.rus },
+          email: company.email,
+          phone: company.phone,
+          website: company.website ?? '',
+          logoId: company.logoId ?? '',
+          socialAccounts: company.socialAccounts ?? {},
+        });
+        this.logoImageId.set(company.logoId ?? null);
         this.isLoading.set(false);
       },
       error: (error: any) => {
@@ -118,20 +121,6 @@ export class AddEditCompany implements OnInit {
         this.router.navigate(['/admin/companies']);
       },
     });
-  }
-
-  onLocationSelected(event: LocationSelectedEvent): void {
-    this.companyForm.patchValue(
-      {
-        location: {
-          streetName: event.streetName,
-          city: event.city,
-          district: event.district,
-          latitude: event.latitude,
-          longitude: event.longitude,
-        }
-      }
-    );
   }
 
   onLogoSelected(file: File): void {
@@ -158,38 +147,6 @@ export class AddEditCompany implements OnInit {
       error: (error) => {
         console.error('Error deleting logo:', error);
         this.snackBar.open('Error deleting logo', 'Close', { duration: 3000 });
-      },
-    });
-  }
-
-  onCoverImageSelected(file: File): void {
-    this.imagesService.upload(file).subscribe({
-      next: (response) => {
-        const coverImageId = response.id;
-
-        this.coverImageId.set(coverImageId);
-        this.companyForm.patchValue({ coverImageId });
-      },
-      error: (error) => {
-        console.error('Error uploading cover image:', error);
-        this.snackBar.open('Error uploading cover image', 'Close', {
-          duration: 3000,
-        });
-      },
-    });
-  }
-
-  onCoverImageRemoved(): void {
-    this.imagesService.delete(this.companyForm.get('coverImageId')!.value).subscribe({
-      next: () => {
-        this.coverImageId.set(null);
-        this.companyForm.patchValue({ coverImageId: '' });
-      },
-      error: (error) => {
-        console.error('Error deleting cover image:', error);
-        this.snackBar.open('Error deleting cover image', 'Close', {
-          duration: 3000,
-        });
       },
     });
   }
@@ -249,24 +206,22 @@ export class AddEditCompany implements OnInit {
   }
 
   private markFormGroupTouched(): void {
-    Object.keys(this.companyForm.controls).forEach((key) => {
-      const control = this.companyForm.get(key);
-      control?.markAsTouched();
-    });
+    this.companyForm.markAllAsTouched();
   }
 
   onCancel(): void {
     this.router.navigate(['/admin/companies']);
   }
 
-  getFieldError(fieldName: string): string {
+  getFieldError(fieldName: string, label?: string): string {
     const field = this.companyForm.get(fieldName);
+    const name = label ?? fieldName;
     if (field?.errors && field.touched) {
-      if (field.errors['required']) return `${fieldName} is required`;
+      if (field.errors['required']) return `${name} is required`;
       if (field.errors['email']) return 'Please enter a valid email';
       if (field.errors['minlength'])
-        return `${fieldName} must be at least ${field.errors['minlength'].requiredLength} characters`;
-      if (field.errors['pattern']) return `${fieldName} format is invalid`;
+        return `${name} must be at least ${field.errors['minlength'].requiredLength} characters`;
+      if (field.errors['pattern']) return `${name} format is invalid`;
     }
     return '';
   }

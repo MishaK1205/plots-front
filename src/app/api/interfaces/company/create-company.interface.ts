@@ -1,12 +1,4 @@
-export type CreateCompanyStatus = 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
-
-export interface CreateCompanyLocation {
-  streetName: string;
-  city: string;
-  district: string;
-  latitude: number;
-  longitude: number;
-}
+import { LocalizedTextInterface } from '../localized-text.interface';
 
 export interface CreateCompanySocialAccounts {
   facebook?: string;
@@ -16,14 +8,11 @@ export interface CreateCompanySocialAccounts {
 }
 
 export interface CreateCompanyInterface {
-  name: string;
-  email: string;
-  phone: string;
-  website?: string;
-  description?: string;
+  companyName: LocalizedTextInterface;
   logoId?: string;
-  coverImageId?: string;
-  status?: CreateCompanyStatus;
-  location: CreateCompanyLocation;
+  phone: string;
+  email: string;
+  address: LocalizedTextInterface;
+  website?: string;
   socialAccounts?: CreateCompanySocialAccounts;
 }

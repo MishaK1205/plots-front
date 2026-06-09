@@ -6,3 +6,4 @@ export * from './detailed-project-card/detailed-project-card';
 export * from './sponsored-project-card/sponsored-project-card';
 export * from './google-maps/google-maps';
 export * from './currency-toggle/currency-toggle';
+export * from './language-switcher/language-switcher';

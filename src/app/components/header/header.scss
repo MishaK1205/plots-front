@@ -34,19 +34,6 @@
     gap: px-to-rem(16px);
   }
 
-  &__login-btn {
-    padding: px-to-rem(8px) px-to-rem(16px);
-    font-size: px-to-rem(14px);
-    border-radius: px-to-rem(6px);
-    border: 1px solid #ddd;
-    background-color: #fff;
-    cursor: pointer;
-
-    &:hover {
-      background-color: #f5f5f5;
-    }
-  }
-
   &__burger {
     display: none;
     background: none;

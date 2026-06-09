@@ -34,11 +34,10 @@ export class Companies implements OnInit {
   private companiesService = inject(CompaniesService);
 
   displayedColumns: string[] = [
-    'name',
+    'companyName',
     'email',
     'phone',
-    'city',
-    'status',
+    'address',
     'createdAt',
     'actions',
   ];
@@ -81,18 +80,5 @@ export class Companies implements OnInit {
 
   formatDate(dateString: string): string {
     return new Date(dateString).toLocaleDateString();
-  }
-
-  getStatusColor(status: string): string {
-    switch (status) {
-      case 'ACTIVE':
-        return 'green';
-      case 'INACTIVE':
-        return 'gray';
-      case 'SUSPENDED':
-        return 'red';
-      default:
-        return 'gray';
-    }
   }
 }

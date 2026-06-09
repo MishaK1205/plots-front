@@ -42,7 +42,7 @@
                 <mat-select formControlName="companyId">
                   @for (company of companies(); track company.id) {
                     <mat-option [value]="company.id">
-                      {{ company.name }}
+                      {{ company.companyName }}
                     </mat-option>
                   }
                 </mat-select>

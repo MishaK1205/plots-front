@@ -1,24 +1,16 @@
+import { LocalizedTextInterface } from '../localized-text.interface';
+import { CreateCompanySocialAccounts } from './create-company.interface';
+
 export interface CompanyResponseInterface {
   id: string;
-  name: string;
+  companyName: LocalizedTextInterface;
+  address: LocalizedTextInterface;
   slug: string;
   email: string;
   phone: string;
   website?: string;
-  address: string;
-  city: string;
-  latitude?: number;
-  longitude?: number;
-  description?: string;
-  logoUrl?: string;
-  coverImageUrl?: string;
-  status: 'ACTIVE' | 'INACTIVE' | 'SUSPENDED';
+  logoId?: string;
   createdAt: string;
   updatedAt: string;
-  socialAccounts?: {
-    facebook?: string;
-    instagram?: string;
-    linkedin?: string;
-    tiktok?: string;
-  };
+  socialAccounts?: CreateCompanySocialAccounts;
 }
