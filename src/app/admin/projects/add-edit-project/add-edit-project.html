@@ -42,7 +42,7 @@
                 <mat-select formControlName="companyId">
                   @for (company of companies(); track company.id) {
                     <mat-option [value]="company.id">
-                      {{ company.companyName }}
+                      {{ company.companyName.geo }}
                     </mat-option>
                   }
                 </mat-select>
@@ -54,112 +54,190 @@
 
             <div class="form-row">
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Status *</mat-label>
-                <mat-select formControlName="status">
-                  <mat-option value="ACTIVE">Active</mat-option>
-                  <mat-option value="INACTIVE">Inactive</mat-option>
+                <mat-label>Location *</mat-label>
+                <mat-select formControlName="locationId">
+                  @for (location of locations(); track location.id) {
+                    <mat-option [value]="location.id">
+                      {{ location.locationName.geo }}
+                    </mat-option>
+                  }
                 </mat-select>
+                @if (getFieldError("locationId")) {
+                  <mat-error>{{ getFieldError("locationId") }}</mat-error>
+                }
               </mat-form-field>
-            </div>
 
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field full-width">
-                <mat-label>Description *</mat-label>
-                <textarea
-                  matInput
-                  formControlName="description"
-                  rows="4"
-                  placeholder="Enter project description"
-                >
-                </textarea>
-                @if (getFieldError("description")) {
-                  <mat-error>{{ getFieldError("description") }}</mat-error>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Amenity *</mat-label>
+                <mat-select formControlName="amenityId">
+                  @for (amenity of amenities(); track amenity.id) {
+                    <mat-option [value]="amenity.id">
+                      {{ amenity.amenityName.geo }}
+                    </mat-option>
+                  }
+                </mat-select>
+                @if (getFieldError("amenityId")) {
+                  <mat-error>{{ getFieldError("amenityId") }}</mat-error>
                 }
               </mat-form-field>
             </div>
+
+            <div class="form-row toggles-row">
+              <mat-checkbox formControlName="isActive">Active</mat-checkbox>
+              <mat-checkbox formControlName="isFavourite">
+                Favourite
+              </mat-checkbox>
+            </div>
           </section>
 
-          <section>
-            <h1 class="project-section__title">Communications</h1>
-            <p class="section-hint">
-              Toggle availability and describe each utility for the project.
-            </p>
-            <div formArrayName="communications" class="communications-list">
-              @for (
-                comm of communicationsFormArray.controls;
-                track comm;
-                let i = $index
-              ) {
-                <div class="communication-row" [formGroupName]="i">
-                  <mat-checkbox formControlName="available">
-                    {{ comm.value?.type | titlecase }}
-                  </mat-checkbox>
-                  <mat-form-field appearance="outline" class="form-field flex-grow">
-                    <mat-label>Description</mat-label>
-                    <input
-                      matInput
-                      formControlName="description"
-                      placeholder="e.g. Natural gas connection"
-                    />
-                  </mat-form-field>
+          <section formGroupName="shortDescription">
+            <h1 class="project-section__title">Short Description</h1>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Georgian</mat-label>
+                <textarea matInput formControlName="geo" rows="2"></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>English</mat-label>
+                <textarea matInput formControlName="eng" rows="2"></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Russian</mat-label>
+                <textarea matInput formControlName="rus" rows="2"></textarea>
+              </mat-form-field>
+            </div>
+          </section>
+
+          <section formGroupName="description">
+            <h1 class="project-section__title">Description</h1>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Georgian</mat-label>
+                <textarea matInput formControlName="geo" rows="4"></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>English</mat-label>
+                <textarea matInput formControlName="eng" rows="4"></textarea>
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Russian</mat-label>
+                <textarea matInput formControlName="rus" rows="4"></textarea>
+              </mat-form-field>
+            </div>
+          </section>
+
+          <section formGroupName="tagline">
+            <h1 class="project-section__title">Tagline</h1>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Georgian</mat-label>
+                <input matInput formControlName="geo" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>English</mat-label>
+                <input matInput formControlName="eng" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Russian</mat-label>
+                <input matInput formControlName="rus" />
+              </mat-form-field>
+            </div>
+          </section>
+
+          <section formGroupName="minutesToLocation">
+            <h1 class="project-section__title">Minutes To Location</h1>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Georgian</mat-label>
+                <input matInput formControlName="geo" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>English</mat-label>
+                <input matInput formControlName="eng" />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Russian</mat-label>
+                <input matInput formControlName="rus" />
+              </mat-form-field>
+            </div>
+          </section>
+
+          <section formGroupName="faqs">
+            <h1 class="project-section__title">FAQs</h1>
+            @for (lang of faqLanguages; track lang.key) {
+              <div class="faq-language" [formArrayName]="lang.key">
+                <div class="faq-language__header">
+                  <h2 class="faq-language__title">{{ lang.label }}</h2>
+                  <button
+                    mat-stroked-button
+                    color="primary"
+                    type="button"
+                    (click)="addFaq(lang.key)"
+                  >
+                    <mat-icon>add</mat-icon>
+                    Add FAQ
+                  </button>
                 </div>
-              }
-            </div>
-          </section>
 
-          <section>
-            <h1 class="project-section__title">Gallery & tags</h1>
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field full-width">
-                <mat-label>Photo URLs</mat-label>
-                <textarea
-                  matInput
-                  formControlName="photosText"
-                  rows="4"
-                  placeholder="One image URL per line"
-                ></textarea>
-                <mat-hint>Full URLs for gallery images (e.g. CDN links)</mat-hint>
-              </mat-form-field>
-            </div>
-            <div class="form-row">
-              <mat-form-field appearance="outline" class="form-field full-width">
-                <mat-label>Tags</mat-label>
-                <input
-                  matInput
-                  formControlName="tagsText"
-                  placeholder="residential, prime-location, amenities"
-                />
-                <mat-hint>Comma-separated tags</mat-hint>
-              </mat-form-field>
-            </div>
+                @for (
+                  faq of faqArray(lang.key).controls;
+                  track faq;
+                  let i = $index
+                ) {
+                  <div class="faq-item" [formGroupName]="i">
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Question</mat-label>
+                      <input matInput formControlName="question" />
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="form-field">
+                      <mat-label>Answer</mat-label>
+                      <textarea
+                        matInput
+                        formControlName="answer"
+                        rows="2"
+                      ></textarea>
+                    </mat-form-field>
+                    <button
+                      mat-icon-button
+                      color="warn"
+                      type="button"
+                      title="Remove FAQ"
+                      (click)="removeFaq(lang.key, i)"
+                    >
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </div>
+                }
+
+                @if (faqArray(lang.key).length === 0) {
+                  <p class="section-hint">No FAQs added for {{ lang.label }}.</p>
+                }
+              </div>
+            }
           </section>
 
           <section>
             <h1 class="project-section__title">Images</h1>
 
             <div class="form-row">
-              <div class="form-field full-width">
+              <div class="form-field">
                 <app-image-upload
                   label="Project Card Image"
                   [maxSizeMB]="5"
-                  [existingImageUrl]="
-                    projectForm.get('cardPhotoId')?.value
-                      ? `http://localhost:3000/api/images/${projectForm.get('cardPhotoId')?.value}`
-                      : undefined
-                  "
+                  [existingImageUrl]="imageUrl(projectForm.get('photoId')?.value)"
                   (imageSelected)="onCardImageSelected($event)"
                   (imageRemoved)="onCardImageRemoved()"
                 >
                 </app-image-upload>
               </div>
-  
-              <div class="form-field full-width">
+
+              <div class="form-field">
                 <app-image-upload
                   label="Project Cover Image"
                   [maxSizeMB]="5"
-                  [existingImageUrl]="projectForm.get('coverPhotoId')?.value
-                  ? `http://localhost:3000/api/images/${projectForm.get('coverPhotoId')?.value}`
-                  : undefined"
+                  [existingImageUrl]="
+                    imageUrl(projectForm.get('coverPhotoId')?.value)
+                  "
                   (imageSelected)="onCoverImageSelected($event)"
                   (imageRemoved)="onCoverImageRemoved()"
                 >
@@ -168,28 +246,69 @@
             </div>
           </section>
 
-          <div>
+          <section>
+            <h1 class="project-section__title">Gallery</h1>
+            <p class="section-hint">Upload one or more images for the gallery.</p>
+
+            <div class="gallery-grid">
+              @for (imageId of gallery(); track imageId) {
+                <div class="gallery-item">
+                  <img [src]="imageUrl(imageId)" alt="Gallery image" />
+                  <button
+                    mat-icon-button
+                    color="warn"
+                    type="button"
+                    class="gallery-item__remove"
+                    title="Remove image"
+                    (click)="onGalleryImageRemoved(imageId)"
+                  >
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </div>
+              }
+
+              <label class="gallery-add">
+                @if (isUploadingGallery()) {
+                  <mat-spinner diameter="32"></mat-spinner>
+                } @else {
+                  <mat-icon>add_photo_alternate</mat-icon>
+                  <span>Add images</span>
+                }
+                <input
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  hidden
+                  (change)="onGalleryFilesSelected($event)"
+                />
+              </label>
+            </div>
+          </section>
+
+          <section>
+            <h1 class="project-section__title">Map Location</h1>
+            <p class="section-hint">
+              Click on the map or search to set the project coordinates.
+            </p>
             <app-google-maps
-              [initialLatitude]="projectForm.get('location')?.value?.latitude"
-              [initialLongitude]="projectForm.get('location')?.value?.longitude"
-              height="500px"
+              [initialLatitude]="projectForm.get('location.latitude')?.value"
+              [initialLongitude]="projectForm.get('location.longitude')?.value"
               markerTitle="Project Location"
               (locationSelected)="onLocationSelected($event)"
             >
             </app-google-maps>
-          </div>
 
-          <div class="form-row">
-            <mat-form-field appearance="outline" class="form-field full-width">
-              <mat-label>Video URL</mat-label>
-              <input
-                matInput
-                formControlName="videoUrl"
-                placeholder="https://example.com/video.mp4"
-              />
-              <mat-hint>Optional: Add a promotional video URL</mat-hint>
-            </mat-form-field>
-          </div>
+            <div class="form-row coordinates-row" formGroupName="location">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Latitude</mat-label>
+                <input matInput formControlName="latitude" readonly />
+              </mat-form-field>
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Longitude</mat-label>
+                <input matInput formControlName="longitude" readonly />
+              </mat-form-field>
+            </div>
+          </section>
 
           <div class="form-actions">
             <button mat-button type="button" (click)="onCancel()">

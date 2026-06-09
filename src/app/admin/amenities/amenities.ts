@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { AmenitiesService } from '../../api/services/amenities.service';
 import {
@@ -25,6 +26,7 @@ import {
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    MatSnackBarModule,
     RouterModule,
   ],
   templateUrl: './amenities.html',
@@ -32,6 +34,7 @@ import {
 })
 export class Amenities implements OnInit {
   private amenitiesService = inject(AmenitiesService);
+  private snackBar = inject(MatSnackBar);
 
   displayedColumns: string[] = ['amenityName', 'actions'];
   dataSource = new MatTableDataSource<AmenityResponseInterface>();
@@ -63,6 +66,27 @@ export class Amenities implements OnInit {
           this.isLoading.set(false);
         },
       });
+  }
+
+  onDelete(amenity: AmenityResponseInterface): void {
+    if (!confirm(`Delete amenity "${amenity.amenityName.geo}"?`)) {
+      return;
+    }
+
+    this.amenitiesService.delete(amenity.id).subscribe({
+      next: () => {
+        this.snackBar.open('Amenity deleted successfully', 'Close', {
+          duration: 3000,
+        });
+        this.loadAmenities();
+      },
+      error: (error) => {
+        console.error('Error deleting amenity:', error);
+        this.snackBar.open('Error deleting amenity', 'Close', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   onPageChange(event: PageEvent): void {

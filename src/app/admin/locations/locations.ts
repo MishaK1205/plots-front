@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { LocationsService } from '../../api/services/locations.service';
 import {
@@ -25,6 +26,7 @@ import {
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    MatSnackBarModule,
     RouterModule,
   ],
   templateUrl: './locations.html',
@@ -32,6 +34,7 @@ import {
 })
 export class Locations implements OnInit {
   private locationsService = inject(LocationsService);
+  private snackBar = inject(MatSnackBar);
 
   displayedColumns: string[] = ['locationName', 'actions'];
   dataSource = new MatTableDataSource<LocationResponseInterface>();
@@ -63,6 +66,27 @@ export class Locations implements OnInit {
           this.isLoading.set(false);
         },
       });
+  }
+
+  onDelete(location: LocationResponseInterface): void {
+    if (!confirm(`Delete location "${location.locationName.geo}"?`)) {
+      return;
+    }
+
+    this.locationsService.delete(location.id).subscribe({
+      next: () => {
+        this.snackBar.open('Location deleted successfully', 'Close', {
+          duration: 3000,
+        });
+        this.loadLocations();
+      },
+      error: (error) => {
+        console.error('Error deleting location:', error);
+        this.snackBar.open('Error deleting location', 'Close', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   onPageChange(event: PageEvent): void {

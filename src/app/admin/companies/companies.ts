@@ -7,6 +7,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { CompaniesService } from '../../api/services/companies.service';
 import {
@@ -25,6 +26,7 @@ import {
     MatButtonModule,
     MatIconModule,
     MatToolbarModule,
+    MatSnackBarModule,
     RouterModule,
   ],
   templateUrl: './companies.html',
@@ -32,6 +34,7 @@ import {
 })
 export class Companies implements OnInit {
   private companiesService = inject(CompaniesService);
+  private snackBar = inject(MatSnackBar);
 
   displayedColumns: string[] = [
     'companyName',
@@ -70,6 +73,27 @@ export class Companies implements OnInit {
           this.isLoading.set(false);
         },
       });
+  }
+
+  onDelete(company: CompanyResponseInterface): void {
+    if (!confirm(`Delete company "${company.companyName.geo}"?`)) {
+      return;
+    }
+
+    this.companiesService.delete(company.id).subscribe({
+      next: () => {
+        this.snackBar.open('Company deleted successfully', 'Close', {
+          duration: 3000,
+        });
+        this.loadCompanies();
+      },
+      error: (error) => {
+        console.error('Error deleting company:', error);
+        this.snackBar.open('Error deleting company', 'Close', {
+          duration: 3000,
+        });
+      },
+    });
   }
 
   onPageChange(event: PageEvent): void {

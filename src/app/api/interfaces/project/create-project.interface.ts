@@ -1,37 +1,35 @@
-export type ProjectCommunicationType =
-  | 'gas'
-  | 'water'
-  | 'sewerage'
-  | 'road'
-  | 'electricity'
-  | 'internet';
+import { LocalizedTextInterface } from '../localized-text.interface';
 
-export interface ProjectCommunication {
-  type: ProjectCommunicationType;
-  available: boolean;
-  description: string;
+export interface ProjectFaqItem {
+  question: string;
+  answer: string;
 }
 
-export interface CreateProjectLocation {
-  streetName: string;
-  city: string;
-  district: string;
+export interface ProjectFaqsInterface {
+  geo: ProjectFaqItem[];
+  eng: ProjectFaqItem[];
+  rus: ProjectFaqItem[];
+}
+
+export interface ProjectCoordinates {
   latitude: number;
   longitude: number;
 }
 
-export type CreateProjectStatus = 'ACTIVE' | 'INACTIVE';
-
 export interface CreateProjectInterface {
   name: string;
-  description: string;
-  location: CreateProjectLocation;
-  cardPhotoId?: string;
+  shortDescription: LocalizedTextInterface;
+  description: LocalizedTextInterface;
+  faqs: ProjectFaqsInterface;
+  locationId: string;
+  amenityId: string;
+  minutesToLocation: LocalizedTextInterface;
+  tagline: LocalizedTextInterface;
+  photoId?: string;
   coverPhotoId?: string;
-  photos?: string[];
-  videoUrl?: string;
-  communications: ProjectCommunication[];
-  tags?: string[];
-  status?: CreateProjectStatus;
+  gallery: string[];
+  location: ProjectCoordinates;
+  isFavourite: boolean;
+  isActive: boolean;
   companyId: string;
 }

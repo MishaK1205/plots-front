@@ -35,4 +35,8 @@ export class CompaniesService {
   ): Observable<CompanyResponseInterface> {
     return this.api.put<CompanyResponseInterface>(`/companies/${id}`, company);
   }
+
+  delete(id: string): Observable<void> {
+    return this.api.delete<void>(`/companies/${id}`);
+  }
 }

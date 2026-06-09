@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
   FormGroup,
+  FormArray,
   Validators,
   ReactiveFormsModule,
-  FormArray,
 } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { forkJoin } from 'rxjs';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,16 +20,20 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule, MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelectModule } from '@angular/material/select';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 import { ProjectsService } from '../../../api/services/projects.service';
 import { CompaniesService } from '../../../api/services/companies.service';
+import { LocationsService } from '../../../api/services/locations.service';
+import { AmenitiesService } from '../../../api/services/amenities.service';
 import { ImagesService } from '../../../api/services';
 import {
   ProjectResponseInterface,
   CompanyResponseInterface,
+  LocationResponseInterface,
+  AmenityResponseInterface,
   CreateProjectInterface,
-  ProjectCommunication,
-  ProjectCommunicationType,
+  ProjectFaqItem,
 } from '../../../api/interfaces';
 
 import { ImageUpload } from '../../../components/image-upload/image-upload';
@@ -36,17 +41,10 @@ import {
   GoogleMaps,
   LocationSelectedEvent,
 } from '../../../components/google-maps/google-maps';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { CommunicationType } from '../../../shared';
 
-const COMMUNICATION_DEFAULT_DESCRIPTIONS: Record<string, string> = {
-  [CommunicationType.GAS]: 'Natural gas connection',
-  [CommunicationType.WATER]: 'Water supply connection',
-  [CommunicationType.SEWERAGE]: 'Sewerage system',
-  [CommunicationType.ROAD]: 'Road access',
-  [CommunicationType.ELECTRICITY]: 'Electrical connection',
-  [CommunicationType.INTERNET]: 'Internet connection',
-};
+const IMAGE_BASE_URL = 'http://localhost:3000/api/images';
+
+type FaqLanguage = 'geo' | 'eng' | 'rus';
 
 const MATERIAL_MODULES = [
   MatCardModule,
@@ -82,56 +80,115 @@ export class AddEditProject implements OnInit {
 
   private readonly projectsService = inject(ProjectsService);
   private readonly companiesService = inject(CompaniesService);
+  private readonly locationsService = inject(LocationsService);
+  private readonly amenitiesService = inject(AmenitiesService);
   private readonly imagesService = inject(ImagesService);
+
+  readonly faqLanguages: { key: FaqLanguage; label: string }[] = [
+    { key: 'geo', label: 'Georgian' },
+    { key: 'eng', label: 'English' },
+    { key: 'rus', label: 'Russian' },
+  ];
 
   projectForm!: FormGroup;
   isEditMode = signal(false);
   isLoading = signal(false);
   projectId = signal<string | null>(null);
+
   companies = signal<CompanyResponseInterface[]>([]);
+  locations = signal<LocationResponseInterface[]>([]);
+  amenities = signal<AmenityResponseInterface[]>([]);
+
+  gallery = signal<string[]>([]);
+  isUploadingGallery = signal(false);
 
   ngOnInit(): void {
     this.initializeForm();
-    this.loadCompanies();
+    this.loadDropdownData();
     this.checkEditMode();
   }
 
-  get communicationsFormArray(): FormArray {
-    return this.projectForm.get('communications') as FormArray;
-  }
-
-  private createCommunicationsFormArray(): FormArray {
-    return this.fb.array(
-      Object.values(CommunicationType).map((type) =>
-        this.fb.group({
-          type: [type],
-          available: [false],
-          description: [COMMUNICATION_DEFAULT_DESCRIPTIONS[type] ?? ''],
-        }),
-      ),
-    );
+  private localizedGroup(): FormGroup {
+    return this.fb.group({
+      geo: [''],
+      eng: [''],
+      rus: [''],
+    });
   }
 
   private initializeForm(): void {
     this.projectForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
-      description: ['', [Validators.required, Validators.minLength(10)]],
       companyId: ['', [Validators.required]],
-      status: ['ACTIVE', [Validators.required]],
-      cardPhotoId: [''],
-      coverPhotoId: [''],
-      photosText: [''],
-      tagsText: [''],
-      communications: this.createCommunicationsFormArray(),
-      location: this.fb.group({
-        streetName: [''],
-        city: [''],
-        district: [''],
-        latitude: [''],
-        longitude: [''],
+      locationId: ['', [Validators.required]],
+      amenityId: ['', [Validators.required]],
+      shortDescription: this.localizedGroup(),
+      description: this.localizedGroup(),
+      tagline: this.localizedGroup(),
+      minutesToLocation: this.localizedGroup(),
+      faqs: this.fb.group({
+        geo: this.fb.array([]),
+        eng: this.fb.array([]),
+        rus: this.fb.array([]),
       }),
-      videoUrl: [''],
+      photoId: [''],
+      coverPhotoId: [''],
+      location: this.fb.group({
+        latitude: [null as number | null],
+        longitude: [null as number | null],
+      }),
+      isFavourite: [false],
+      isActive: [false],
     });
+  }
+
+  get faqsGroup(): FormGroup {
+    return this.projectForm.get('faqs') as FormGroup;
+  }
+
+  faqArray(lang: FaqLanguage): FormArray {
+    return this.faqsGroup.get(lang) as FormArray;
+  }
+
+  private createFaqGroup(item?: ProjectFaqItem): FormGroup {
+    return this.fb.group({
+      question: [item?.question ?? '', [Validators.required]],
+      answer: [item?.answer ?? '', [Validators.required]],
+    });
+  }
+
+  addFaq(lang: FaqLanguage, item?: ProjectFaqItem): void {
+    this.faqArray(lang).push(this.createFaqGroup(item));
+  }
+
+  removeFaq(lang: FaqLanguage, index: number): void {
+    this.faqArray(lang).removeAt(index);
+  }
+
+  private loadDropdownData(): void {
+    this.companiesService
+      .getAll({ limit: 100 })
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => this.companies.set(response.data),
+        error: () => this.showError('Failed to load companies'),
+      });
+
+    this.locationsService
+      .getAll({ limit: 100 })
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => this.locations.set(response.data),
+        error: () => this.showError('Failed to load locations'),
+      });
+
+    this.amenitiesService
+      .getAll({ limit: 100 })
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => this.amenities.set(response.data),
+        error: () => this.showError('Failed to load amenities'),
+      });
   }
 
   private checkEditMode(): void {
@@ -141,16 +198,6 @@ export class AddEditProject implements OnInit {
       this.projectId.set(id);
       this.loadProject(id);
     }
-  }
-
-  private loadCompanies(): void {
-    this.companiesService
-      .getAll()
-      .pipe(takeUntilDestroyed(this.destroyRef$))
-      .subscribe({
-        next: (response) => this.companies.set(response.data),
-        error: () => this.showError('Failed to load companies'),
-      });
   }
 
   private loadProject(id: string): void {
@@ -172,122 +219,100 @@ export class AddEditProject implements OnInit {
       });
   }
 
-  private patchCommunicationsFromProject(
-    comms: ProjectResponseInterface['communications'] | undefined,
-  ): void {
-    const arr = this.communicationsFormArray;
-    if (!comms?.length) return;
-    const first = comms[0];
-    const isNewFormat =
-      typeof first === 'object' &&
-      first !== null &&
-      'available' in first;
-
-    if (isNewFormat) {
-      const byType = new Map(
-        (comms as ProjectCommunication[]).map((c) => [c.type, c]),
-      );
-      arr.controls.forEach((ctrl) => {
-        const g = ctrl as FormGroup;
-        const t = g.get('type')!.value as ProjectCommunicationType;
-        const item = byType.get(t);
-        if (item) {
-          g.patchValue({
-            available: item.available,
-            description: item.description ?? '',
-          });
-        }
-      });
-    } else {
-      const selected = new Set(comms as unknown as string[]);
-      arr.controls.forEach((ctrl) => {
-        const g = ctrl as FormGroup;
-        const t = g.get('type')!.value as CommunicationType;
-        g.patchValue({
-          available: selected.has(t),
-          description: COMMUNICATION_DEFAULT_DESCRIPTIONS[t] ?? '',
-        });
-      });
-    }
-  }
-
   private populateForm(project: ProjectResponseInterface): void {
     this.projectForm.patchValue({
       name: project.name,
-      description: project.description,
       companyId: project.companyId,
-      status: project.status,
-      coverPhotoId: project.coverPhotoId,
-      cardPhotoId: project.cardPhotoId,
-      videoUrl: project.videoUrl,
-      photosText: (project.photos ?? []).join('\n'),
-      tagsText: (project.tags ?? []).join(', '),
+      locationId: project.locationId,
+      amenityId: project.amenityId,
+      shortDescription: this.localizedValue(project.shortDescription),
+      description: this.localizedValue(project.description),
+      tagline: this.localizedValue(project.tagline),
+      minutesToLocation: this.localizedValue(project.minutesToLocation),
+      photoId: project.photoId ?? '',
+      coverPhotoId: project.coverPhotoId ?? '',
       location: {
-        streetName: project.location.streetName,
-        city: project.location.city,
-        district: project.location.district,
-        latitude: project.location.latitude,
-        longitude: project.location.longitude,
+        latitude: project.location?.latitude ?? null,
+        longitude: project.location?.longitude ?? null,
       },
+      isFavourite: project.isFavourite ?? false,
+      isActive: project.isActive ?? false,
     });
-    this.patchCommunicationsFromProject(project.communications);
+
+    this.gallery.set(project.gallery ?? []);
+    this.patchFaqs(project.faq);
+  }
+
+  private localizedValue(
+    value: { geo?: string; eng?: string; rus?: string } | undefined,
+  ): { geo: string; eng: string; rus: string } {
+    return {
+      geo: value?.geo ?? '',
+      eng: value?.eng ?? '',
+      rus: value?.rus ?? '',
+    };
+  }
+
+  private patchFaqs(faqs: ProjectResponseInterface['faq'] | undefined): void {
+    if (!faqs) return;
+    (['geo', 'eng', 'rus'] as FaqLanguage[]).forEach((lang) => {
+      const arr = this.faqArray(lang);
+      arr.clear();
+      (faqs[lang] ?? []).forEach((item) => this.addFaq(lang, item));
+    });
   }
 
   onLocationSelected(event: LocationSelectedEvent): void {
-    this.projectForm.patchValue({
-      location: {
-        streetName: event.streetName,
-        city: event.city,
-        district: event.district,
-        latitude: event.latitude,
-        longitude: event.longitude,
-      },
+    this.projectForm.get('location')?.patchValue({
+      latitude: event.latitude,
+      longitude: event.longitude,
     });
+  }
+
+  private collectFaqs(): CreateProjectInterface['faqs'] {
+    const build = (lang: FaqLanguage): ProjectFaqItem[] =>
+      (this.faqArray(lang).getRawValue() as ProjectFaqItem[]).map((item) => ({
+        question: (item.question ?? '').trim(),
+        answer: (item.answer ?? '').trim(),
+      }));
+
+    return {
+      geo: build('geo'),
+      eng: build('eng'),
+      rus: build('rus'),
+    };
   }
 
   private toApiPayload(): CreateProjectInterface {
     const v = this.projectForm.getRawValue();
-    const photos = (v.photosText as string)
-      .split('\n')
-      .map((s) => s.trim())
-      .filter(Boolean);
-    const tags = (v.tagsText as string)
-      .split(',')
-      .map((s) => s.trim())
-      .filter(Boolean);
     const lat = Number(v.location.latitude);
     const lng = Number(v.location.longitude);
 
     return {
       name: v.name,
+      shortDescription: v.shortDescription,
       description: v.description,
+      faqs: this.collectFaqs(),
+      locationId: v.locationId,
+      amenityId: v.amenityId,
+      minutesToLocation: v.minutesToLocation,
+      tagline: v.tagline,
+      photoId: v.photoId || undefined,
+      coverPhotoId: v.coverPhotoId || undefined,
+      gallery: this.gallery(),
       location: {
-        streetName: v.location.streetName ?? '',
-        city: v.location.city ?? '',
-        district: v.location.district ?? '',
         latitude: Number.isFinite(lat) ? lat : 0,
         longitude: Number.isFinite(lng) ? lng : 0,
       },
-      cardPhotoId: v.cardPhotoId || undefined,
-      coverPhotoId: v.coverPhotoId || undefined,
-      photos: photos.length ? photos : undefined,
-      videoUrl: v.videoUrl || undefined,
-      communications: (v.communications as ProjectCommunication[]).map(
-        (c) => ({
-          type: c.type,
-          available: !!c.available,
-          description: (c.description ?? '').toString(),
-        }),
-      ),
-      tags: tags.length ? tags : undefined,
-      status: v.status,
+      isFavourite: !!v.isFavourite,
+      isActive: !!v.isActive,
       companyId: v.companyId,
     };
   }
 
   onSubmit(): void {
     if (!this.projectForm.valid) {
-      this.markFormGroupTouched();
+      this.projectForm.markAllAsTouched();
       return;
     }
 
@@ -318,15 +343,17 @@ export class AddEditProject implements OnInit {
     });
   }
 
+  imageUrl(id: string | null | undefined): string | undefined {
+    return id ? `${IMAGE_BASE_URL}/${id}` : undefined;
+  }
+
   onCoverImageSelected(file: File): void {
     this.imagesService
       .upload(file)
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
         next: (response) => {
-          const coverImageId = response.id;
-
-          this.projectForm.get('coverPhotoId')?.setValue(coverImageId);
+          this.projectForm.get('coverPhotoId')?.setValue(response.id);
           this.showSuccess('Image uploaded successfully');
         },
         error: () => this.showError('Failed to upload image'),
@@ -342,7 +369,7 @@ export class AddEditProject implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
         next: () => {
-          this.projectForm.get('coverPhotoId')?.setValue(null);
+          this.projectForm.get('coverPhotoId')?.setValue('');
           this.showSuccess('Image removed successfully');
         },
         error: () => this.showError('Failed to remove image'),
@@ -355,8 +382,7 @@ export class AddEditProject implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
         next: (response) => {
-          const cardImageId = response.id;
-          this.projectForm.get('cardPhotoId')?.setValue(cardImageId);
+          this.projectForm.get('photoId')?.setValue(response.id);
           this.showSuccess('Image uploaded successfully');
         },
         error: () => this.showError('Failed to upload image'),
@@ -364,7 +390,7 @@ export class AddEditProject implements OnInit {
   }
 
   onCardImageRemoved(): void {
-    const imageId = this.projectForm.get('cardPhotoId')?.value;
+    const imageId = this.projectForm.get('photoId')?.value;
     if (!imageId) return;
 
     this.imagesService
@@ -372,7 +398,50 @@ export class AddEditProject implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe({
         next: () => {
-          this.projectForm.get('cardPhotoId')?.setValue(null);
+          this.projectForm.get('photoId')?.setValue('');
+          this.showSuccess('Image removed successfully');
+        },
+        error: () => this.showError('Failed to remove image'),
+      });
+  }
+
+  onGalleryFilesSelected(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const files = input.files;
+    if (!files || files.length === 0) return;
+
+    this.isUploadingGallery.set(true);
+    const uploads = Array.from(files).map((file) =>
+      this.imagesService.upload(file),
+    );
+
+    forkJoin(uploads)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (responses) => {
+          this.gallery.update((ids) => [
+            ...ids,
+            ...responses.map((r) => r.id),
+          ]);
+          this.isUploadingGallery.set(false);
+          this.showSuccess('Gallery images uploaded successfully');
+        },
+        error: () => {
+          this.isUploadingGallery.set(false);
+          this.showError('Failed to upload gallery images');
+        },
+      });
+
+    input.value = '';
+  }
+
+  onGalleryImageRemoved(imageId: string): void {
+    this.imagesService
+      .delete(imageId)
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: () => {
+          this.gallery.update((ids) => ids.filter((id) => id !== imageId));
           this.showSuccess('Image removed successfully');
         },
         error: () => this.showError('Failed to remove image'),
@@ -397,13 +466,6 @@ export class AddEditProject implements OnInit {
       .replace(/([A-Z])/g, ' $1')
       .toLowerCase()
       .trim();
-  }
-
-  private markFormGroupTouched(): void {
-    Object.values(this.projectForm.controls).forEach((control) =>
-      control.markAsTouched(),
-    );
-    this.communicationsFormArray.controls.forEach((c) => c.markAsTouched());
   }
 
   onCancel(): void {
