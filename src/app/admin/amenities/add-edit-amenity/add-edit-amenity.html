@@ -1,0 +1,87 @@
+<div class="add-edit-container">
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>{{ isEditMode() ? "Edit Amenity" : "Add New Amenity" }}</span>
+  </mat-toolbar>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      @if (isLoading()) {
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>
+            {{ isEditMode() ? "Loading amenity details..." : "Processing..." }}
+          </p>
+        </div>
+      } @else {
+        <form
+          [formGroup]="amenityForm"
+          (ngSubmit)="onSubmit()"
+          class="amenity-form"
+        >
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Amenity Name (Georgian) *</mat-label>
+              <input
+                matInput
+                formControlName="amenityNameGeo"
+                placeholder="აუზი"
+              />
+              @if (getFieldError("amenityNameGeo", "Amenity name (Georgian)")) {
+                <mat-error>{{
+                  getFieldError("amenityNameGeo", "Amenity name (Georgian)")
+                }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Amenity Name (English) *</mat-label>
+              <input
+                matInput
+                formControlName="amenityNameEng"
+                placeholder="Swimming pool"
+              />
+              @if (getFieldError("amenityNameEng", "Amenity name (English)")) {
+                <mat-error>{{
+                  getFieldError("amenityNameEng", "Amenity name (English)")
+                }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Amenity Name (Russian) *</mat-label>
+              <input
+                matInput
+                formControlName="amenityNameRus"
+                placeholder="Бассейн"
+              />
+              @if (getFieldError("amenityNameRus", "Amenity name (Russian)")) {
+                <mat-error>{{
+                  getFieldError("amenityNameRus", "Amenity name (Russian)")
+                }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="onCancel()">
+              Cancel
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="isLoading()"
+            >
+              {{ isEditMode() ? "Update Amenity" : "Create Amenity" }}
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

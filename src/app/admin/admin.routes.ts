@@ -58,4 +58,42 @@ export const adminRoutes: Routes = [
     loadComponent: () =>
       import('./lands/add-edit-land/add-edit-land').then((m) => m.AddEditLand),
   },
+  {
+    path: 'locations',
+    loadComponent: () =>
+      import('./locations/locations').then((m) => m.Locations),
+  },
+  {
+    path: 'add-location',
+    loadComponent: () =>
+      import('./locations/add-edit-location/add-edit-location').then(
+        (m) => m.AddEditLocation,
+      ),
+  },
+  {
+    path: 'edit-location/:id',
+    loadComponent: () =>
+      import('./locations/add-edit-location/add-edit-location').then(
+        (m) => m.AddEditLocation,
+      ),
+  },
+  {
+    path: 'amenities',
+    loadComponent: () =>
+      import('./amenities/amenities').then((m) => m.Amenities),
+  },
+  {
+    path: 'add-amenity',
+    loadComponent: () =>
+      import('./amenities/add-edit-amenity/add-edit-amenity').then(
+        (m) => m.AddEditAmenity,
+      ),
+  },
+  {
+    path: 'edit-amenity/:id',
+    loadComponent: () =>
+      import('./amenities/add-edit-amenity/add-edit-amenity').then(
+        (m) => m.AddEditAmenity,
+      ),
+  },
 ];

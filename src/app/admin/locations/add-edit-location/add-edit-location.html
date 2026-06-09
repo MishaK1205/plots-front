@@ -1,0 +1,93 @@
+<div class="add-edit-container">
+  <mat-toolbar color="primary">
+    <button mat-icon-button (click)="onCancel()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+    <span>{{ isEditMode() ? "Edit Location" : "Add New Location" }}</span>
+  </mat-toolbar>
+
+  <mat-card class="form-card">
+    <mat-card-content>
+      @if (isLoading()) {
+        <div class="loading-container">
+          <mat-spinner diameter="50"></mat-spinner>
+          <p>
+            {{ isEditMode() ? "Loading location details..." : "Processing..." }}
+          </p>
+        </div>
+      } @else {
+        <form
+          [formGroup]="locationForm"
+          (ngSubmit)="onSubmit()"
+          class="location-form"
+        >
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field full-width">
+              <mat-label>Location Name (Georgian) *</mat-label>
+              <input
+                matInput
+                formControlName="locationNameGeo"
+                placeholder="თბილისი"
+              />
+              @if (
+                getFieldError("locationNameGeo", "Location name (Georgian)")
+              ) {
+                <mat-error>{{
+                  getFieldError("locationNameGeo", "Location name (Georgian)")
+                }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="form-row">
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Location Name (English) *</mat-label>
+              <input
+                matInput
+                formControlName="locationNameEng"
+                placeholder="Tbilisi"
+              />
+              @if (
+                getFieldError("locationNameEng", "Location name (English)")
+              ) {
+                <mat-error>{{
+                  getFieldError("locationNameEng", "Location name (English)")
+                }}</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="form-field">
+              <mat-label>Location Name (Russian) *</mat-label>
+              <input
+                matInput
+                formControlName="locationNameRus"
+                placeholder="Тбилиси"
+              />
+              @if (
+                getFieldError("locationNameRus", "Location name (Russian)")
+              ) {
+                <mat-error>{{
+                  getFieldError("locationNameRus", "Location name (Russian)")
+                }}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+          <div class="form-actions">
+            <button mat-button type="button" (click)="onCancel()">
+              Cancel
+            </button>
+            <button
+              mat-raised-button
+              color="primary"
+              type="submit"
+              [disabled]="isLoading()"
+            >
+              {{ isEditMode() ? "Update Location" : "Create Location" }}
+            </button>
+          </div>
+        </form>
+      }
+    </mat-card-content>
+  </mat-card>
+</div>

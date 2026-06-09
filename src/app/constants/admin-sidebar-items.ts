@@ -19,4 +19,14 @@ export const ADMIN_SIDEBAR_ITEMS = [
     icon: 'landscape',
     path: '/admin/lands',
   },
+  {
+    label: 'Locations',
+    icon: 'place',
+    path: '/admin/locations',
+  },
+  {
+    label: 'Amenities',
+    icon: 'pool',
+    path: '/admin/amenities',
+  },
 ];
