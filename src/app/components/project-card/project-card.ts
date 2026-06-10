@@ -14,7 +14,7 @@ export class ProjectCard {
   currencyChanged = output<CurrencyType>();
 
   get cardImageUrl(): string {
-    return this.resolveImageUrl(this.project().cardPhotoId);
+    return this.resolveImageUrl(this.project().photoId);
   }
 
   onCurrencyChange(currency: CurrencyType) {
@@ -28,9 +28,6 @@ export class ProjectCard {
   }
 
   private resolveImageUrl(image?: string): string {
-    if (!image) return '';
-    return /^https?:\/\//.test(image)
-      ? image
-      : `http://localhost:3000/api/images/${image}`;
+    return `http://localhost:3000/api/images/${image}`;
   }
 }

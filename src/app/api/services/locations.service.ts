@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LocationResponseInterface } from '../interfaces/location/location-response.interface';
-import { LocationsResponseInterface } from '../interfaces/location/locations-response.interface';
-import { CreateLocationInterface } from '../interfaces/location/create-location.interface';
-import { UpdateLocationInterface } from '../interfaces/location/update-location.interface';
+import { LocationResponseInterface } from '../interfaces';
+import { LocationsResponseInterface } from '../interfaces';
+import { CreateLocationInterface } from '../interfaces';
+import { UpdateLocationInterface } from '../interfaces';
 import { ApiService } from './api.service';
 
 @Injectable({

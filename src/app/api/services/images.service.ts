@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ImageResponseInterface } from '../interfaces/images/image-response.interface';
+import { ImageResponseInterface } from '../interfaces';
 import { ApiService } from './api.service';
 
 @Injectable({

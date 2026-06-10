@@ -1,11 +1,11 @@
 <div class="home-container">
-  <section class="home-container__favourite-projects">
-    <div class="home-container__favourite-projects-header">
+  <section class="home-container__favourite-new-projects">
+    <div class="home-container__favourite-new-projects-header">
       <h2>რჩეული პროექტები</h2>
       <span>ყველას ნახვა</span>
     </div>
 
-    <div class="home-container__favourite-projects-list">
+    <div class="home-container__favourite-new-projects-list">
       @for (project of favouriteProjects(); track project.id) {
         <app-project-card [project]="project"></app-project-card>
       }
@@ -14,7 +14,28 @@
 
   <section class="home-container__sponsored-projects">
     <div class="home-container__sponsored-projects-list">
-      @for (project of sponsoredProjects(); track project.id) {
+      @for (project of sponsoredProjects().slice(0, 2); track project.id) {
+        <app-sponsored-project-card [project]="project"></app-sponsored-project-card>
+      }
+    </div>
+  </section>
+
+  <section class="home-container__favourite-new-projects">
+    <div class="home-container__favourite-new-projects-header">
+      <h2>ახალი პროექტები</h2>
+      <span>ყველას ნახვა</span>
+    </div>
+
+    <div class="home-container__favourite-new-projects-list">
+      @for (project of newProjects(); track project.id) {
+        <app-project-card [project]="project"></app-project-card>
+      }
+    </div>
+  </section>
+
+  <section class="home-container__sponsored-projects">
+    <div class="home-container__sponsored-projects-list">
+      @for (project of sponsoredProjects().slice(2, 4); track project.id) {
         <app-sponsored-project-card [project]="project"></app-sponsored-project-card>
       }
     </div>

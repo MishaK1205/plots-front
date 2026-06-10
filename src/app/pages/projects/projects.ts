@@ -9,7 +9,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectResponseInterface } from '../../api/interfaces';
 import { DetailedProjectCard } from '../../components';
-import { ProjectsService } from '../../api/services/projects.service';
+import { ProjectsService } from '../../api/services';
 
 @Component({
   selector: 'app-projects',

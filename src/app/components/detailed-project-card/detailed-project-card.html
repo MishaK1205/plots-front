@@ -1,31 +1,88 @@
-<div class="project-detailed-card__container">
-    <div class="project-detailed-card__container__card-image__container">
-        <img class="project-detailed-card__container__card-image" [src]="cardImageUrl" alt="Project Image" />
+<article class="project-card">
+  <div class="project-card__media">
+    @if (cardImageUrl()) {
+      <img class="project-card__image" [src]="cardImageUrl()" [alt]="project().name" />
+    } @else {
+      <div class="project-card__image project-card__image--placeholder">
+        <img src="assets/icons/globe.svg" alt="" />
+      </div>
+    }
+  </div>
+
+  <div class="project-card__info">
+    <header class="project-card__header">
+      <h2 class="project-card__title">{{ project().name }}</h2>
+      @if (project().developerCompanyName) {
+        <p class="project-card__developer">დეველოპერი: {{ project().developerCompanyName }}</p>
+      }
+    </header>
+
+    <div class="project-card__price">
+      <div class="project-card__price-values">
+        <p class="project-card__price-total">
+          ${{ project().lowestLandTotalPrice | number }}<span>-დან</span>
+        </p>
+        <p class="project-card__price-sqm">
+          1მ<sup>2</sup> &mdash; $ {{ project().lowestLandSquareMeterPrice | number }}
+        </p>
+      </div>
+
+      <app-currency-toggle (currencyChanged)="onCurrencyChange($event)"></app-currency-toggle>
     </div>
-    
-    <div class="project-detailed-card__container__details">
-        <h2 class="project-detailed-card__container__title">{{ project().name }}</h2>
-        <p class="project-detailed-card__container__developer">დეველოპერი: {{ project().developerCompanyName }}</p>
 
-        <div class="project-detailed-card__container__price-details">
-            <div>
-                <p class="project-detailed-card__container__total-price">${{ project().lowestLandTotalPrice }}<span>-დან</span></p>
-                <p class="project-detailed-card__container__square-meter-price">1მ<sup>2</sup> - $ {{ project().lowestLandSquareMeterPrice }}</p>
-            </div>
+    @if (shortDescription()) {
+      <div class="project-card__description">
+        <p class="project-card__description-label">მოკლე აღწერა</p>
+        <p class="project-card__description-text">{{ shortDescription() }}</p>
+      </div>
+    }
 
-            <app-currency-toggle
-                (currencyChanged)="onCurrencyChange($event)"
-            ></app-currency-toggle>
-        </div>
-        
-        <p>{{ project().description }}</p>
-
-        <div 
-            class="project-detailed-card__container__location"
-            (click)="onLocationClick()"
+    <div class="project-card__meta">
+      @if (locationName()) {
+        <button
+          type="button"
+          class="project-card__location"
+          (click)="onLocationClick($event)"
         >
-            <img  class="project-detailed-card__container__location__icon" src="assets/icons/location.svg" alt="Location Icon" /> 
-            <span>{{ project().location.city }}</span>
-        </div>
+          <img class="project-card__location-icon" src="assets/icons/location.svg" alt="" />
+          <span>{{ locationName() }}</span>
+        </button>
+      }
+
+      @if (minutesToLocation()) {
+        <span class="project-card__distance">
+          <svg
+            class="project-card__distance-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 20 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle cx="10" cy="10" r="7.5" stroke="#7B7B7B" stroke-width="1.25" />
+            <path d="M10 6V10L12.5 11.5" stroke="#7B7B7B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+          <span>{{ minutesToLocation() }}</span>
+        </span>
+      }
     </div>
-</div>
+  </div>
+
+  <aside class="project-card__developer-panel">
+    <div class="project-card__logo">
+      @if (developerLogoUrl()) {
+        <img [src]="developerLogoUrl()" [alt]="project().developerCompanyName" />
+      } @else {
+        <span class="project-card__logo-initials">{{ developerInitials() }}</span>
+      }
+    </div>
+
+    @if (project().developerCompanyName) {
+      <p class="project-card__developer-name">{{ project().developerCompanyName }}</p>
+    }
+
+    <button type="button" class="project-card__contact" (click)="onContactClick($event)">
+      დაკავშირება
+    </button>
+  </aside>
+</article>

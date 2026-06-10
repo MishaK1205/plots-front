@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { LandResponseInterface } from '../interfaces/land/land-response.interface';
-import { CreateLandInterface } from '../interfaces/land/create-land.interface';
-import { UpdateLandInterface } from '../interfaces/land/update-land.interface';
-import { LandsResponseInterface } from '../interfaces/land/lands-response.interface';
+import { LandResponseInterface } from '../interfaces';
+import { CreateLandInterface } from '../interfaces';
+import { UpdateLandInterface } from '../interfaces';
+import { LandsResponseInterface } from '../interfaces';
 import { ApiService } from './api.service';
 
 @Injectable({

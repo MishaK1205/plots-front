@@ -28,6 +28,10 @@ export class ProjectsService {
     return this.api.get<ProjectResponseInterface[]>('/projects/sponsored');
   }
 
+  getNew(): Observable<ProjectResponseInterface[]> {
+    return this.api.get<ProjectResponseInterface[]>('/projects/new');
+  }
+
   getById(id: string): Observable<ProjectResponseInterface> {
     return this.api.get<ProjectResponseInterface>(`/projects/${id}`);
   }

@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { CompanyResponseInterface } from '../interfaces/company/company-response.interface';
-import { CreateCompanyInterface } from '../interfaces/company/create-company.interface';
-import { UpdateCompanyInterface } from '../interfaces/company/update-company.interface';
-import { CompaniesResponseInterface } from '../interfaces/company/companies-response.interface';
+import { CompanyResponseInterface } from '../interfaces';
+import { CreateCompanyInterface } from '../interfaces';
+import { UpdateCompanyInterface } from '../interfaces';
+import { CompaniesResponseInterface } from '../interfaces';
 import { ApiService } from './api.service';
 
 @Injectable({

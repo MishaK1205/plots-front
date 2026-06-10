@@ -1,9 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AmenityResponseInterface } from '../interfaces/amenity/amenity-response.interface';
-import { AmenitiesResponseInterface } from '../interfaces/amenity/amenities-response.interface';
-import { CreateAmenityInterface } from '../interfaces/amenity/create-amenity.interface';
-import { UpdateAmenityInterface } from '../interfaces/amenity/update-amenity.interface';
+import { AmenityResponseInterface } from '../interfaces';
+import { AmenitiesResponseInterface } from '../interfaces';
+import { CreateAmenityInterface } from '../interfaces';
+import { UpdateAmenityInterface } from '../interfaces';
 import { ApiService } from './api.service';
 
 @Injectable({

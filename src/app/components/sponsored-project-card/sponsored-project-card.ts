@@ -12,7 +12,7 @@ export class SponsoredProjectCard {
   project = input.required<ProjectResponseInterface>();
 
   get cardImageBackground(): string {
-    return `url(${this.resolveImageUrl(this.project().cardPhotoId)})`;
+    return `url(${this.resolveImageUrl(this.project().photoId)})`;
   }
 
   viewProject() {
@@ -21,9 +21,7 @@ export class SponsoredProjectCard {
 
   private resolveImageUrl(image?: string): string {
     if (!image) return '';
-    return /^https?:\/\//.test(image)
-      ? image
-      : `http://localhost:3000/api/images/${image}`;
+    return `http://localhost:3000/api/images/${image}`;
   }
 }
 
