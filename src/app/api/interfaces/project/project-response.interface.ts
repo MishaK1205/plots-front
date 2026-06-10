@@ -1,12 +1,10 @@
 import { LocalizedTextInterface } from '../localized-text.interface';
+import { CompanyResponseInterface } from '../company/company-response.interface';
 import { ProjectFaqsInterface } from './create-project.interface';
 
 export interface ProjectResponseLocation {
   latitude: number;
   longitude: number;
-  streetName?: string;
-  city?: string;
-  district?: string;
 }
 
 export interface ProjectResponseInterface {
@@ -15,15 +13,13 @@ export interface ProjectResponseInterface {
   shortDescription: LocalizedTextInterface;
   description: LocalizedTextInterface;
   faq: ProjectFaqsInterface;
-  developerCompanyName?: string;
-  developerContactInfo?: string;
-  developerPhotoId?: string;
+  companyInfo?: CompanyResponseInterface;
   minutesToLocation: LocalizedTextInterface;
   tagline: LocalizedTextInterface;
   locationId: string;
+  locationName: LocalizedTextInterface;
   amenityId: string;
   photoId?: string;
-  cardPhotoId?: string;
   coverPhotoId?: string;
   gallery: string[];
   location: ProjectResponseLocation;
@@ -36,4 +32,5 @@ export interface ProjectResponseInterface {
   companyId: string;
   lowestLandTotalPrice?: number;
   lowestLandSquareMeterPrice?: number;
+  lowestLandSquareMeters?: number;
 }

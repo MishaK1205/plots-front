@@ -1,0 +1,15 @@
+@use "../../tools/px-to-rem" as *;
+
+:host {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.projects-map {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: px-to-rem(16px);
+  overflow: hidden;
+}

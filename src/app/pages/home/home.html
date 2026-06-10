@@ -1,4 +1,8 @@
 <div class="home-container">
+  <section class="home-container__search">
+    <app-project-search (search)="onSearch($event)"></app-project-search>
+  </section>
+
   <section class="home-container__favourite-new-projects">
     <div class="home-container__favourite-new-projects-header">
       <h2>რჩეული პროექტები</h2>

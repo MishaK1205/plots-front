@@ -1,4 +1,18 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+} from '@angular/core';
+import {
+  LanguageStateService,
+  LanguageType,
+} from '../../shared/services/language-state.service';
+
+interface LanguageOption {
+  label: string;
+  value: LanguageType;
+}
 
 @Component({
   selector: 'app-language-switcher',
@@ -7,12 +21,26 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LanguageSwitcher {
-  languages = ['ქარ', 'Eng', 'Rus'];
-  selectedLanguage = this.languages[0];
+  private readonly languageState = inject(LanguageStateService);
+
+  languages: LanguageOption[] = [
+    { label: 'ქარ', value: 'geo' },
+    { label: 'Eng', value: 'eng' },
+    { label: 'Rus', value: 'rus' },
+  ];
+
+  selectedLanguage = this.languageState.language;
+
+  readonly selectedLanguageLabel = computed(
+    () =>
+      this.languages.find((option) => option.value === this.selectedLanguage())
+        ?.label ?? this.languages[0].label,
+  );
+
   languageMenuOpen = false;
 
-  selectLanguage(language: string): void {
-    this.selectedLanguage = language;
+  selectLanguage(language: LanguageType): void {
+    this.languageState.setLanguage(language);
     this.languageMenuOpen = false;
   }
 }

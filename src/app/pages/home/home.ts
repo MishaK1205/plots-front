@@ -5,19 +5,28 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { ProjectCard, SponsoredProjectCard } from '../../components';
+import { Router } from '@angular/router';
+import {
+  ProjectCard,
+  ProjectSearch,
+  SponsoredProjectCard,
+} from '../../components';
 import { ProjectsService } from '../../api/services';
-import { ProjectResponseInterface } from '../../api/interfaces';
+import {
+  ProjectResponseInterface,
+  ProjectsQueryParamsInterface,
+} from '../../api/interfaces';
 
 @Component({
   selector: 'app-home',
-  imports: [ProjectCard, SponsoredProjectCard],
+  imports: [ProjectCard, ProjectSearch, SponsoredProjectCard],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Home implements OnInit {
   private projectsService = inject(ProjectsService);
+  private router = inject(Router);
 
   favouriteProjects = signal<ProjectResponseInterface[]>([]);
   sponsoredProjects = signal<ProjectResponseInterface[]>([]);
@@ -41,5 +50,9 @@ export class Home implements OnInit {
         this.newProjects.set(data);
       },
     });
+  }
+
+  onSearch(params: ProjectsQueryParamsInterface): void {
+    this.router.navigate(['/projects'], { queryParams: params });
   }
 }

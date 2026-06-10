@@ -6,6 +6,7 @@ export * from './company/create-company.interface';
 export * from './company/update-company.interface';
 export * from './project/project-response.interface';
 export * from './project/projects-response.interface';
+export * from './project/projects-query-params.interface';
 export * from './project/create-project.interface';
 export * from './project/update-project.interface';
 export * from './land/land-response.interface';

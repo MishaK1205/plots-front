@@ -12,18 +12,27 @@
   <div class="project-card__info">
     <header class="project-card__header">
       <h2 class="project-card__title">{{ project().name }}</h2>
-      @if (project().developerCompanyName) {
-        <p class="project-card__developer">დეველოპერი: {{ project().developerCompanyName }}</p>
+      @if (developerName()) {
+        <p class="project-card__developer">დეველოპერი: {{ developerName() }}</p>
       }
     </header>
 
     <div class="project-card__price">
+      @if (project().lowestLandSquareMeters != null) {
+        <div class="project-card__land-size">
+          <p class="project-card__land-size-value">
+            {{ project().lowestLandSquareMeters | number: '1.0-0' }}მ<sup>2</sup><span>-დან</span>
+          </p>
+          <p class="project-card__land-size-label">მინიმალური მიწის ზომა</p>
+        </div>
+      }
+
       <div class="project-card__price-values">
         <p class="project-card__price-total">
-          ${{ project().lowestLandTotalPrice | number }}<span>-დან</span>
+          {{ currencySymbol() }}{{ lowestTotalPrice() | number: '1.0-0' }}<span>-დან</span>
         </p>
         <p class="project-card__price-sqm">
-          1მ<sup>2</sup> &mdash; $ {{ project().lowestLandSquareMeterPrice | number }}
+          1მ<sup>2</sup> &mdash; {{ currencySymbol() }} {{ lowestSquareMeterPrice() | number: '1.0-0' }}
         </p>
       </div>
 
@@ -71,14 +80,14 @@
   <aside class="project-card__developer-panel">
     <div class="project-card__logo">
       @if (developerLogoUrl()) {
-        <img [src]="developerLogoUrl()" [alt]="project().developerCompanyName" />
+        <img [src]="developerLogoUrl()" [alt]="developerName()" />
       } @else {
         <span class="project-card__logo-initials">{{ developerInitials() }}</span>
       }
     </div>
 
-    @if (project().developerCompanyName) {
-      <p class="project-card__developer-name">{{ project().developerCompanyName }}</p>
+    @if (developerName()) {
+      <p class="project-card__developer-name">{{ developerName() }}</p>
     }
 
     <button type="button" class="project-card__contact" (click)="onContactClick($event)">

@@ -4,6 +4,7 @@ import { ProjectResponseInterface } from '../interfaces';
 import { CreateProjectInterface } from '../interfaces';
 import { UpdateProjectInterface } from '../interfaces';
 import { ProjectsResponseInterface } from '../interfaces';
+import { ProjectsQueryParamsInterface } from '../interfaces';
 import { ApiService } from './api.service';
 
 @Injectable({
@@ -12,11 +13,9 @@ import { ApiService } from './api.service';
 export class ProjectsService {
   private readonly api = inject(ApiService);
 
-  getAll(params?: {
-    companyId?: string;
-    page?: number;
-    limit?: number;
-  }): Observable<ProjectsResponseInterface> {
+  getAll(
+    params?: ProjectsQueryParamsInterface,
+  ): Observable<ProjectsResponseInterface> {
     return this.api.get<ProjectsResponseInterface>('/projects', params);
   }
 

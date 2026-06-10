@@ -1,9 +1,10 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { ProjectResponseInterface } from '../../api/interfaces';
+import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 
 @Component({
   selector: 'app-sponsored-project-card',
-  imports: [],
+  imports: [LocalizedPipe],
   templateUrl: './sponsored-project-card.html',
   styleUrl: './sponsored-project-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

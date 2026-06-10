@@ -1,9 +1,164 @@
-<section class="projects-container">
-  @for (project of favouriteProjects(); track project.id) {
-    <app-detailed-project-card [project]="project"></app-detailed-project-card>
+<section class="projects-page">
+  <form class="projects-page__search-bar" (ngSubmit)="applyFilters()">
+    <input
+      class="projects-page__search-input"
+      type="text"
+      name="locationName"
+      placeholder="მაგ. თბილისის, ლისის ტბის მიმდებარედ"
+      [(ngModel)]="locationName"
+    />
+
+    <input
+      class="projects-page__search-input"
+      type="text"
+      name="keyword"
+      placeholder="ID, პროექტის დასახელება, ს/კ, ტელეფონი"
+      [(ngModel)]="keyword"
+    />
+
+    <button class="projects-page__search-submit" type="submit">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" />
+        <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+      </svg>
+      <span>ძებნა</span>
+    </button>
+  </form>
+
+  <div class="projects-page__filters">
+    <div class="projects-page__filter">
+      <button
+        class="projects-page__filter-trigger"
+        type="button"
+        (click)="toggleDropdown('area')"
+      >
+        <span class="projects-page__filter-label">ფართობი</span>
+        <span class="projects-page__filter-value">
+          {{ rangeLabel(minSquareMeters, maxSquareMeters, 'მ²') }}
+          <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
+        </span>
+      </button>
+
+      @if (openDropdown() === 'area') {
+        <div class="projects-page__filter-panel">
+          <input type="number" name="minSquareMeters" placeholder="დან" [(ngModel)]="minSquareMeters" />
+          <input type="number" name="maxSquareMeters" placeholder="მდე" [(ngModel)]="maxSquareMeters" />
+          <button type="button" (click)="applyFilters()">არჩევა</button>
+        </div>
+      }
+    </div>
+
+    <div class="projects-page__filter">
+      <button
+        class="projects-page__filter-trigger"
+        type="button"
+        (click)="toggleDropdown('sqmPrice')"
+      >
+        <span class="projects-page__filter-label">კვმ ფასი</span>
+        <span class="projects-page__filter-value">
+          {{ rangeLabel(minSquareMeterPrice, maxSquareMeterPrice, ' $') }}
+          <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
+        </span>
+      </button>
+
+      @if (openDropdown() === 'sqmPrice') {
+        <div class="projects-page__filter-panel">
+          <input type="number" name="minSquareMeterPrice" placeholder="დან" [(ngModel)]="minSquareMeterPrice" />
+          <input type="number" name="maxSquareMeterPrice" placeholder="მდე" [(ngModel)]="maxSquareMeterPrice" />
+          <button type="button" (click)="applyFilters()">არჩევა</button>
+        </div>
+      }
+    </div>
+
+    <div class="projects-page__filter">
+      <button
+        class="projects-page__filter-trigger"
+        type="button"
+        (click)="toggleDropdown('price')"
+      >
+        <span class="projects-page__filter-label">ფასი</span>
+        <span class="projects-page__filter-value">
+          {{ rangeLabel(minTotalPrice, maxTotalPrice, ' $') }}
+          <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
+        </span>
+      </button>
+
+      @if (openDropdown() === 'price') {
+        <div class="projects-page__filter-panel">
+          <input type="number" name="minTotalPrice" placeholder="დან" [(ngModel)]="minTotalPrice" />
+          <input type="number" name="maxTotalPrice" placeholder="მდე" [(ngModel)]="maxTotalPrice" />
+          <button type="button" (click)="applyFilters()">არჩევა</button>
+        </div>
+      }
+    </div>
+
+    @if (hasActiveFilters()) {
+      <button
+        class="projects-page__clear-filters"
+        type="button"
+        (click)="clearFilters()"
+      >
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 1.5v3h-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+        ფილტრის გასუფთავება
+      </button>
+    }
+  </div>
+
+  <div class="projects-page__header">
+    <h2 class="projects-page__title">ნაპოვნია {{ totalItems() }} პროექტი</h2>
+
+    <label class="projects-page__map-toggle">
+      <span>რუკაზე ნახვა</span>
+      <input
+        type="checkbox"
+        [checked]="mapView()"
+        (change)="mapView.set(!mapView())"
+      />
+      <span class="projects-page__map-toggle-switch" aria-hidden="true"></span>
+    </label>
+  </div>
+
+  @if (mapView()) {
+    <div class="projects-page__map-layout">
+      <div class="projects-page__cards-grid">
+        @for (project of projects(); track project.id) {
+          <app-project-card
+            [project]="project"
+            (click)="openProject(project)"
+          ></app-project-card>
+        }
+      </div>
+
+      <div class="projects-page__map">
+        <app-projects-map
+          [projects]="projects()"
+          (projectClick)="openProject($event)"
+        ></app-projects-map>
+      </div>
+    </div>
+  } @else {
+    <div class="projects-page__list">
+      @for (project of projects(); track project.id) {
+        <app-detailed-project-card
+          [project]="project"
+          (click)="openProject(project)"
+        ></app-detailed-project-card>
+      }
+    </div>
   }
 
-  @for (project of sponsoredProjects(); track project.id) {
-    <app-detailed-project-card [project]="project"></app-detailed-project-card>
+  @if (!isLoading() && projects().length === 0) {
+    <p class="projects-page__empty">პროექტები ვერ მოიძებნა</p>
+  }
+
+  @if (totalPages() > 1) {
+    <app-pagination
+      class="projects-page__pagination"
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    ></app-pagination>
   }
 </section>

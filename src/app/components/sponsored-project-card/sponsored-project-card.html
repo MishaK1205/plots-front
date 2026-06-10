@@ -6,7 +6,7 @@
 
  <div class="sponsored-project-card__project-info">
   <span class="sponsored-project-card__project-name">{{ project().name }}</span>
-  <span class="sponsored-project-card__developer-name">დეველოპერი: {{ project().developerCompanyName }}</span>
+  <span class="sponsored-project-card__developer-name">დეველოპერი: {{ project().companyInfo?.companyName | localized }}</span>
  </div>
 
 

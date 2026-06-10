@@ -1,0 +1,41 @@
+<nav class="pagination" aria-label="Pagination">
+  <button
+    class="pagination__nav"
+    type="button"
+    [disabled]="currentPage() <= 1"
+    (click)="goToPage(currentPage() - 1)"
+  >
+    <span aria-hidden="true">&larr;</span>
+    უკან
+  </button>
+
+  <ul class="pagination__pages">
+    @for (item of items(); track $index) {
+      <li>
+        @if (isEllipsis(item)) {
+          <span class="pagination__ellipsis">&hellip;</span>
+        } @else {
+          <button
+            class="pagination__page"
+            type="button"
+            [class.pagination__page--active]="item === currentPage()"
+            [attr.aria-current]="item === currentPage() ? 'page' : null"
+            (click)="goToPage(item)"
+          >
+            {{ item }}
+          </button>
+        }
+      </li>
+    }
+  </ul>
+
+  <button
+    class="pagination__nav"
+    type="button"
+    [disabled]="currentPage() >= totalPages()"
+    (click)="goToPage(currentPage() + 1)"
+  >
+    შემდეგი
+    <span aria-hidden="true">&rarr;</span>
+  </button>
+</nav>

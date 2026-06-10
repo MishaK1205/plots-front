@@ -1,0 +1,218 @@
+@if (project(); as project) {
+  <section class="project-details">
+    <!-- Cover -->
+    <div class="project-details__cover">
+      @if (coverImageUrl()) {
+        <img
+          class="project-details__cover-image"
+          [src]="coverImageUrl()"
+          [alt]="project.name"
+        />
+      }
+      <div class="project-details__cover-overlay"></div>
+
+      @if (tagline()) {
+        <h1 class="project-details__tagline">{{ tagline() }}</h1>
+      }
+
+      <div class="project-details__cover-bottom">
+        <div class="project-details__cover-company">
+          @if (companyLogoUrl()) {
+            <img
+              class="project-details__company-logo"
+              [src]="companyLogoUrl()"
+              [alt]="companyName()"
+            />
+          }
+          <div>
+            <p class="project-details__project-name">{{ project.name }}</p>
+            @if (companyName()) {
+              <p class="project-details__company-name">
+                დეველოპერი: {{ companyName() }}
+              </p>
+            }
+          </div>
+        </div>
+
+        <div class="project-details__cover-contact">
+          <span>როდის შეგვიძლია მონახულება?</span>
+          <button type="button" (click)="onContactClick()">დაკავშირება</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Lands -->
+    <div class="project-details__section">
+      <h2 class="project-details__section-title">მიწის ნაკვეთები</h2>
+
+      @if (lands().length > 0) {
+        <div class="project-details__lands">
+          @for (land of visibleLands(); track land.id) {
+            <app-land-card [land]="land"></app-land-card>
+          }
+        </div>
+
+        @if (hasMoreLands()) {
+          <button
+            class="project-details__show-all-lands"
+            type="button"
+            (click)="showAllLands.set(true)"
+          >
+            ყველა მიწის ნახვა
+            <span aria-hidden="true">&rarr;</span>
+          </button>
+        }
+      } @else {
+        <p class="project-details__empty">ნაკვეთები ვერ მოიძებნა</p>
+      }
+    </div>
+
+    <!-- About -->
+    @if (description()) {
+      <div class="project-details__section project-details__about">
+        <div class="project-details__about-text">
+          <h2 class="project-details__section-title">პროექტის შესახებ</h2>
+          <p>{{ description() }}</p>
+        </div>
+
+        @if (descriptionImageUrl()) {
+          <img
+            class="project-details__about-image"
+            [src]="descriptionImageUrl()"
+            [alt]="project.name"
+          />
+        }
+      </div>
+    }
+
+    <!-- Amenities -->
+    @if (amenityName() || minutesToLocation()) {
+      <div class="project-details__amenities">
+        @if (amenityName()) {
+          <div class="project-details__amenity">
+            <span class="project-details__amenity-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.4" />
+                <path d="M6.5 10l2.4 2.4L13.5 7.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span>{{ amenityName() }}</span>
+          </div>
+        }
+
+        @if (minutesToLocation()) {
+          <div class="project-details__amenity">
+            <span class="project-details__amenity-icon">
+              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.4" />
+                <path d="M10 6v4l2.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </span>
+            <span>{{ minutesToLocation() }}</span>
+          </div>
+        }
+      </div>
+    }
+
+    <!-- Map -->
+    <div class="project-details__map">
+      <app-projects-map [projects]="mapProjects()"></app-projects-map>
+    </div>
+
+    <!-- Gallery -->
+    @if (galleryUrls().length > 0) {
+      <div class="project-details__section">
+        <h2 class="project-details__section-title">ფოტო გალერეა</h2>
+        <div class="project-details__gallery">
+          @for (imageUrl of galleryUrls(); track imageUrl) {
+            <img
+              class="project-details__gallery-image"
+              [src]="imageUrl"
+              [alt]="project.name"
+              loading="lazy"
+            />
+          }
+        </div>
+      </div>
+    }
+
+    <!-- FAQ + Contact -->
+    <div class="project-details__footer">
+      @if (project.companyInfo; as company) {
+        <aside class="project-details__contact">
+          <h3>კონტაქტი</h3>
+
+          @if (companyName()) {
+            <p class="project-details__contact-company">{{ companyName() }}</p>
+          }
+
+          @if (company.phone) {
+            <a
+              class="project-details__contact-item"
+              [href]="'tel:' + company.phone"
+            >
+              {{ company.phone }}
+            </a>
+          }
+
+          @if (company.email) {
+            <a
+              class="project-details__contact-item"
+              [href]="'mailto:' + company.email"
+            >
+              {{ company.email }}
+            </a>
+          }
+
+          @if (company.socialAccounts; as socials) {
+            <div class="project-details__contact-socials">
+              @if (socials.facebook) {
+                <a [href]="socials.facebook" target="_blank" rel="noopener">
+                  <img src="assets/icons/facebook-icon.svg" alt="Facebook" />
+                </a>
+              }
+              @if (socials.instagram) {
+                <a [href]="socials.instagram" target="_blank" rel="noopener">
+                  <img src="assets/icons/instagram-icon.svg" alt="Instagram" />
+                </a>
+              }
+              @if (socials.linkedin) {
+                <a [href]="socials.linkedin" target="_blank" rel="noopener">
+                  <img src="assets/icons/linkedin-icon.svg" alt="LinkedIn" />
+                </a>
+              }
+            </div>
+          }
+        </aside>
+      }
+
+      @if (faqItems().length > 0) {
+        <div class="project-details__faq">
+          <h2 class="project-details__section-title">კითხვები და პასუხები</h2>
+
+          @for (item of faqItems(); track $index) {
+            <div
+              class="project-details__faq-item"
+              [class.project-details__faq-item--open]="openFaqIndex() === $index"
+            >
+              <button
+                class="project-details__faq-question"
+                type="button"
+                (click)="toggleFaq($index)"
+              >
+                <span>{{ item.question }}</span>
+                <span class="project-details__faq-icon" aria-hidden="true">
+                  {{ openFaqIndex() === $index ? '−' : '+' }}
+                </span>
+              </button>
+
+              @if (openFaqIndex() === $index) {
+                <p class="project-details__faq-answer">{{ item.answer }}</p>
+              }
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </section>
+}

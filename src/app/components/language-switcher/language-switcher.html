@@ -13,7 +13,7 @@
       aria-hidden="true"
     />
 
-    <span>{{ selectedLanguage }}</span>
+    <span>{{ selectedLanguageLabel() }}</span>
 
     <img
       class="language-switcher__chevron"
@@ -25,17 +25,17 @@
 
   @if (languageMenuOpen) {
     <ul class="language-switcher__menu">
-      @for (language of languages; track language) {
+      @for (language of languages; track language.value) {
         <li>
           <button
             class="language-switcher__option"
             type="button"
             [class.language-switcher__option--active]="
-              language === selectedLanguage
+              language.value === selectedLanguage()
             "
-            (click)="selectLanguage(language)"
+            (click)="selectLanguage(language.value)"
           >
-            {{ language }}
+            {{ language.label }}
           </button>
         </li>
       }

@@ -85,6 +85,29 @@ $line: #ededed;
     gap: px-to-rem(12);
   }
 
+  &__land-size-value {
+    font-size: px-to-rem(20);
+    font-weight: 700;
+    color: $ink;
+    line-height: 1.1;
+
+    sup {
+      font-size: px-to-rem(11);
+    }
+
+    span {
+      font-size: px-to-rem(13);
+      font-weight: 500;
+      color: $muted;
+    }
+  }
+
+  &__land-size-label {
+    margin-top: px-to-rem(4);
+    font-size: px-to-rem(13);
+    color: $soft;
+  }
+
   &__price-total {
     font-size: px-to-rem(20);
     font-weight: 700;

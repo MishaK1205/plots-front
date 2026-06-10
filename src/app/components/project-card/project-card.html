@@ -7,13 +7,13 @@
 
   <h1 class="project-card__title">{{ project().name }}</h1>
   <p class="project-card__developer-company-name">
-    დეველოპერი: {{ project().developerCompanyName }}
+    დეველოპერი: {{ project().companyInfo?.companyName | localized }}
   </p>
 
   <div class="project-card__price-container">
     <div>
-      <p class="project-card__total-price">${{ project().lowestLandTotalPrice }}<span>-დან</span></p>
-      <p class="project-card__square-meter-price">1მ<sup>2</sup> - $ {{ project().lowestLandSquareMeterPrice }}</p>
+      <p class="project-card__total-price">{{ currencySymbol() }}{{ lowestTotalPrice() | number: '1.0-0' }}<span>-დან</span></p>
+      <p class="project-card__square-meter-price">1მ<sup>2</sup> - {{ currencySymbol() }} {{ lowestSquareMeterPrice() | number: '1.0-0' }}</p>
     </div>
 
     <app-currency-toggle
@@ -23,9 +23,9 @@
 
   <div 
     class="project-card__location"
-    (click)="onLocationClick()"
+    (click)="onLocationClick($event)"
   >
     <img src="assets/icons/location.svg" alt="Location Icon" /> 
-    <span>{{ project().location.city }}</span>
+    <span>{{ project().locationName | localized }}</span>
   </div>
 </div>

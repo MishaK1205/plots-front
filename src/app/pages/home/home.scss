@@ -9,6 +9,10 @@
   width: 100%;
   padding: px-to-rem(0px) px-to-rem(150px);
 
+  &__search {
+    margin: px-to-rem(40px) 0 px-to-rem(48px);
+  }
+
   &__favourite-new-projects-header {
     display: flex;
     align-items: center;

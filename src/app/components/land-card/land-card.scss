@@ -1,0 +1,127 @@
+@use "../../tools/px-to-rem" as *;
+
+:host {
+  display: block;
+}
+
+.land-card {
+  display: flex;
+  flex-direction: column;
+
+  padding: px-to-rem(12);
+
+  background-color: #fff;
+  border: 1px solid #ededed;
+  border-radius: px-to-rem(16);
+  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    border-color: rgba(#16bc2e, 0.6);
+    box-shadow: 0 px-to-rem(8) px-to-rem(28) rgba(#16bc2e, 0.12);
+  }
+
+  &__media {
+    position: relative;
+    border-radius: px-to-rem(12);
+    overflow: hidden;
+    margin-bottom: px-to-rem(12);
+  }
+
+  &__image {
+    width: 100%;
+    height: px-to-rem(180);
+    object-fit: cover;
+    display: block;
+
+    &--placeholder {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f4f5f6;
+
+      img {
+        width: px-to-rem(40);
+        height: px-to-rem(40);
+        opacity: 0.4;
+      }
+    }
+  }
+
+  &__tag {
+    position: absolute;
+    top: px-to-rem(10);
+    left: px-to-rem(10);
+
+    padding: px-to-rem(4) px-to-rem(10);
+
+    color: #16bc2e;
+    font-size: px-to-rem(11);
+    font-weight: 600;
+
+    background-color: #e7f8e9;
+    border-radius: px-to-rem(99);
+  }
+
+  &__title {
+    margin: 0 0 px-to-rem(10);
+    font-size: px-to-rem(16);
+    font-weight: 700;
+    color: #1a1a1a;
+  }
+
+  &__details {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: px-to-rem(8);
+
+    padding-bottom: px-to-rem(10);
+    border-bottom: 1px dashed #ededed;
+  }
+
+  &__size {
+    &-label {
+      margin: 0 0 px-to-rem(4);
+      font-size: px-to-rem(11);
+      color: #7b7b7b;
+    }
+
+    &-value {
+      margin: 0;
+      font-size: px-to-rem(16);
+      font-weight: 700;
+      color: #1a1a1a;
+
+      sup {
+        font-size: px-to-rem(9);
+      }
+    }
+  }
+
+  &__price {
+    text-align: right;
+
+    &-total {
+      margin: 0;
+      font-size: px-to-rem(16);
+      font-weight: 700;
+      color: #1a1a1a;
+    }
+
+    &-sqm {
+      margin: px-to-rem(4) 0 0;
+      font-size: px-to-rem(12);
+      color: #7b7b7b;
+
+      sup {
+        font-size: px-to-rem(8);
+      }
+    }
+  }
+
+  &__cadastral {
+    margin: px-to-rem(10) 0 0;
+    font-size: px-to-rem(11);
+    color: #7b7b7b;
+  }
+}

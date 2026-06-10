@@ -1,0 +1,18 @@
+<google-map
+  class="projects-map"
+  width="100%"
+  height="100%"
+  [center]="center"
+  [zoom]="zoom"
+  [options]="mapOptions"
+  (mapInitialized)="onMapInitialized($event)"
+>
+  @for (marker of markers(); track marker.project.id) {
+    <map-advanced-marker
+      [position]="marker.position"
+      [title]="marker.project.name"
+      [options]="markerOptions"
+      (mapClick)="onMarkerClick(marker)"
+    ></map-advanced-marker>
+  }
+</google-map>

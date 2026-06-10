@@ -1,7 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
-import { LocalizedTextInterface, ProjectResponseInterface } from '../../api/interfaces';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  output,
+} from '@angular/core';
+import {
+  LocalizedTextInterface,
+  ProjectResponseInterface,
+} from '../../api/interfaces';
 import { CurrencyToggle, CurrencyType } from '../currency-toggle/currency-toggle';
+import { CurrencyStateService } from '../../shared/services/currency-state.service';
+import { ExchangeRateService } from '../../shared/services/exchange-rate.service';
+import { LanguageStateService } from '../../shared/services/language-state.service';
+import { localizeText } from '../../shared/utils/localize-text.util';
 
 @Component({
   selector: 'app-detailed-project-card',
@@ -11,15 +25,23 @@ import { CurrencyToggle, CurrencyType } from '../currency-toggle/currency-toggle
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailedProjectCard {
+  private readonly currencyState = inject(CurrencyStateService);
+  private readonly exchangeRate = inject(ExchangeRateService);
+  private readonly languageState = inject(LanguageStateService);
+
   project = input.required<ProjectResponseInterface>();
   currencyChanged = output<CurrencyType>();
 
   readonly cardImageUrl = computed(() =>
-    this.resolveImageUrl(this.project().cardPhotoId ?? this.project().photoId),
+    this.resolveImageUrl(this.project().photoId),
   );
 
   readonly developerLogoUrl = computed(() =>
-    this.resolveImageUrl(this.project().developerPhotoId),
+    this.resolveImageUrl(this.project().companyInfo?.logoId),
+  );
+
+  readonly developerName = computed(() =>
+    this.localized(this.project().companyInfo?.companyName),
   );
 
   readonly shortDescription = computed(() =>
@@ -30,18 +52,30 @@ export class DetailedProjectCard {
     this.localized(this.project().minutesToLocation),
   );
 
-  readonly locationName = computed(() => {
-    const location = this.project().location;
-    return (
-      location?.streetName?.trim() ||
-      location?.city?.trim() ||
-      location?.district?.trim() ||
-      ''
-    );
-  });
+  readonly currencySymbol = computed(() =>
+    this.currencyState.currency() === 'USD' ? '$' : '₾',
+  );
+
+  readonly lowestTotalPrice = computed(() =>
+    this.exchangeRate.convertFromUsd(
+      this.project().lowestLandTotalPrice,
+      this.currencyState.currency(),
+    ),
+  );
+
+  readonly lowestSquareMeterPrice = computed(() =>
+    this.exchangeRate.convertFromUsd(
+      this.project().lowestLandSquareMeterPrice,
+      this.currencyState.currency(),
+    ),
+  );
+
+  readonly locationName = computed(() =>
+    this.localized(this.project().locationName),
+  );
 
   readonly developerInitials = computed(() => {
-    const name = this.project().developerCompanyName?.trim();
+    const name = this.developerName().trim();
     if (!name) return '';
     return name
       .split(/\s+/)
@@ -64,23 +98,22 @@ export class DetailedProjectCard {
 
   onContactClick(event: Event): void {
     event.stopPropagation();
-    const contact = this.project().developerContactInfo?.trim();
-    if (!contact) return;
+    const companyInfo = this.project().companyInfo;
 
-    if (contact.includes('@')) {
-      window.open(`mailto:${contact}`, '_self');
+    const phone = companyInfo?.phone?.replace(/[^\d+]/g, '');
+    if (phone) {
+      window.open(`tel:${phone}`, '_self');
       return;
     }
 
-    const phone = contact.replace(/[^\d+]/g, '');
-    if (phone) {
-      window.open(`tel:${phone}`, '_self');
+    const email = companyInfo?.email?.trim();
+    if (email) {
+      window.open(`mailto:${email}`, '_self');
     }
   }
 
   private localized(value?: LocalizedTextInterface): string {
-    if (!value) return '';
-    return value.geo?.trim() || value.eng?.trim() || value.rus?.trim() || '';
+    return localizeText(value, this.languageState.language());
   }
 
   private resolveImageUrl(image?: string): string {

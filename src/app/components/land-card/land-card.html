@@ -1,0 +1,41 @@
+<article class="land-card">
+  <div class="land-card__media">
+    @if (imageUrl()) {
+      <img class="land-card__image" [src]="imageUrl()" [alt]="land().name" />
+    } @else {
+      <div class="land-card__image land-card__image--placeholder">
+        <img src="assets/icons/globe.svg" alt="" />
+      </div>
+    }
+
+    @if (tag()) {
+      <span class="land-card__tag">{{ tag() }}</span>
+    }
+  </div>
+
+  <h3 class="land-card__title">{{ land().name }}</h3>
+
+  <div class="land-card__details">
+    <div class="land-card__size">
+      <p class="land-card__size-label">მიწის ზომა</p>
+      <p class="land-card__size-value">
+        {{ land().squareMeters | number: '1.0-0' }}მ<sup>2</sup>
+      </p>
+    </div>
+
+    <div class="land-card__price">
+      <p class="land-card__price-total">
+        {{ currencySymbol() }}{{ totalPrice() | number: '1.0-0' }}
+      </p>
+      <p class="land-card__price-sqm">
+        1მ<sup>2</sup> - {{ currencySymbol() }} {{ squareMeterPrice() | number: '1.0-0' }}
+      </p>
+    </div>
+
+    <app-currency-toggle></app-currency-toggle>
+  </div>
+
+  <p class="land-card__cadastral">
+    საკადასტრო კოდი: {{ land().cadastralCode }}
+  </p>
+</article>
