@@ -5,6 +5,7 @@ export interface CreateCompanySocialAccounts {
   instagram?: string;
   linkedin?: string;
   tiktok?: string;
+  x?: string;
 }
 
 export interface CreateCompanyInterface {

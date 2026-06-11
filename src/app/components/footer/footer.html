@@ -6,33 +6,35 @@
 
     <div class="footer__content">
       <div class="footer__description">
-        <p>მიწის ნაკვეთები, სააგარაკე მიწები, ურბან პროექტები ერთ სივრცეში</p>
+        <p>{{ 'common.footer.description' | translate }}</p>
       </div>
 
       <nav class="footer__column">
-        <h2 class="footer__title">პლატფორმები</h2>
+        <h2 class="footer__title">{{ 'common.footer.platforms' | translate }}</h2>
         <ul class="footer__list">
-          @for (platform of platforms; track platform.name) {
+          @for (platform of platforms; track platform.nameKey) {
             <li>
-              <a [href]="platform.link">{{ platform.name }}</a>
+              <a [href]="platform.link">{{ platform.nameKey | translate }}</a>
             </li>
           }
         </ul>
       </nav>
 
       <nav class="footer__column">
-        <h2 class="footer__title">კომპანია</h2>
+        <h2 class="footer__title">{{ 'common.footer.company' | translate }}</h2>
         <ul class="footer__list">
-          @for (item of company; track item.name) {
+          @for (item of company; track item.nameKey) {
             <li>
-              <a [href]="item.link">{{ item.name }}</a>
+              <a [href]="item.link">{{ item.nameKey | translate }}</a>
             </li>
           }
         </ul>
       </nav>
 
       <div class="footer__column footer__contact">
-        <h2 class="footer__title">საკონტაქტო ინფორმაცია</h2>
+        <h2 class="footer__title">
+          {{ 'common.footer.contactInfo' | translate }}
+        </h2>
 
         <ul class="footer__list">
           <li>+995 577 03 36 44</li>

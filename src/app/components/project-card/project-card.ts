@@ -12,10 +12,11 @@ import { CurrencyToggle, CurrencyType } from '../currency-toggle/currency-toggle
 import { CurrencyStateService } from '../../shared/services/currency-state.service';
 import { ExchangeRateService } from '../../shared/services/exchange-rate.service';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-project-card',
-  imports: [CurrencyToggle, DecimalPipe, LocalizedPipe],
+  imports: [CurrencyToggle, DecimalPipe, LocalizedPipe, TranslatePipe],
   templateUrl: './project-card.html',
   styleUrl: './project-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

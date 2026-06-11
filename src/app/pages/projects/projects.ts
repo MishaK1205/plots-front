@@ -21,6 +21,8 @@ import {
 } from '../../components';
 import { ProjectsService } from '../../api/services';
 import { applyKeywordToParams } from '../../shared/utils/keyword-params.util';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { TranslationService } from '../../shared/i18n/translation.service';
 
 const PAGE_LIMIT = 10;
 
@@ -34,6 +36,7 @@ type FilterDropdown = 'area' | 'sqmPrice' | 'price';
     Pagination,
     ProjectCard,
     ProjectsMap,
+    TranslatePipe,
   ],
   templateUrl: './projects.html',
   styleUrl: './projects.scss',
@@ -44,6 +47,7 @@ export class Projects implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef$ = inject(DestroyRef);
+  private readonly translation = inject(TranslationService);
 
   projects = signal<ProjectResponseInterface[]>([]);
   totalItems = signal(0);
@@ -83,7 +87,9 @@ export class Projects implements OnInit {
     max: number | null,
     suffix: string,
   ): string {
-    if (min == null && max == null) return 'ყველა';
+    if (min == null && max == null) {
+      return this.translation.translate('projects.filters.any');
+    }
     return `${min ?? 0}${suffix} - ${max != null ? max + suffix : '∞'}`;
   }
 

@@ -5,13 +5,33 @@
 
   <section class="home-container__favourite-new-projects">
     <div class="home-container__favourite-new-projects-header">
-      <h2>რჩეული პროექტები</h2>
-      <span>ყველას ნახვა</span>
+      <h2>{{ 'home.sections.featuredProjects' | translate }}</h2>
+      <span>{{ 'home.sections.viewAll' | translate }}</span>
+
+      <div class="home-container__scroll-buttons">
+        <button
+          type="button"
+          aria-label="Scroll left"
+          (click)="scrollList(favouriteList, -1)"
+        >
+          <img src="assets/icons/arrow-left.svg" alt="" />
+        </button>
+        <button
+          type="button"
+          aria-label="Scroll right"
+          (click)="scrollList(favouriteList, 1)"
+        >
+          <img src="assets/icons/arrow-right.svg" alt="" />
+        </button>
+      </div>
     </div>
 
-    <div class="home-container__favourite-new-projects-list">
+    <div class="home-container__favourite-new-projects-list" #favouriteList>
       @for (project of favouriteProjects(); track project.id) {
-        <app-project-card [project]="project"></app-project-card>
+        <app-project-card
+          [project]="project"
+          (click)="openProject(project)"
+        ></app-project-card>
       }
     </div>
   </section>
@@ -19,20 +39,43 @@
   <section class="home-container__sponsored-projects">
     <div class="home-container__sponsored-projects-list">
       @for (project of sponsoredProjects().slice(0, 2); track project.id) {
-        <app-sponsored-project-card [project]="project"></app-sponsored-project-card>
+        <app-sponsored-project-card
+          [project]="project"
+          (view)="openProject(project)"
+        ></app-sponsored-project-card>
       }
     </div>
   </section>
 
   <section class="home-container__favourite-new-projects">
     <div class="home-container__favourite-new-projects-header">
-      <h2>ახალი პროექტები</h2>
-      <span>ყველას ნახვა</span>
+      <h2>{{ 'home.sections.newProjects' | translate }}</h2>
+      <span>{{ 'home.sections.viewAll' | translate }}</span>
+
+      <div class="home-container__scroll-buttons">
+        <button
+          type="button"
+          aria-label="Scroll left"
+          (click)="scrollList(newList, -1)"
+        >
+          <img src="assets/icons/arrow-left.svg" alt="" />
+        </button>
+        <button
+          type="button"
+          aria-label="Scroll right"
+          (click)="scrollList(newList, 1)"
+        >
+          <img src="assets/icons/arrow-right.svg" alt="" />
+        </button>
+      </div>
     </div>
 
-    <div class="home-container__favourite-new-projects-list">
+    <div class="home-container__favourite-new-projects-list" #newList>
       @for (project of newProjects(); track project.id) {
-        <app-project-card [project]="project"></app-project-card>
+        <app-project-card
+          [project]="project"
+          (click)="openProject(project)"
+        ></app-project-card>
       }
     </div>
   </section>
@@ -40,7 +83,10 @@
   <section class="home-container__sponsored-projects">
     <div class="home-container__sponsored-projects-list">
       @for (project of sponsoredProjects().slice(2, 4); track project.id) {
-        <app-sponsored-project-card [project]="project"></app-sponsored-project-card>
+        <app-sponsored-project-card
+          [project]="project"
+          (view)="openProject(project)"
+        ></app-sponsored-project-card>
       }
     </div>
   </section>

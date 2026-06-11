@@ -2,30 +2,37 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { LanguageSwitcher } from '../language-switcher/language-switcher';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { TranslationKey } from '../../shared/i18n/translations';
+
+interface HeaderItem {
+  labelKey: TranslationKey;
+  path: string;
+}
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule, LanguageSwitcher],
+  imports: [CommonModule, RouterModule, LanguageSwitcher, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Header {
-  headerItems = [
+  headerItems: HeaderItem[] = [
     {
-      label: 'პროექტები',
+      labelKey: 'common.nav.projects',
       path: '/projects',
     },
     {
-      label: 'სტატისტიკა',
+      labelKey: 'common.nav.statistics',
       path: '/statistics',
     },
     {
-      label: 'ბლოგი',
+      labelKey: 'common.nav.blog',
       path: '/blog',
     },
     {
-      label: 'კონტაქტი',
+      labelKey: 'common.nav.contact',
       path: '/contact',
     },
   ];

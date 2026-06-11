@@ -6,7 +6,7 @@
     (click)="goToPage(currentPage() - 1)"
   >
     <span aria-hidden="true">&larr;</span>
-    უკან
+    {{ 'common.pagination.previous' | translate }}
   </button>
 
   <ul class="pagination__pages">
@@ -35,7 +35,7 @@
     [disabled]="currentPage() >= totalPages()"
     (click)="goToPage(currentPage() + 1)"
   >
-    შემდეგი
+    {{ 'common.pagination.next' | translate }}
     <span aria-hidden="true">&rarr;</span>
   </button>
 </nav>

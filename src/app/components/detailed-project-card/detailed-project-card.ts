@@ -16,10 +16,11 @@ import { CurrencyStateService } from '../../shared/services/currency-state.servi
 import { ExchangeRateService } from '../../shared/services/exchange-rate.service';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { localizeText } from '../../shared/utils/localize-text.util';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-detailed-project-card',
-  imports: [CommonModule, CurrencyToggle],
+  imports: [CommonModule, CurrencyToggle, TranslatePipe],
   templateUrl: './detailed-project-card.html',
   styleUrl: './detailed-project-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

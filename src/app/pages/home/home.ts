@@ -11,6 +11,7 @@ import {
   ProjectSearch,
   SponsoredProjectCard,
 } from '../../components';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { ProjectsService } from '../../api/services';
 import {
   ProjectResponseInterface,
@@ -19,7 +20,7 @@ import {
 
 @Component({
   selector: 'app-home',
-  imports: [ProjectCard, ProjectSearch, SponsoredProjectCard],
+  imports: [ProjectCard, ProjectSearch, SponsoredProjectCard, TranslatePipe],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -54,5 +55,14 @@ export class Home implements OnInit {
 
   onSearch(params: ProjectsQueryParamsInterface): void {
     this.router.navigate(['/projects'], { queryParams: params });
+  }
+
+  openProject(project: ProjectResponseInterface): void {
+    this.router.navigate(['/projects', project.id]);
+  }
+
+  scrollList(list: HTMLElement, direction: 1 | -1): void {
+    const scrollAmount = Math.round(list.clientWidth * 0.8);
+    list.scrollBy({ left: direction * scrollAmount, behavior: 'smooth' });
   }
 }

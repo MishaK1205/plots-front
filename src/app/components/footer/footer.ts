@@ -1,9 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { TranslationKey } from '../../shared/i18n/translations';
+
+interface FooterItem {
+  nameKey: TranslationKey;
+  link: string;
+}
 
 @Component({
   selector: 'app-footer',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './footer.html',
   styleUrl: './footer.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -11,40 +18,40 @@ import { CommonModule } from '@angular/common';
 export class Footer {
   currentYear = new Date().getFullYear();
 
-  platforms = [
+  platforms: FooterItem[] = [
     {
-      name: 'პროექტები',
+      nameKey: 'common.nav.projects',
       link: '/projects',
     },
     {
-      name: 'სტატისტიკა',
+      nameKey: 'common.nav.statistics',
       link: '/statistics',
     },
     {
-      name: 'ბლოგი',
+      nameKey: 'common.nav.blog',
       link: '/blog',
     },
     {
-      name: 'კონტაქტი',
+      nameKey: 'common.nav.contact',
       link: '/contact',
     },
   ];
 
-  company = [
+  company: FooterItem[] = [
     {
-      name: 'პროექტის შესახებ',
+      nameKey: 'common.footer.aboutProject',
       link: '/about-project',
     },
     {
-      name: 'წესები და პირობები',
+      nameKey: 'common.footer.termsAndConditions',
       link: '/terms-and-conditions',
     },
     {
-      name: 'პარტნიორობა',
+      nameKey: 'common.footer.partnership',
       link: '/partnership',
     },
     {
-      name: 'კონტაქტი',
+      nameKey: 'common.nav.contact',
       link: '/contact',
     },
   ];

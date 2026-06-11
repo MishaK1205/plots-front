@@ -13,7 +13,9 @@
     <header class="project-card__header">
       <h2 class="project-card__title">{{ project().name }}</h2>
       @if (developerName()) {
-        <p class="project-card__developer">დეველოპერი: {{ developerName() }}</p>
+        <p class="project-card__developer">
+          {{ 'common.card.developer' | translate }}: {{ developerName() }}
+        </p>
       }
     </header>
 
@@ -21,18 +23,20 @@
       @if (project().lowestLandSquareMeters != null) {
         <div class="project-card__land-size">
           <p class="project-card__land-size-value">
-            {{ project().lowestLandSquareMeters | number: '1.0-0' }}მ<sup>2</sup><span>-დან</span>
+            <span>{{ 'common.card.priceFromPrefix' | translate }}</span>{{ project().lowestLandSquareMeters | number: '1.0-0' }}{{ 'common.units.meter' | translate }}<sup>2</sup><span>{{ 'common.card.priceFromSuffix' | translate }}</span>
           </p>
-          <p class="project-card__land-size-label">მინიმალური მიწის ზომა</p>
+          <p class="project-card__land-size-label">
+            {{ 'common.card.minimumLandSize' | translate }}
+          </p>
         </div>
       }
 
       <div class="project-card__price-values">
         <p class="project-card__price-total">
-          {{ currencySymbol() }}{{ lowestTotalPrice() | number: '1.0-0' }}<span>-დან</span>
+          <span>{{ 'common.card.priceFromPrefix' | translate }}</span>{{ currencySymbol() }}{{ lowestTotalPrice() | number: '1.0-0' }}<span>{{ 'common.card.priceFromSuffix' | translate }}</span>
         </p>
         <p class="project-card__price-sqm">
-          1მ<sup>2</sup> &mdash; {{ currencySymbol() }} {{ lowestSquareMeterPrice() | number: '1.0-0' }}
+          1{{ 'common.units.meter' | translate }}<sup>2</sup> &mdash; {{ currencySymbol() }} {{ lowestSquareMeterPrice() | number: '1.0-0' }}
         </p>
       </div>
 
@@ -41,7 +45,9 @@
 
     @if (shortDescription()) {
       <div class="project-card__description">
-        <p class="project-card__description-label">მოკლე აღწერა</p>
+        <p class="project-card__description-label">
+          {{ 'common.card.shortDescription' | translate }}
+        </p>
         <p class="project-card__description-text">{{ shortDescription() }}</p>
       </div>
     }
@@ -60,17 +66,11 @@
 
       @if (minutesToLocation()) {
         <span class="project-card__distance">
-          <svg
+          <img
             class="project-card__distance-icon"
-            width="16"
-            height="16"
-            viewBox="0 0 20 20"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <circle cx="10" cy="10" r="7.5" stroke="#7B7B7B" stroke-width="1.25" />
-            <path d="M10 6V10L12.5 11.5" stroke="#7B7B7B" stroke-width="1.25" stroke-linecap="round" stroke-linejoin="round" />
-          </svg>
+            src="assets/icons/minutes-to-location.svg"
+            alt=""
+          />
           <span>{{ minutesToLocation() }}</span>
         </span>
       }
@@ -91,7 +91,7 @@
     }
 
     <button type="button" class="project-card__contact" (click)="onContactClick($event)">
-      დაკავშირება
+      {{ 'common.card.contact' | translate }}
     </button>
   </aside>
 </article>

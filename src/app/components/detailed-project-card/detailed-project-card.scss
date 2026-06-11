@@ -185,6 +185,8 @@ $line: #ededed;
   }
 
   &__distance-icon {
+    width: px-to-rem(16);
+    height: px-to-rem(16);
     flex-shrink: 0;
   }
 

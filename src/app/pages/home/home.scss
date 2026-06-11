@@ -10,7 +10,13 @@
   padding: px-to-rem(0px) px-to-rem(150px);
 
   &__search {
-    margin: px-to-rem(40px) 0 px-to-rem(48px);
+    margin: 0 px-to-rem(-150px) px-to-rem(48px);
+    padding: px-to-rem(40px) px-to-rem(150px) px-to-rem(48px);
+
+    background-image: url("/assets/background-image-of-homepage-header.svg");
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: cover;
   }
 
   &__favourite-new-projects-header {
@@ -32,6 +38,38 @@
     }
   }
 
+  &__scroll-buttons {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(8px);
+    margin-left: auto;
+
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      width: px-to-rem(36px);
+      height: px-to-rem(36px);
+
+      background-color: #fff;
+      border: 1px solid #e5e5e5;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+
+      &:hover {
+        border-color: #c4c4c4;
+        background-color: #f7f7f7;
+      }
+
+      img {
+        width: px-to-rem(7px);
+        height: px-to-rem(13px);
+      }
+    }
+  }
+
   &__favourite-new-projects-list {
     display: flex;
     align-items: stretch;
@@ -41,6 +79,13 @@
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
 
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
     gap: px-to-rem(20px);
     padding-bottom: px-to-rem(8px);
 
@@ -48,6 +93,7 @@
       flex: 0 0 auto;
       width: px-to-rem(285px);
       scroll-snap-align: start;
+      cursor: pointer;
     }
 
     @media (max-width: 768px) {
@@ -80,6 +126,11 @@
 @media (max-width: 1200px) {
   .home-container {
     padding: px-to-rem(0px) px-to-rem(70px);
+
+    &__search {
+      margin: 0 px-to-rem(-70px) px-to-rem(48px);
+      padding: px-to-rem(40px) px-to-rem(70px) px-to-rem(48px);
+    }
   }
 }
 
@@ -87,9 +138,18 @@
   .home-container {
     padding: px-to-rem(0px) px-to-rem(16px);
 
+    &__search {
+      margin: 0 px-to-rem(-16px) px-to-rem(36px);
+      padding: px-to-rem(28px) px-to-rem(16px) px-to-rem(36px);
+    }
+
     &__favourite-new-projects-header {
       margin-bottom: px-to-rem(20px);
-      justify-content: space-between;
+    }
+
+    &__scroll-buttons button {
+      width: px-to-rem(32px);
+      height: px-to-rem(32px);
     }
 
     &__sponsored-projects {

@@ -5,6 +5,7 @@ import {
   input,
   output,
 } from '@angular/core';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 const ELLIPSIS = '...' as const;
 
@@ -12,6 +13,7 @@ export type PaginationItem = number | typeof ELLIPSIS;
 
 @Component({
   selector: 'app-pagination',
+  imports: [TranslatePipe],
   templateUrl: './pagination.html',
   styleUrl: './pagination.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

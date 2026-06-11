@@ -12,11 +12,12 @@ import { CurrencyStateService } from '../../shared/services/currency-state.servi
 import { ExchangeRateService } from '../../shared/services/exchange-rate.service';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { localizeText } from '../../shared/utils/localize-text.util';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-land-card',
-  imports: [CurrencyToggle, DecimalPipe],
+  imports: [CurrencyToggle, DecimalPipe, TranslatePipe],
   templateUrl: './land-card.html',
   styleUrl: './land-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,7 +4,7 @@
       class="projects-page__search-input"
       type="text"
       name="locationName"
-      placeholder="მაგ. თბილისის, ლისის ტბის მიმდებარედ"
+      [placeholder]="'common.search.locationPlaceholder' | translate"
       [(ngModel)]="locationName"
     />
 
@@ -12,7 +12,7 @@
       class="projects-page__search-input"
       type="text"
       name="keyword"
-      placeholder="ID, პროექტის დასახელება, ს/კ, ტელეფონი"
+      [placeholder]="'common.search.keywordPlaceholder' | translate"
       [(ngModel)]="keyword"
     />
 
@@ -21,7 +21,7 @@
         <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" />
         <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
       </svg>
-      <span>ძებნა</span>
+      <span>{{ 'common.search.search' | translate }}</span>
     </button>
   </form>
 
@@ -32,18 +32,22 @@
         type="button"
         (click)="toggleDropdown('area')"
       >
-        <span class="projects-page__filter-label">ფართობი</span>
+        <span class="projects-page__filter-label">
+          {{ 'projects.filters.area' | translate }}
+        </span>
         <span class="projects-page__filter-value">
-          {{ rangeLabel(minSquareMeters, maxSquareMeters, 'მ²') }}
+          {{ rangeLabel(minSquareMeters, maxSquareMeters, ('common.units.meter' | translate) + '²') }}
           <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
         </span>
       </button>
 
       @if (openDropdown() === 'area') {
         <div class="projects-page__filter-panel">
-          <input type="number" name="minSquareMeters" placeholder="დან" [(ngModel)]="minSquareMeters" />
-          <input type="number" name="maxSquareMeters" placeholder="მდე" [(ngModel)]="maxSquareMeters" />
-          <button type="button" (click)="applyFilters()">არჩევა</button>
+          <input type="number" name="minSquareMeters" [placeholder]="'common.search.from' | translate" [(ngModel)]="minSquareMeters" />
+          <input type="number" name="maxSquareMeters" [placeholder]="'common.search.to' | translate" [(ngModel)]="maxSquareMeters" />
+          <button type="button" (click)="applyFilters()">
+            {{ 'projects.filters.apply' | translate }}
+          </button>
         </div>
       }
     </div>
@@ -54,7 +58,9 @@
         type="button"
         (click)="toggleDropdown('sqmPrice')"
       >
-        <span class="projects-page__filter-label">კვმ ფასი</span>
+        <span class="projects-page__filter-label">
+          {{ 'projects.filters.squareMeterPrice' | translate }}
+        </span>
         <span class="projects-page__filter-value">
           {{ rangeLabel(minSquareMeterPrice, maxSquareMeterPrice, ' $') }}
           <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
@@ -63,9 +69,11 @@
 
       @if (openDropdown() === 'sqmPrice') {
         <div class="projects-page__filter-panel">
-          <input type="number" name="minSquareMeterPrice" placeholder="დან" [(ngModel)]="minSquareMeterPrice" />
-          <input type="number" name="maxSquareMeterPrice" placeholder="მდე" [(ngModel)]="maxSquareMeterPrice" />
-          <button type="button" (click)="applyFilters()">არჩევა</button>
+          <input type="number" name="minSquareMeterPrice" [placeholder]="'common.search.from' | translate" [(ngModel)]="minSquareMeterPrice" />
+          <input type="number" name="maxSquareMeterPrice" [placeholder]="'common.search.to' | translate" [(ngModel)]="maxSquareMeterPrice" />
+          <button type="button" (click)="applyFilters()">
+            {{ 'projects.filters.apply' | translate }}
+          </button>
         </div>
       }
     </div>
@@ -76,7 +84,9 @@
         type="button"
         (click)="toggleDropdown('price')"
       >
-        <span class="projects-page__filter-label">ფასი</span>
+        <span class="projects-page__filter-label">
+          {{ 'projects.filters.price' | translate }}
+        </span>
         <span class="projects-page__filter-value">
           {{ rangeLabel(minTotalPrice, maxTotalPrice, ' $') }}
           <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
@@ -85,9 +95,11 @@
 
       @if (openDropdown() === 'price') {
         <div class="projects-page__filter-panel">
-          <input type="number" name="minTotalPrice" placeholder="დან" [(ngModel)]="minTotalPrice" />
-          <input type="number" name="maxTotalPrice" placeholder="მდე" [(ngModel)]="maxTotalPrice" />
-          <button type="button" (click)="applyFilters()">არჩევა</button>
+          <input type="number" name="minTotalPrice" [placeholder]="'common.search.from' | translate" [(ngModel)]="minTotalPrice" />
+          <input type="number" name="maxTotalPrice" [placeholder]="'common.search.to' | translate" [(ngModel)]="maxTotalPrice" />
+          <button type="button" (click)="applyFilters()">
+            {{ 'projects.filters.apply' | translate }}
+          </button>
         </div>
       }
     </div>
@@ -101,16 +113,18 @@
         <svg width="14" height="14" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M13.5 8a5.5 5.5 0 1 1-1.6-3.9M13.5 1.5v3h-3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
-        ფილტრის გასუფთავება
+        {{ 'projects.filters.clear' | translate }}
       </button>
     }
   </div>
 
   <div class="projects-page__header">
-    <h2 class="projects-page__title">ნაპოვნია {{ totalItems() }} პროექტი</h2>
+    <h2 class="projects-page__title">
+      {{ 'projects.results.found' | translate: { count: totalItems() } }}
+    </h2>
 
     <label class="projects-page__map-toggle">
-      <span>რუკაზე ნახვა</span>
+      <span>{{ 'projects.results.viewOnMap' | translate }}</span>
       <input
         type="checkbox"
         [checked]="mapView()"
@@ -150,7 +164,9 @@
   }
 
   @if (!isLoading() && projects().length === 0) {
-    <p class="projects-page__empty">პროექტები ვერ მოიძებნა</p>
+    <p class="projects-page__empty">
+      {{ 'projects.results.empty' | translate }}
+    </p>
   }
 
   @if (totalPages() > 1) {

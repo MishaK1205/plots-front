@@ -1,8 +1,8 @@
 <section class="project-search">
   <div class="project-search__hero">
-    <h1 class="project-search__title">მოძებნე მიწის ნაკვეთი აგარაკისთვის!</h1>
+    <h1 class="project-search__title">{{ 'home.hero.title' | translate }}</h1>
     <p class="project-search__subtitle">
-      მიწის ნაკვეთები, სააგარაკე მიწები, ურბან პროექტები ერთ სივრცეში
+      {{ 'home.hero.subtitle' | translate }}
     </p>
   </div>
 
@@ -12,7 +12,7 @@
         class="project-search__input"
         type="text"
         name="locationName"
-        placeholder="მაგ. თბილისის, ლისის ტბის მიმდებარედ"
+        [placeholder]="'common.search.locationPlaceholder' | translate"
         [(ngModel)]="locationName"
       />
 
@@ -20,7 +20,7 @@
         class="project-search__input"
         type="text"
         name="keyword"
-        placeholder="ID, პროექტის დასახელება, ს/კ, ტელეფონი"
+        [placeholder]="'common.search.keywordPlaceholder' | translate"
         [(ngModel)]="keyword"
       />
 
@@ -41,61 +41,67 @@
           <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" />
           <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
         </svg>
-        <span>ძებნა</span>
+        <span>{{ 'common.search.search' | translate }}</span>
       </button>
     </form>
 
     @if (filtersOpen()) {
       <div class="project-search__filters">
         <div class="project-search__filter-group">
-          <span class="project-search__filter-label">სრული ფასი</span>
+          <span class="project-search__filter-label">
+            {{ 'home.search.totalPrice' | translate }}
+          </span>
           <div class="project-search__filter-inputs">
             <input
               type="number"
               name="minTotalPrice"
-              placeholder="დან"
+              [placeholder]="'common.search.from' | translate"
               [(ngModel)]="minTotalPrice"
             />
             <input
               type="number"
               name="maxTotalPrice"
-              placeholder="მდე"
+              [placeholder]="'common.search.to' | translate"
               [(ngModel)]="maxTotalPrice"
             />
           </div>
         </div>
 
         <div class="project-search__filter-group">
-          <span class="project-search__filter-label">1მ² ფასი</span>
+          <span class="project-search__filter-label">
+            {{ 'home.search.squareMeterPrice' | translate }}
+          </span>
           <div class="project-search__filter-inputs">
             <input
               type="number"
               name="minSquareMeterPrice"
-              placeholder="დან"
+              [placeholder]="'common.search.from' | translate"
               [(ngModel)]="minSquareMeterPrice"
             />
             <input
               type="number"
               name="maxSquareMeterPrice"
-              placeholder="მდე"
+              [placeholder]="'common.search.to' | translate"
               [(ngModel)]="maxSquareMeterPrice"
             />
           </div>
         </div>
 
         <div class="project-search__filter-group">
-          <span class="project-search__filter-label">ფართობი (მ²)</span>
+          <span class="project-search__filter-label">
+            {{ 'home.search.area' | translate }}
+          </span>
           <div class="project-search__filter-inputs">
             <input
               type="number"
               name="minSquareMeters"
-              placeholder="დან"
+              [placeholder]="'common.search.from' | translate"
               [(ngModel)]="minSquareMeters"
             />
             <input
               type="number"
               name="maxSquareMeters"
-              placeholder="მდე"
+              [placeholder]="'common.search.to' | translate"
               [(ngModel)]="maxSquareMeters"
             />
           </div>
@@ -105,7 +111,7 @@
 
     <div class="project-search__footer">
       <div class="project-search__quick-filters">
-        @for (filter of quickFilters; track filter) {
+        @for (filter of quickFilters; track filter.labelKey) {
           <button
             class="project-search__chip"
             type="button"
@@ -115,7 +121,7 @@
               <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" />
               <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
-            <span>{{ filter }}</span>
+            <span>{{ filter.labelKey | translate }}</span>
           </button>
         }
       </div>
@@ -123,7 +129,10 @@
       @if (totalActiveProjects() !== null) {
         <span class="project-search__total">
           <span class="project-search__total-dot"></span>
-          სულ აქტიურია {{ totalActiveProjects() }} განცხადება
+          {{
+            'home.search.totalActiveListings'
+              | translate: { count: totalActiveProjects()! }
+          }}
         </span>
       }
     </div>

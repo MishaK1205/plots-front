@@ -6,9 +6,12 @@
       <button
         class="header__burger"
         aria-label="Toggle menu"
+        [class.header__burger--open]="menuOpen"
         (click)="menuOpen = !menuOpen"
       >
-        ☰
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
 
       <a class="header__logo" routerLink="/">
@@ -24,7 +27,7 @@
                 routerLink="{{ item.path }}"
                 (click)="menuOpen = false"
               >
-                {{ item.label }}
+                {{ item.labelKey | translate }}
               </a>
             </li>
           }

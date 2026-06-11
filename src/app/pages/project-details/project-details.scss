@@ -292,6 +292,8 @@ $line: #ededed;
       color: $muted;
       font-size: px-to-rem(13);
       text-decoration: none;
+      overflow-wrap: anywhere;
+      word-break: break-word;
 
       &:hover {
         color: $green;
@@ -300,8 +302,21 @@ $line: #ededed;
 
     &-socials {
       display: flex;
+      flex-wrap: wrap;
       gap: px-to-rem(12);
       margin-top: px-to-rem(14);
+
+      a {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+
+        &:hover {
+          opacity: 0.75;
+          transform: translateY(px-to-rem(-2));
+        }
+      }
 
       img {
         width: px-to-rem(20);

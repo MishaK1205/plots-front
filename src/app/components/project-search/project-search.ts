@@ -10,10 +10,18 @@ import { FormsModule } from '@angular/forms';
 import { ProjectsService } from '../../api/services';
 import { ProjectsQueryParamsInterface } from '../../api/interfaces';
 import { applyKeywordToParams } from '../../shared/utils/keyword-params.util';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { TranslationKey } from '../../shared/i18n/translations';
+
+interface QuickFilter {
+  labelKey: TranslationKey;
+  // Search value stays in Georgian so backend lookups keep working.
+  value: string;
+}
 
 @Component({
   selector: 'app-project-search',
-  imports: [FormsModule],
+  imports: [FormsModule, TranslatePipe],
   templateUrl: './project-search.html',
   styleUrl: './project-search.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -23,7 +31,13 @@ export class ProjectSearch implements OnInit {
 
   search = output<ProjectsQueryParamsInterface>();
 
-  quickFilters = ['ლისის ტბა', 'საგურამო', 'ნაკვეთი', 'ტაბახმელა', 'ნაფეტვრები'];
+  quickFilters: QuickFilter[] = [
+    { labelKey: 'home.quickFilters.lisiLake', value: 'ლისის ტბა' },
+    { labelKey: 'home.quickFilters.saguramo', value: 'საგურამო' },
+    { labelKey: 'home.quickFilters.plot', value: 'ნაკვეთი' },
+    { labelKey: 'home.quickFilters.tabakhmela', value: 'ტაბახმელა' },
+    { labelKey: 'home.quickFilters.napetvrebi', value: 'ნაფეტვრები' },
+  ];
 
   filtersOpen = signal(false);
   totalActiveProjects = signal<number | null>(null);
@@ -48,8 +62,8 @@ export class ProjectSearch implements OnInit {
     this.filtersOpen.update((open) => !open);
   }
 
-  onQuickFilterClick(filter: string): void {
-    this.locationName = filter;
+  onQuickFilterClick(filter: QuickFilter): void {
+    this.locationName = filter.value;
     this.onSearch();
   }
 

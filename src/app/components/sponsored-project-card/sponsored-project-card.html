@@ -2,15 +2,15 @@
   class="sponsored-project-card" 
   [style.background-image]="cardImageBackground"
 >
- <h1 class="sponsored-project-card__title">გადმოდი საცხოვრებლად ჰილსაიდში</h1>
+ <h1 class="sponsored-project-card__title">{{ 'home.sponsored.title' | translate }}</h1>
 
  <div class="sponsored-project-card__project-info">
   <span class="sponsored-project-card__project-name">{{ project().name }}</span>
-  <span class="sponsored-project-card__developer-name">დეველოპერი: {{ project().companyInfo?.companyName | localized }}</span>
+  <span class="sponsored-project-card__developer-name">{{ 'common.card.developer' | translate }}: {{ project().companyInfo?.companyName | localized }}</span>
  </div>
 
 
  <button type="button" class="sponsored-project-card__btn" (click)="viewProject()">
-  პროექტის ნახვა
+  {{ 'home.sponsored.viewProject' | translate }}
  </button>
 </div>

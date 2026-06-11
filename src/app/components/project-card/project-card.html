@@ -7,13 +7,14 @@
 
   <h1 class="project-card__title">{{ project().name }}</h1>
   <p class="project-card__developer-company-name">
-    დეველოპერი: {{ project().companyInfo?.companyName | localized }}
+    {{ 'common.card.developer' | translate }}:
+    {{ project().companyInfo?.companyName | localized }}
   </p>
 
   <div class="project-card__price-container">
     <div>
-      <p class="project-card__total-price">{{ currencySymbol() }}{{ lowestTotalPrice() | number: '1.0-0' }}<span>-დან</span></p>
-      <p class="project-card__square-meter-price">1მ<sup>2</sup> - {{ currencySymbol() }} {{ lowestSquareMeterPrice() | number: '1.0-0' }}</p>
+      <p class="project-card__total-price"><span>{{ 'common.card.priceFromPrefix' | translate }}</span>{{ currencySymbol() }}{{ lowestTotalPrice() | number: '1.0-0' }}<span>{{ 'common.card.priceFromSuffix' | translate }}</span></p>
+      <p class="project-card__square-meter-price">1{{ 'common.units.meter' | translate }}<sup>2</sup> - {{ currencySymbol() }} {{ lowestSquareMeterPrice() | number: '1.0-0' }}</p>
     </div>
 
     <app-currency-toggle
@@ -21,11 +22,20 @@
     ></app-currency-toggle>
   </div>
 
-  <div 
-    class="project-card__location"
-    (click)="onLocationClick($event)"
-  >
-    <img src="assets/icons/location.svg" alt="Location Icon" /> 
-    <span>{{ project().locationName | localized }}</span>
+  <div class="project-card__meta">
+    <div 
+      class="project-card__location"
+      (click)="onLocationClick($event)"
+    >
+      <img src="assets/icons/location.svg" alt="Location Icon" /> 
+      <span>{{ project().locationName | localized }}</span>
+    </div>
+
+    @if (project().minutesToLocation | localized; as minutes) {
+      <div class="project-card__minutes">
+        <img src="assets/icons/minutes-to-location.svg" alt="Minutes To Location Icon" />
+        <span>{{ minutes }}</span>
+      </div>
+    }
   </div>
 </div>

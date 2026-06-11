@@ -3,7 +3,7 @@
     type="button"
     class="currency-toggle__option currency-toggle__option--gel"
     [class.currency-toggle__option--active]="activeCurrency() === 'GEL'"
-    (click)="onCurrencyClick('GEL')"
+    (click)="onCurrencyClick('GEL', $event)"
   >
     <span class="currency-toggle__symbol">₾</span>
   </button>
@@ -12,7 +12,7 @@
     type="button"
     class="currency-toggle__option"
     [class.currency-toggle__option--active]="activeCurrency() === 'USD'"
-    (click)="onCurrencyClick('USD')"
+    (click)="onCurrencyClick('USD', $event)"
   >
     <span class="currency-toggle__symbol">$</span>
   </button>

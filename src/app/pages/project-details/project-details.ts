@@ -23,13 +23,14 @@ import {
 import { LandCard, ProjectsMap } from '../../components';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { localizeText } from '../../shared/utils/localize-text.util';
+import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { environment } from '../../../environments/environment';
 
 const INITIAL_LANDS_COUNT = 3;
 
 @Component({
   selector: 'app-project-details',
-  imports: [LandCard, ProjectsMap],
+  imports: [LandCard, ProjectsMap, TranslatePipe],
   templateUrl: './project-details.html',
   styleUrl: './project-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

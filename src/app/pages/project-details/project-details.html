@@ -28,22 +28,26 @@
             <p class="project-details__project-name">{{ project.name }}</p>
             @if (companyName()) {
               <p class="project-details__company-name">
-                დეველოპერი: {{ companyName() }}
+                {{ 'common.card.developer' | translate }}: {{ companyName() }}
               </p>
             }
           </div>
         </div>
 
         <div class="project-details__cover-contact">
-          <span>როდის შეგვიძლია მონახულება?</span>
-          <button type="button" (click)="onContactClick()">დაკავშირება</button>
+          <span>{{ 'projectDetails.cover.visitQuestion' | translate }}</span>
+          <button type="button" (click)="onContactClick()">
+            {{ 'common.card.contact' | translate }}
+          </button>
         </div>
       </div>
     </div>
 
     <!-- Lands -->
     <div class="project-details__section">
-      <h2 class="project-details__section-title">მიწის ნაკვეთები</h2>
+      <h2 class="project-details__section-title">
+        {{ 'projectDetails.lands.title' | translate }}
+      </h2>
 
       @if (lands().length > 0) {
         <div class="project-details__lands">
@@ -58,12 +62,14 @@
             type="button"
             (click)="showAllLands.set(true)"
           >
-            ყველა მიწის ნახვა
+            {{ 'projectDetails.lands.viewAll' | translate }}
             <span aria-hidden="true">&rarr;</span>
           </button>
         }
       } @else {
-        <p class="project-details__empty">ნაკვეთები ვერ მოიძებნა</p>
+        <p class="project-details__empty">
+          {{ 'projectDetails.lands.empty' | translate }}
+        </p>
       }
     </div>
 
@@ -71,7 +77,9 @@
     @if (description()) {
       <div class="project-details__section project-details__about">
         <div class="project-details__about-text">
-          <h2 class="project-details__section-title">პროექტის შესახებ</h2>
+          <h2 class="project-details__section-title">
+            {{ 'projectDetails.about.title' | translate }}
+          </h2>
           <p>{{ description() }}</p>
         </div>
 
@@ -122,7 +130,9 @@
     <!-- Gallery -->
     @if (galleryUrls().length > 0) {
       <div class="project-details__section">
-        <h2 class="project-details__section-title">ფოტო გალერეა</h2>
+        <h2 class="project-details__section-title">
+          {{ 'projectDetails.gallery.title' | translate }}
+        </h2>
         <div class="project-details__gallery">
           @for (imageUrl of galleryUrls(); track imageUrl) {
             <img
@@ -140,7 +150,7 @@
     <div class="project-details__footer">
       @if (project.companyInfo; as company) {
         <aside class="project-details__contact">
-          <h3>კონტაქტი</h3>
+          <h3>{{ 'projectDetails.contact.title' | translate }}</h3>
 
           @if (companyName()) {
             <p class="project-details__contact-company">{{ companyName() }}</p>
@@ -181,6 +191,16 @@
                   <img src="assets/icons/linkedin-icon.svg" alt="LinkedIn" />
                 </a>
               }
+              @if (socials.tiktok) {
+                <a [href]="socials.tiktok" target="_blank" rel="noopener">
+                  <img src="assets/icons/tiktok.svg" alt="TikTok" />
+                </a>
+              }
+              @if (socials.x) {
+                <a [href]="socials.x" target="_blank" rel="noopener">
+                  <img src="assets/icons/x-icon.svg" alt="X" />
+                </a>
+              }
             </div>
           }
         </aside>
@@ -188,7 +208,9 @@
 
       @if (faqItems().length > 0) {
         <div class="project-details__faq">
-          <h2 class="project-details__section-title">კითხვები და პასუხები</h2>
+          <h2 class="project-details__section-title">
+            {{ 'projectDetails.faq.title' | translate }}
+          </h2>
 
           @for (item of faqItems(); track $index) {
             <div

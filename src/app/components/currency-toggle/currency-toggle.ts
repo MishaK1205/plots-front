@@ -20,7 +20,8 @@ export class CurrencyToggle {
   activeCurrency = this.currencyState.currency;
   currencyChanged = output<CurrencyType>();
 
-  onCurrencyClick(currency: CurrencyType): void {
+  onCurrencyClick(currency: CurrencyType, event: Event): void {
+    event.stopPropagation();
     if (currency !== this.activeCurrency()) {
       this.currencyState.setCurrency(currency);
       this.currencyChanged.emit(currency);

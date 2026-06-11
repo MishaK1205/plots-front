@@ -17,9 +17,11 @@
 
   <div class="land-card__details">
     <div class="land-card__size">
-      <p class="land-card__size-label">მიწის ზომა</p>
+      <p class="land-card__size-label">
+        {{ 'common.card.landSize' | translate }}
+      </p>
       <p class="land-card__size-value">
-        {{ land().squareMeters | number: '1.0-0' }}მ<sup>2</sup>
+        {{ land().squareMeters | number: '1.0-0' }}{{ 'common.units.meter' | translate }}<sup>2</sup>
       </p>
     </div>
 
@@ -28,7 +30,7 @@
         {{ currencySymbol() }}{{ totalPrice() | number: '1.0-0' }}
       </p>
       <p class="land-card__price-sqm">
-        1მ<sup>2</sup> - {{ currencySymbol() }} {{ squareMeterPrice() | number: '1.0-0' }}
+        1{{ 'common.units.meter' | translate }}<sup>2</sup> - {{ currencySymbol() }} {{ squareMeterPrice() | number: '1.0-0' }}
       </p>
     </div>
 
@@ -36,6 +38,6 @@
   </div>
 
   <p class="land-card__cadastral">
-    საკადასტრო კოდი: {{ land().cadastralCode }}
+    {{ 'common.card.cadastralCode' | translate }}: {{ land().cadastralCode }}
   </p>
 </article>
