@@ -168,16 +168,20 @@
     &__item {
       opacity: 0;
       transform: translateX(px-to-rem(-10px));
-    }
-
-    &--open &__item {
-      animation: nav-item-in 0.3s ease forwards;
+      transition:
+        opacity 0.3s ease,
+        transform 0.3s ease;
 
       @for $i from 1 through 8 {
         &:nth-child(#{$i}) {
-          animation-delay: #{0.05 + $i * 0.05}s;
+          transition-delay: #{0.05 + $i * 0.05}s;
         }
       }
+    }
+
+    &--open &__item {
+      opacity: 1;
+      transform: translateX(0);
     }
 
     &__link {
@@ -189,9 +193,12 @@
   }
 }
 
-@keyframes nav-item-in {
-  to {
-    opacity: 1;
-    transform: translateX(0);
+@media (prefers-reduced-motion: reduce) {
+  @media (max-width: 768px) {
+    .nav__item {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
   }
 }
