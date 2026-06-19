@@ -16,7 +16,8 @@
     background-image: url("/assets/background-image-of-homepage-header.svg");
     background-repeat: no-repeat;
     background-position: top center;
-    background-size: cover;
+    // SVG is 1600×150 — scale by width so opening filters doesn't resize it
+    background-size: 100% auto;
   }
 
   &__favourite-new-projects-header {
@@ -30,7 +31,7 @@
       font-size: px-to-rem(20px);
     }
 
-    span {
+    a {
       font-size: px-to-rem(11px);
       color: #0090E3;
       cursor: pointer;

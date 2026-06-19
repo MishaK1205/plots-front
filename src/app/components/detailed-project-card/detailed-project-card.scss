@@ -1,6 +1,6 @@
 @use "../../tools/_px-to-rem.scss" as *;
 
-$green: #16bc2e;
+$green: #00b365;
 $ink: #1a1a1a;
 $muted: #484848;
 $soft: #7b7b7b;
@@ -171,12 +171,8 @@ $line: #ededed;
     color: $muted;
   }
 
-  &__location {
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: $green;
-    }
+  ::ng-deep .project-card__location {
+    gap: px-to-rem(6);
   }
 
   &__location-icon {
@@ -232,24 +228,6 @@ $line: #ededed;
     font-size: px-to-rem(14);
     font-weight: 600;
     color: $ink;
-  }
-
-  &__contact {
-    padding: px-to-rem(8) px-to-rem(18);
-    border-radius: px-to-rem(99);
-    background: $green;
-    color: #ffffff;
-    font-size: px-to-rem(13);
-    font-weight: 600;
-    transition: background 0.2s ease, transform 0.1s ease;
-
-    &:hover {
-      background: #13a829;
-    }
-
-    &:active {
-      transform: scale(0.97);
-    }
   }
 }
 

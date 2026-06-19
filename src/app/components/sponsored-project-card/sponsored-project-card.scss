@@ -69,19 +69,6 @@
   &__developer-name {
     font-size: px-to-rem(12);
   }
-
-  &__btn {
-    padding: px-to-rem(18) px-to-rem(16);
-
-    font-size: px-to-rem(12);
-    font-weight: bold;
-    background-color: #16BC2E;
-    color: #ffffff;
-
-    border-radius: px-to-rem(8);
-
-    cursor: pointer;
-  }
 }
 
 /* =====================
@@ -95,10 +82,6 @@
 
     &__title {
       font-size: px-to-rem(20);
-    }
-
-    &__btn {
-      padding: px-to-rem(14) px-to-rem(16);
     }
   }
 }

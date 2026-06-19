@@ -11,6 +11,7 @@ import {
   LocalizedTextInterface,
   ProjectResponseInterface,
 } from '../../api/interfaces';
+import { Button } from '../button/button';
 import { CurrencyToggle, CurrencyType } from '../currency-toggle/currency-toggle';
 import { CurrencyStateService } from '../../shared/services/currency-state.service';
 import { ExchangeRateService } from '../../shared/services/exchange-rate.service';
@@ -20,7 +21,7 @@ import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-detailed-project-card',
-  imports: [CommonModule, CurrencyToggle, TranslatePipe],
+  imports: [CommonModule, Button, CurrencyToggle, TranslatePipe],
   templateUrl: './detailed-project-card.html',
   styleUrl: './detailed-project-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

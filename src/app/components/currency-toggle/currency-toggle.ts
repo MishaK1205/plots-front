@@ -1,4 +1,5 @@
 import { Component, output, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Button } from '../button/button';
 import { CommonModule } from '@angular/common';
 import {
   CurrencyStateService,
@@ -9,7 +10,7 @@ export type { CurrencyType } from '../../shared/services/currency-state.service'
 
 @Component({
   selector: 'app-currency-toggle',
-  imports: [CommonModule],
+  imports: [CommonModule, Button],
   templateUrl: './currency-toggle.html',
   styleUrl: './currency-toggle.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

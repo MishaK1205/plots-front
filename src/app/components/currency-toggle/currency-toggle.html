@@ -1,20 +1,27 @@
 <div class="currency-toggle" [attr.data-active]="activeCurrency()">
-  <button
+  <app-button
+    variant="ghost"
+    size="xs"
+    shape="circle"
     type="button"
-    class="currency-toggle__option currency-toggle__option--gel"
-    [class.currency-toggle__option--active]="activeCurrency() === 'GEL'"
+    extraClass="currency-toggle__option currency-toggle__option--gel"
+    [active]="activeCurrency() === 'GEL'"
+    activeTone="primary"
     (click)="onCurrencyClick('GEL', $event)"
   >
     <span class="currency-toggle__symbol">₾</span>
-  </button>
-  
-  <button
+  </app-button>
+
+  <app-button
+    variant="ghost"
+    size="xs"
+    shape="circle"
     type="button"
-    class="currency-toggle__option"
-    [class.currency-toggle__option--active]="activeCurrency() === 'USD'"
+    extraClass="currency-toggle__option"
+    [active]="activeCurrency() === 'USD'"
+    activeTone="primary"
     (click)="onCurrencyClick('USD', $event)"
   >
     <span class="currency-toggle__symbol">$</span>
-  </button>
+  </app-button>
 </div>
-

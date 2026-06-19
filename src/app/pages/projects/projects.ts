@@ -14,6 +14,7 @@ import {
   ProjectsQueryParamsInterface,
 } from '../../api/interfaces';
 import {
+  Button,
   DetailedProjectCard,
   Pagination,
   ProjectCard,
@@ -27,10 +28,12 @@ import { TranslationService } from '../../shared/i18n/translation.service';
 const PAGE_LIMIT = 10;
 
 type FilterDropdown = 'area' | 'sqmPrice' | 'price';
+type ProjectCollection = 'favourites' | 'new';
 
 @Component({
   selector: 'app-projects',
   imports: [
+    Button,
     DetailedProjectCard,
     FormsModule,
     Pagination,
@@ -54,6 +57,7 @@ export class Projects implements OnInit {
   totalPages = signal(0);
   currentPage = signal(1);
   isLoading = signal(false);
+  collection = signal<ProjectCollection | null>(null);
 
   mapView = signal(false);
   openDropdown = signal<FilterDropdown | null>(null);
@@ -95,6 +99,7 @@ export class Projects implements OnInit {
 
   hasActiveFilters(): boolean {
     return (
+      this.collection() != null ||
       !!this.locationName.trim() ||
       !!this.keyword.trim() ||
       this.minSquareMeters != null ||
@@ -163,7 +168,25 @@ export class Projects implements OnInit {
   }
 
   private loadProjects(queryParams: ParamMap): void {
+    const collection = this.parseCollection(queryParams.get('collection'));
+    this.collection.set(collection);
     this.isLoading.set(true);
+
+    if (collection === 'favourites') {
+      this.projectsService.getFavourites().subscribe({
+        next: (data) => this.setCollectionResults(data),
+        error: (error) => this.handleLoadError(error),
+      });
+      return;
+    }
+
+    if (collection === 'new') {
+      this.projectsService.getNew().subscribe({
+        next: (data) => this.setCollectionResults(data),
+        error: (error) => this.handleLoadError(error),
+      });
+      return;
+    }
 
     this.projectsService.getAll(this.buildApiParams(queryParams)).subscribe({
       next: (response) => {
@@ -173,11 +196,26 @@ export class Projects implements OnInit {
         this.currentPage.set(response.pagination.currentPage);
         this.isLoading.set(false);
       },
-      error: (error) => {
-        console.error('Error loading projects:', error);
-        this.isLoading.set(false);
-      },
+      error: (error) => this.handleLoadError(error),
     });
+  }
+
+  private setCollectionResults(data: ProjectResponseInterface[]): void {
+    this.projects.set(data);
+    this.totalItems.set(data.length);
+    this.totalPages.set(1);
+    this.currentPage.set(1);
+    this.isLoading.set(false);
+  }
+
+  private handleLoadError(error: unknown): void {
+    console.error('Error loading projects:', error);
+    this.isLoading.set(false);
+  }
+
+  private parseCollection(value: string | null): ProjectCollection | null {
+    if (value === 'favourites' || value === 'new') return value;
+    return null;
   }
 
   private buildApiParams(queryParams: ParamMap): ProjectsQueryParamsInterface {

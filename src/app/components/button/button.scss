@@ -1,0 +1,202 @@
+@use "../../tools/px-to-rem" as *;
+
+$primary: #00b365;
+$primary-hover: #009e59;
+$ink: #202020;
+$muted: #555;
+$border: #e5e5e5;
+
+:host {
+  display: inline-flex;
+}
+
+:host(.app-button-host--full-width) {
+  width: 100%;
+}
+
+.app-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: px-to-rem(8px);
+
+  font-family: inherit;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  text-decoration: none;
+
+  border: 0;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.1s ease;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.55;
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  // ---------- Sizes ----------
+  &--xs {
+    min-width: px-to-rem(24px);
+    height: px-to-rem(24px);
+    padding: 0;
+    font-size: px-to-rem(12px);
+  }
+
+  &--sm {
+    min-width: px-to-rem(36px);
+    height: px-to-rem(36px);
+    padding: 0 px-to-rem(12px);
+    font-size: px-to-rem(13px);
+  }
+
+  &--md {
+    padding: px-to-rem(12px) px-to-rem(24px);
+    font-size: px-to-rem(13px);
+  }
+
+  &--lg {
+    padding: px-to-rem(18px) px-to-rem(16px);
+    font-size: px-to-rem(12px);
+    font-weight: 700;
+  }
+
+  // ---------- Shapes ----------
+  &--rounded {
+    border-radius: px-to-rem(10px);
+  }
+
+  &--pill {
+    border-radius: px-to-rem(99px);
+  }
+
+  &--circle {
+    border-radius: 50%;
+  }
+
+  // ---------- Variants ----------
+  &--primary {
+    color: #fff;
+    background-color: $primary;
+
+    &:hover:not(:disabled) {
+      background-color: $primary-hover;
+    }
+
+    &:active:not(:disabled) {
+      transform: scale(0.97);
+    }
+  }
+
+  &--outline {
+    color: $ink;
+    background-color: #fff;
+    border: 1px solid $border;
+
+    &:hover:not(:disabled),
+    &.app-button--active {
+      color: $primary;
+      border-color: $primary;
+    }
+  }
+
+  &--ghost {
+    color: $ink;
+    background: none;
+
+    &:hover:not(:disabled):not(.app-button--active) {
+      background-color: #f3f3f3;
+    }
+
+    &:disabled {
+      color: #b5b5b5;
+      opacity: 1;
+    }
+
+    &.app-button--active.app-button--active-muted {
+      background-color: #f3f3f3;
+    }
+
+    &.app-button--active.app-button--active-primary {
+      color: #fff;
+      background-color: $primary;
+      cursor: default;
+    }
+  }
+
+  &--text {
+    padding: 0;
+    color: #484848;
+    font-size: px-to-rem(13px);
+    font-weight: 400;
+    background: none;
+
+    &:hover:not(:disabled) {
+      color: $primary;
+    }
+  }
+
+  &--icon {
+    flex: 0 0 auto;
+    width: px-to-rem(44px);
+    height: px-to-rem(44px);
+    padding: 0;
+    color: $ink;
+    background-color: #fff;
+    border: 1px solid $border;
+
+    &:hover:not(:disabled),
+    &.app-button--active {
+      color: $primary;
+      border-color: $primary;
+    }
+  }
+
+  &--chip {
+    padding: px-to-rem(7px) px-to-rem(12px);
+    color: $muted;
+    font-size: px-to-rem(11px);
+    font-weight: 400;
+    background-color: #fff;
+    border: 1px solid $border;
+    border-radius: px-to-rem(20px);
+
+    &:hover:not(:disabled) {
+      color: $primary;
+      border-color: $primary;
+    }
+  }
+
+  // Size overrides per variant
+  &--ghost.app-button--sm {
+    min-width: px-to-rem(36px);
+    height: px-to-rem(36px);
+    padding: 0 px-to-rem(8px);
+  }
+
+  &--ghost.app-button--md {
+    padding: px-to-rem(8px) px-to-rem(12px);
+  }
+
+  &--primary.app-button--sm {
+    min-width: px-to-rem(36px);
+    height: px-to-rem(36px);
+    padding: 0 px-to-rem(8px);
+    border-radius: px-to-rem(8px);
+  }
+
+  &--primary.app-button--sm.app-button--pill {
+    min-width: auto;
+    height: auto;
+    padding: px-to-rem(8px) px-to-rem(18px);
+    border-radius: px-to-rem(99px);
+  }
+}

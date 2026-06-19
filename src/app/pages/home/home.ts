@@ -5,7 +5,7 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   ProjectCard,
   ProjectSearch,
@@ -20,7 +20,13 @@ import {
 
 @Component({
   selector: 'app-home',
-  imports: [ProjectCard, ProjectSearch, SponsoredProjectCard, TranslatePipe],
+  imports: [
+    ProjectCard,
+    ProjectSearch,
+    RouterLink,
+    SponsoredProjectCard,
+    TranslatePipe,
+  ],
   templateUrl: './home.html',
   styleUrl: './home.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

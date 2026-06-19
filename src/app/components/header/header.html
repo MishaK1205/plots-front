@@ -3,16 +3,18 @@
     <!-- Left -->
     <div class="header__left">
       <!-- Mobile menu button -->
-      <button
+      <app-button
         class="header__burger"
-        aria-label="Toggle menu"
+        variant="ghost"
+        type="button"
+        ariaLabel="Toggle menu"
         [class.header__burger--open]="menuOpen"
         (click)="menuOpen = !menuOpen"
       >
         <span></span>
         <span></span>
         <span></span>
-      </button>
+      </app-button>
 
       <a class="header__logo" routerLink="/">
         <img src="assets/logo.svg" alt="Plots" />

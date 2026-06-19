@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ProjectsService } from '../../api/services';
 import { ProjectsQueryParamsInterface } from '../../api/interfaces';
 import { applyKeywordToParams } from '../../shared/utils/keyword-params.util';
+import { Button } from '../button/button';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { TranslationKey } from '../../shared/i18n/translations';
 
@@ -21,7 +22,7 @@ interface QuickFilter {
 
 @Component({
   selector: 'app-project-search',
-  imports: [FormsModule, TranslatePipe],
+  imports: [FormsModule, Button, TranslatePipe],
   templateUrl: './project-search.html',
   styleUrl: './project-search.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

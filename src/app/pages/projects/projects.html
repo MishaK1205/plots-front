@@ -16,13 +16,13 @@
       [(ngModel)]="keyword"
     />
 
-    <button class="projects-page__search-submit" type="submit">
+    <app-button class="projects-page__search-submit" variant="primary" type="submit">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" />
         <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
       </svg>
       <span>{{ 'common.search.search' | translate }}</span>
-    </button>
+    </app-button>
   </form>
 
   <div class="projects-page__filters">
@@ -120,7 +120,15 @@
 
   <div class="projects-page__header">
     <h2 class="projects-page__title">
-      {{ 'projects.results.found' | translate: { count: totalItems() } }}
+      @if (collection() === 'favourites') {
+        {{ 'home.sections.featuredProjects' | translate }}
+        ({{ totalItems() }})
+      } @else if (collection() === 'new') {
+        {{ 'home.sections.newProjects' | translate }}
+        ({{ totalItems() }})
+      } @else {
+        {{ 'projects.results.found' | translate: { count: totalItems() } }}
+      }
     </h2>
 
     <label class="projects-page__map-toggle">

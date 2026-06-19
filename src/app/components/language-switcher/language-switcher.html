@@ -1,9 +1,11 @@
 <div class="language-switcher">
-  <button
-    class="language-switcher__trigger"
+  <app-button
+    variant="outline"
+    size="md"
     type="button"
-    aria-label="Select language"
-    [attr.aria-expanded]="languageMenuOpen"
+    extraClass="language-switcher__trigger"
+    ariaLabel="Select language"
+    [ariaExpanded]="languageMenuOpen"
     (click)="languageMenuOpen = !languageMenuOpen"
   >
     <img
@@ -21,22 +23,24 @@
       alt=""
       aria-hidden="true"
     />
-  </button>
+  </app-button>
 
   @if (languageMenuOpen) {
     <ul class="language-switcher__menu">
       @for (language of languages; track language.value) {
         <li>
-          <button
-            class="language-switcher__option"
+          <app-button
+            variant="ghost"
+            size="md"
             type="button"
-            [class.language-switcher__option--active]="
-              language.value === selectedLanguage()
-            "
+            extraClass="language-switcher__option"
+            [active]="language.value === selectedLanguage()"
+            activeTone="muted"
+            [fullWidth]="true"
             (click)="selectLanguage(language.value)"
           >
             {{ language.label }}
-          </button>
+          </app-button>
         </li>
       }
     </ul>

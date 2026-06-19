@@ -6,7 +6,9 @@
   <section class="home-container__favourite-new-projects">
     <div class="home-container__favourite-new-projects-header">
       <h2>{{ 'home.sections.featuredProjects' | translate }}</h2>
-      <span>{{ 'home.sections.viewAll' | translate }}</span>
+      <a routerLink="/projects" [queryParams]="{ collection: 'favourites' }">
+        {{ 'home.sections.viewAll' | translate }}
+      </a>
 
       <div class="home-container__scroll-buttons">
         <button
@@ -50,7 +52,9 @@
   <section class="home-container__favourite-new-projects">
     <div class="home-container__favourite-new-projects-header">
       <h2>{{ 'home.sections.newProjects' | translate }}</h2>
-      <span>{{ 'home.sections.viewAll' | translate }}</span>
+      <a routerLink="/projects" [queryParams]="{ collection: 'new' }">
+        {{ 'home.sections.viewAll' | translate }}
+      </a>
 
       <div class="home-container__scroll-buttons">
         <button

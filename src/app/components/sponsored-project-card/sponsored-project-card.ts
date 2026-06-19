@@ -5,12 +5,13 @@ import {
   output,
 } from '@angular/core';
 import { ProjectResponseInterface } from '../../api/interfaces';
+import { Button } from '../button/button';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-sponsored-project-card',
-  imports: [LocalizedPipe, TranslatePipe],
+  imports: [Button, LocalizedPipe, TranslatePipe],
   templateUrl: './sponsored-project-card.html',
   styleUrl: './sponsored-project-card.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

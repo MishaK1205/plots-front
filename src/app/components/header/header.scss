@@ -34,47 +34,43 @@
     gap: px-to-rem(16px);
   }
 
-  &__burger {
+  app-button.header__burger {
     display: none;
-    flex-direction: column;
-    justify-content: center;
-    gap: px-to-rem(5px);
 
-    width: px-to-rem(36px);
-    height: px-to-rem(36px);
-    padding: px-to-rem(8px);
+    ::ng-deep .app-button {
+      flex-direction: column;
+      justify-content: center;
+      gap: px-to-rem(5px);
 
-    background: none;
-    border: none;
-    border-radius: px-to-rem(8px);
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+      width: px-to-rem(36px);
+      height: px-to-rem(36px);
+      min-width: px-to-rem(36px);
+      padding: px-to-rem(8px);
 
-    &:hover {
-      background-color: #f3f3f3;
+      background: none;
+      border: none;
+      border-radius: px-to-rem(8px);
+
+      span {
+        display: block;
+        width: 100%;
+        height: px-to-rem(2px);
+        border-radius: px-to-rem(2px);
+        background-color: #333;
+        transition: transform 0.3s ease, opacity 0.2s ease;
+      }
     }
 
-    span {
-      display: block;
-      width: 100%;
-      height: px-to-rem(2px);
-      border-radius: px-to-rem(2px);
-      background-color: #333;
-      transition: transform 0.3s ease, opacity 0.2s ease;
+    &.header__burger--open ::ng-deep .app-button span:nth-child(1) {
+      transform: translateY(px-to-rem(7px)) rotate(45deg);
     }
 
-    &--open {
-      span:nth-child(1) {
-        transform: translateY(px-to-rem(7px)) rotate(45deg);
-      }
+    &.header__burger--open ::ng-deep .app-button span:nth-child(2) {
+      opacity: 0;
+    }
 
-      span:nth-child(2) {
-        opacity: 0;
-      }
-
-      span:nth-child(3) {
-        transform: translateY(px-to-rem(-7px)) rotate(-45deg);
-      }
+    &.header__burger--open ::ng-deep .app-button span:nth-child(3) {
+      transform: translateY(px-to-rem(-7px)) rotate(-45deg);
     }
   }
 }
@@ -121,8 +117,8 @@
 
 @media (max-width: 768px) {
   .header {
-    &__burger {
-      display: flex;
+    app-button.header__burger {
+      display: inline-flex;
     }
 
     &__container {

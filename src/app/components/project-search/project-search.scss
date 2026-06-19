@@ -63,48 +63,8 @@
     }
   }
 
-  &__filters-toggle {
-    flex: 0 0 auto;
-    width: px-to-rem(44px);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    color: #202020;
-
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: px-to-rem(10px);
-    cursor: pointer;
-
-    &:hover,
-    &--active {
-      color: #00b365;
-      border-color: #00b365;
-    }
-  }
-
   &__submit {
     flex: 0 0 auto;
-    padding: 0 px-to-rem(24px);
-
-    display: flex;
-    align-items: center;
-    gap: px-to-rem(8px);
-
-    color: #fff;
-    font-size: px-to-rem(13px);
-    font-weight: 700;
-
-    background-color: #00b365;
-    border: 0;
-    border-radius: px-to-rem(10px);
-    cursor: pointer;
-
-    &:hover {
-      background-color: #009e59;
-    }
   }
 
   &__filters {
@@ -163,27 +123,6 @@
     gap: px-to-rem(8px);
   }
 
-  &__chip {
-    display: flex;
-    align-items: center;
-    gap: px-to-rem(6px);
-
-    padding: px-to-rem(7px) px-to-rem(12px);
-
-    color: #555;
-    font-size: px-to-rem(11px);
-
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: px-to-rem(20px);
-    cursor: pointer;
-
-    &:hover {
-      color: #00b365;
-      border-color: #00b365;
-    }
-  }
-
   &__total {
     display: flex;
     align-items: center;
@@ -218,8 +157,11 @@
 
     &__submit {
       flex: 1 1 auto;
-      justify-content: center;
-      padding: px-to-rem(12px) px-to-rem(24px);
+      width: 100%;
+
+      ::ng-deep .app-button {
+        width: 100%;
+      }
     }
 
     &__footer {

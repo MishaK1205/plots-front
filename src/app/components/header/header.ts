@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { Button } from '../button/button';
 import { LanguageSwitcher } from '../language-switcher/language-switcher';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { TranslationKey } from '../../shared/i18n/translations';
@@ -12,7 +13,7 @@ interface HeaderItem {
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule, RouterModule, LanguageSwitcher, TranslatePipe],
+  imports: [CommonModule, RouterModule, Button, LanguageSwitcher, TranslatePipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

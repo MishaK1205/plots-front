@@ -4,6 +4,7 @@ import {
   computed,
   inject,
 } from '@angular/core';
+import { Button } from '../button/button';
 import {
   LanguageStateService,
   LanguageType,
@@ -16,6 +17,7 @@ interface LanguageOption {
 
 @Component({
   selector: 'app-language-switcher',
+  imports: [Button],
   templateUrl: './language-switcher.html',
   styleUrl: './language-switcher.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -10,35 +10,14 @@
   gap: 0;
   height: px-to-rem(28);
   padding: px-to-rem(2);
-  border: 1px solid #EEEEEE;
+  border: 1px solid #eeeeee;
   border-radius: px-to-rem(99);
-  background-color: #FFFFFF;
+  background-color: #ffffff;
 }
 
-.currency-toggle__option {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: px-to-rem(24);
-  height: px-to-rem(24);
-  padding: 0;
-  background-color: transparent;
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  font-family: inherit;
-  line-height: 1;
-  color: #111111;
-  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
-    color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-
-  &:hover:not(.currency-toggle__option--active) {
-    background-color: rgba(245, 245, 245, 0.8);
-  }
-
-  &--active {
-    background-color: #16BC2E;
-    color: #FFFFFF;
+::ng-deep .currency-toggle__option--gel {
+  .currency-toggle__symbol {
+    transform: translateX(px-to-rem(-1));
   }
 }
 
@@ -47,10 +26,4 @@
   font-size: px-to-rem(12);
   font-weight: 500;
   line-height: 1;
-}
-
-.currency-toggle__option--gel {
-  span {
-    transform: translateX(px-to-rem(-1));
-  }
 }

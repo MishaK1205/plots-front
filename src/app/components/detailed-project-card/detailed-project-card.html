@@ -54,14 +54,15 @@
 
     <div class="project-card__meta">
       @if (locationName()) {
-        <button
+        <app-button
+          variant="text"
           type="button"
-          class="project-card__location"
+          extraClass="project-card__location"
           (click)="onLocationClick($event)"
         >
           <img class="project-card__location-icon" src="assets/icons/location.svg" alt="" />
           <span>{{ locationName() }}</span>
-        </button>
+        </app-button>
       }
 
       @if (minutesToLocation()) {
@@ -90,8 +91,14 @@
       <p class="project-card__developer-name">{{ developerName() }}</p>
     }
 
-    <button type="button" class="project-card__contact" (click)="onContactClick($event)">
+    <app-button
+      variant="primary"
+      size="sm"
+      shape="pill"
+      type="button"
+      (click)="onContactClick($event)"
+    >
       {{ 'common.card.contact' | translate }}
-    </button>
+    </app-button>
   </aside>
 </article>

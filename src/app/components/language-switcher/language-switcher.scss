@@ -3,25 +3,14 @@
 .language-switcher {
   position: relative;
 
-  &__trigger {
+  ::ng-deep .language-switcher__trigger {
     min-width: px-to-rem(88px);
     height: px-to-rem(40px);
     padding: 0 px-to-rem(16px);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
     gap: px-to-rem(8px);
-
-    color: #202020;
     font-size: px-to-rem(12px);
     font-weight: 700;
-
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: px-to-rem(10px);
     box-shadow: 0 px-to-rem(1px) px-to-rem(2px) rgba(0, 0, 0, 0.04);
-    cursor: pointer;
   }
 
   &__icon {
@@ -53,23 +42,12 @@
     box-shadow: 0 px-to-rem(8px) px-to-rem(24px) rgba(0, 0, 0, 0.08);
   }
 
-  &__option {
+  ::ng-deep .language-switcher__option {
     width: 100%;
     padding: px-to-rem(8px) px-to-rem(10px);
-
-    color: #202020;
-    font: inherit;
     font-size: px-to-rem(12px);
+    font-weight: 400;
     text-align: left;
-
-    background: none;
-    border: 0;
-    border-radius: px-to-rem(8px);
-    cursor: pointer;
-
-    &:hover,
-    &--active {
-      background-color: #f3f3f3;
-    }
+    justify-content: flex-start;
   }
 }
