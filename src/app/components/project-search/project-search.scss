@@ -27,6 +27,8 @@
   }
 
   &__panel {
+    position: relative;
+    z-index: 1;
     padding: px-to-rem(16px);
 
     background-color: #fff;
@@ -41,9 +43,51 @@
     gap: px-to-rem(12px);
   }
 
+  &__autocomplete {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  &__suggestions {
+    position: absolute;
+    top: calc(100% + px-to-rem(4px));
+    left: 0;
+    right: 0;
+    z-index: 20;
+
+    margin: 0;
+    padding: px-to-rem(6px);
+    list-style: none;
+
+    background-color: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: px-to-rem(10px);
+    box-shadow: 0 px-to-rem(8px) px-to-rem(24px) rgba(0, 0, 0, 0.08);
+  }
+
+  &__suggestion {
+    width: 100%;
+    padding: px-to-rem(10px) px-to-rem(12px);
+
+    color: #202020;
+    font-size: px-to-rem(12px);
+    text-align: left;
+
+    background: none;
+    border: 0;
+    border-radius: px-to-rem(8px);
+    cursor: pointer;
+
+    &:hover {
+      background-color: #f3f3f3;
+    }
+  }
+
   &__input {
     flex: 1 1 0;
     min-width: 0;
+    width: 100%;
     padding: px-to-rem(12px) px-to-rem(14px);
 
     color: #202020;
@@ -152,6 +196,10 @@
     }
 
     &__input {
+      flex: 1 1 100%;
+    }
+
+    &__autocomplete {
       flex: 1 1 100%;
     }
 

@@ -8,13 +8,38 @@
 
   <div class="project-search__panel">
     <form class="project-search__bar" (ngSubmit)="onSearch()">
-      <input
-        class="project-search__input"
-        type="text"
-        name="locationName"
-        [placeholder]="'common.search.locationPlaceholder' | translate"
-        [(ngModel)]="locationName"
-      />
+      <div class="project-search__autocomplete">
+        <input
+          class="project-search__input"
+          type="text"
+          name="locationName"
+          [placeholder]="'common.search.locationPlaceholder' | translate"
+          [(ngModel)]="locationName"
+          (ngModelChange)="onLocationInput($event)"
+          (focus)="onLocationFocus()"
+          autocomplete="off"
+          role="combobox"
+          aria-autocomplete="list"
+          [attr.aria-expanded]="locationAutocompleteOpen()"
+        />
+
+        @if (locationAutocompleteOpen()) {
+          <ul class="project-search__suggestions" role="listbox">
+            @for (location of locationSuggestions(); track location.id) {
+              <li role="presentation">
+                <button
+                  type="button"
+                  class="project-search__suggestion"
+                  role="option"
+                  (mousedown)="selectLocation(location); $event.preventDefault()"
+                >
+                  {{ getLocationSuggestionLabel(location) }}
+                </button>
+              </li>
+            }
+          </ul>
+        }
+      </div>
 
       <input
         class="project-search__input"
