@@ -59,7 +59,7 @@ export class Projects implements OnInit {
   isLoading = signal(false);
   collection = signal<ProjectCollection | null>(null);
 
-  mapView = signal(false);
+  mapView = signal(true);
   openDropdown = signal<FilterDropdown | null>(null);
 
   locationName = '';

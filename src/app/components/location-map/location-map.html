@@ -1,6 +1,6 @@
-<div class="google-maps-container">
-  <div class="map-search-container">
-    <mat-form-field appearance="outline" class="location-search-field">
+<div class="location-map">
+  <div class="location-map__search">
+    <mat-form-field appearance="outline" class="location-map__search-field">
       <mat-label>Search for a location</mat-label>
       <input
         matInput
@@ -15,15 +15,12 @@
         [displayWith]="displayLocationFn"
         (optionSelected)="onLocationSelected($event.option.value)"
       >
-        @for (
-          suggestion of locationSuggestions();
-          track suggestion.placePrediction?.placeId || $index
-        ) {
+        @for (suggestion of locationSuggestions(); track suggestion.description) {
           <mat-option [value]="suggestion">
-            <div class="suggestion-option">
-              <mat-icon class="suggestion-icon">place</mat-icon>
-              <div class="suggestion-text">
-                <div class="suggestion-main">
+            <div class="location-map__suggestion">
+              <mat-icon class="location-map__suggestion-icon">place</mat-icon>
+              <div class="location-map__suggestion-text">
+                <div class="location-map__suggestion-main">
                   {{ suggestion.description }}
                 </div>
               </div>
@@ -34,13 +31,5 @@
     </mat-form-field>
   </div>
 
-  <google-map
-    width="100%"
-    [center]="center"
-    [zoom]="zoom"
-    [options]="mapOptions"
-    (mapInitialized)="onMapInitialized($event)"
-    (mapClick)="onMapClick($event)"
-  >
-  </google-map>
+  <div #mapContainer class="location-map__map"></div>
 </div>

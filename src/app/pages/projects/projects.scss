@@ -253,7 +253,7 @@
 
   &__map-layout {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
     gap: px-to-rem(20);
     align-items: stretch;
   }
@@ -266,7 +266,8 @@
 
     max-height: px-to-rem(900);
     overflow-y: auto;
-    padding-right: px-to-rem(4);
+    padding-right: px-to-rem(12);
+    scrollbar-gutter: stable;
 
     app-project-card {
       cursor: pointer;
@@ -304,6 +305,14 @@
 
     &__map {
       min-height: px-to-rem(420);
+      order: -1;
+    }
+
+    &__cards-grid {
+      max-height: none;
+      overflow: visible;
+      padding-right: 0;
+      scrollbar-gutter: auto;
     }
   }
 }

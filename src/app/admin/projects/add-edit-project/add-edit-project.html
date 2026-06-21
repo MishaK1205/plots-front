@@ -293,13 +293,13 @@
             <p class="section-hint">
               Click on the map or search to set the project coordinates.
             </p>
-            <app-google-maps
+            <app-location-map
               [initialLatitude]="projectForm.get('location.latitude')?.value"
               [initialLongitude]="projectForm.get('location.longitude')?.value"
               markerTitle="Project Location"
               (locationSelected)="onLocationSelected($event)"
             >
-            </app-google-maps>
+            </app-location-map>
 
             <div class="form-row coordinates-row" formGroupName="location">
               <mat-form-field appearance="outline" class="form-field">

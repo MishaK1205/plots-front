@@ -38,9 +38,9 @@ import {
 
 import { ImageUpload } from '../../../components/image-upload/image-upload';
 import {
-  GoogleMaps,
+  LocationMap,
   LocationSelectedEvent,
-} from '../../../components/google-maps/google-maps';
+} from '../../../components/location-map/location-map';
 import { environment } from '../../../../environments/environment';
 
 const IMAGE_BASE_URL = `${environment.apiUrl}/images`;
@@ -66,7 +66,7 @@ const MATERIAL_MODULES = [
     CommonModule,
     ReactiveFormsModule,
     ImageUpload,
-    GoogleMaps,
+    LocationMap,
     ...MATERIAL_MODULES,
   ],
   templateUrl: './add-edit-project.html',
