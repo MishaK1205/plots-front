@@ -1,12 +1,12 @@
-@use "../../tools/px-to-rem" as *;
+@use "../../tools/design-system" as *;
 
 .header {
   position: sticky;
   top: 0;
   z-index: 1000;
 
-  background-color: #fff;
-  border-bottom: 1px solid #eee;
+  background-color: $bg-white;
+  border-bottom: 1px solid $border-color-header;
 
   &__container {
     margin: 0 auto;
@@ -49,15 +49,15 @@
 
       background: none;
       border: none;
-      border-radius: px-to-rem(8px);
+      border-radius: $radius-sm;
 
       span {
         display: block;
         width: 100%;
         height: px-to-rem(2px);
         border-radius: px-to-rem(2px);
-        background-color: #333;
-        transition: transform 0.3s ease, opacity 0.2s ease;
+        background-color: $text-dark;
+        transition: transform $transition-nav ease, opacity $transition-base;
       }
     }
 
@@ -89,17 +89,17 @@
   &__link {
     text-decoration: none;
     font-size: px-to-rem(14px);
-    color: #333;
+    color: $text-dark;
     padding: px-to-rem(6px) px-to-rem(10px);
     border-radius: px-to-rem(6px);
     transition: background-color 0.5s ease;
 
     &:hover {
-      background-color: #ececec;
+      background-color: $bg-nav-hover;
     }
 
     &:active {
-      background-color: #dadada;
+      background-color: $bg-nav-active;
     }
   }
 }
@@ -107,7 +107,7 @@
 /* =========================
    Mobile styles
    ========================= */
-@media (max-width: 1200px) {
+@media (max-width: $breakpoint-2xl) {
   .header {
     &__container {
       padding: px-to-rem(16px) px-to-rem(70px);
@@ -115,7 +115,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-md) {
   .header {
     app-button.header__burger {
       display: inline-flex;
@@ -132,10 +132,10 @@
     left: 0;
     right: 0;
 
-    background-color: #fff;
-    border-bottom: 1px solid #eee;
-    box-shadow: 0 px-to-rem(16px) px-to-rem(32px) rgba(0, 0, 0, 0.1);
-    border-radius: 0 0 px-to-rem(16px) px-to-rem(16px);
+    background-color: $bg-white;
+    border-bottom: 1px solid $border-color-header;
+    box-shadow: $shadow-nav;
+    border-radius: 0 0 $radius-xl $radius-xl;
     overflow: hidden;
 
     visibility: hidden;
@@ -143,9 +143,9 @@
     transform: translateY(px-to-rem(-12px));
     pointer-events: none;
     transition:
-      opacity 0.25s ease,
-      transform 0.25s ease,
-      visibility 0.25s ease;
+      opacity $transition-slow,
+      transform $transition-slow,
+      visibility $transition-slow;
 
     &--open {
       visibility: visible;
@@ -165,8 +165,8 @@
       opacity: 0;
       transform: translateX(px-to-rem(-10px));
       transition:
-        opacity 0.3s ease,
-        transform 0.3s ease;
+        opacity $transition-nav ease,
+        transform $transition-nav ease;
 
       @for $i from 1 through 8 {
         &:nth-child(#{$i}) {
@@ -183,14 +183,14 @@
     &__link {
       display: block;
       padding: px-to-rem(12px) px-to-rem(14px);
-      font-weight: 500;
-      border-radius: px-to-rem(10px);
+      font-weight: $font-weight-medium;
+      border-radius: $radius-md;
     }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  @media (max-width: 768px) {
+  @media (max-width: $breakpoint-md) {
     .nav__item {
       opacity: 1;
       transform: none;

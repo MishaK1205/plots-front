@@ -1,10 +1,4 @@
-@use "../../tools/px-to-rem" as *;
-
-$ink: #1a1a1a;
-$muted: #484848;
-$soft: #7b7b7b;
-$green: #16bc2e;
-$line: #ededed;
+@use "../../tools/design-system" as *;
 
 :host {
   display: block;
@@ -24,7 +18,7 @@ $line: #ededed;
     height: px-to-rem(380);
     border-radius: px-to-rem(20);
     overflow: hidden;
-    background: #2a2a2a;
+    background: $bg-dark;
   }
 
   &__cover-image {
@@ -40,9 +34,9 @@ $line: #ededed;
     inset: 0;
     background: linear-gradient(
       180deg,
-      rgba(0, 0, 0, 0.45) 0%,
-      rgba(0, 0, 0, 0.05) 45%,
-      rgba(0, 0, 0, 0.55) 100%
+      $overlay-black-45 0%,
+      $overlay-black-05 45%,
+      $overlay-black-55 100%
     );
   }
 
@@ -53,7 +47,7 @@ $line: #ededed;
     max-width: px-to-rem(420);
     margin: 0;
 
-    color: #fff;
+    color: $text-inverse;
     font-size: px-to-rem(28);
     font-weight: 800;
     line-height: 1.3;
@@ -83,20 +77,20 @@ $line: #ededed;
     height: px-to-rem(64);
     border-radius: 50%;
     object-fit: cover;
-    border: px-to-rem(3) solid rgba(255, 255, 255, 0.85);
-    background: #fff;
+    border: px-to-rem(3) solid $overlay-white-85;
+    background: $bg-white;
   }
 
   &__project-name {
     margin: 0;
-    color: #fff;
+    color: $text-inverse;
     font-size: px-to-rem(20);
     font-weight: 700;
   }
 
   &__company-name {
     margin: px-to-rem(4) 0 0;
-    color: rgba(255, 255, 255, 0.85);
+    color: $overlay-white-85;
     font-size: px-to-rem(13);
   }
 
@@ -106,25 +100,25 @@ $line: #ededed;
     gap: px-to-rem(12);
 
     span {
-      color: rgba(255, 255, 255, 0.9);
+      color: $overlay-white-90;
       font-size: px-to-rem(13);
     }
 
     button {
       padding: px-to-rem(10) px-to-rem(20);
 
-      color: $ink;
+      color: $text-primary;
       font-size: px-to-rem(13);
       font-weight: 600;
 
-      background-color: #fff;
+      background-color: $bg-white;
       border: 0;
       border-radius: px-to-rem(99);
       cursor: pointer;
       transition: background-color 0.2s ease;
 
       &:hover {
-        background-color: #e7f8e9;
+        background-color: $bg-primary-tint;
       }
     }
   }
@@ -133,7 +127,7 @@ $line: #ededed;
   &__section-title {
     margin: 0 0 px-to-rem(20);
     font-size: px-to-rem(20);
-    color: $ink;
+    color: $text-primary;
   }
 
   // ---------- Lands ----------
@@ -151,19 +145,19 @@ $line: #ededed;
     margin: px-to-rem(24) auto 0;
     padding: px-to-rem(10) px-to-rem(22);
 
-    color: $ink;
+    color: $text-primary;
     font-size: px-to-rem(13);
     font-weight: 600;
 
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
+    background-color: $bg-white;
+    border: 1px solid $border-color;
     border-radius: px-to-rem(99);
     cursor: pointer;
     transition: border-color 0.2s ease, color 0.2s ease;
 
     &:hover {
-      color: $green;
-      border-color: $green;
+      color: $color-accent;
+      border-color: $color-accent;
     }
   }
 
@@ -175,14 +169,14 @@ $line: #ededed;
     align-items: center;
 
     padding: px-to-rem(32);
-    background-color: #fafafa;
+    background-color: $bg-surface;
     border-radius: px-to-rem(20);
   }
 
   &__about-text {
     p {
       margin: 0;
-      color: $muted;
+      color: $text-body;
       font-size: px-to-rem(14);
       line-height: 1.7;
       white-space: pre-line;
@@ -212,7 +206,7 @@ $line: #ededed;
 
     max-width: px-to-rem(200);
 
-    color: $muted;
+    color: $text-body;
     font-size: px-to-rem(13);
     text-align: center;
   }
@@ -224,8 +218,8 @@ $line: #ededed;
     width: px-to-rem(44);
     height: px-to-rem(44);
 
-    color: $green;
-    background-color: #e7f8e9;
+    color: $color-accent;
+    background-color: $bg-primary-tint;
     border-radius: 50%;
   }
 
@@ -253,7 +247,7 @@ $line: #ededed;
 
     &:hover {
       transform: scale(1.02);
-      box-shadow: 0 px-to-rem(8) px-to-rem(20) rgba(0, 0, 0, 0.12);
+      box-shadow: $shadow-card;
     }
   }
 
@@ -268,35 +262,35 @@ $line: #ededed;
   &__contact {
     padding: px-to-rem(20);
 
-    background-color: #fff;
-    border: 1px solid $line;
+    background-color: $bg-white;
+    border: 1px solid $border-color-light;
     border-radius: px-to-rem(16);
 
     h3 {
       margin: 0 0 px-to-rem(14);
       font-size: px-to-rem(16);
-      color: $ink;
+      color: $text-primary;
     }
 
     &-company {
       margin: 0 0 px-to-rem(10);
       font-size: px-to-rem(13);
       font-weight: 600;
-      color: $ink;
+      color: $text-primary;
     }
 
     &-item {
       display: block;
       margin-bottom: px-to-rem(8);
 
-      color: $muted;
+      color: $text-body;
       font-size: px-to-rem(13);
       text-decoration: none;
       overflow-wrap: anywhere;
       word-break: break-word;
 
       &:hover {
-        color: $green;
+        color: $color-accent;
       }
     }
 
@@ -327,11 +321,11 @@ $line: #ededed;
 
   &__faq {
     &-item {
-      border-bottom: 1px solid $line;
+      border-bottom: 1px solid $border-color-light;
 
       &--open {
         .project-details__faq-icon {
-          color: $green;
+          color: $color-accent;
         }
       }
     }
@@ -345,7 +339,7 @@ $line: #ededed;
       justify-content: space-between;
       gap: px-to-rem(12);
 
-      color: $ink;
+      color: $text-primary;
       font: inherit;
       font-size: px-to-rem(14);
       font-weight: 600;
@@ -359,14 +353,14 @@ $line: #ededed;
     &-icon {
       flex-shrink: 0;
       font-size: px-to-rem(18);
-      color: $soft;
+      color: $text-muted;
     }
 
     &-answer {
       margin: 0;
       padding: 0 0 px-to-rem(16);
 
-      color: $muted;
+      color: $text-body;
       font-size: px-to-rem(13);
       line-height: 1.6;
     }
@@ -374,18 +368,18 @@ $line: #ededed;
 
   &__empty {
     margin: 0;
-    color: $soft;
+    color: $text-muted;
   }
 }
 
 // ---------- Responsive ----------
-@media (max-width: 1200px) {
+@media (max-width: $breakpoint-2xl) {
   .project-details {
     padding: px-to-rem(20) px-to-rem(70) px-to-rem(40);
   }
 }
 
-@media (max-width: 1024px) {
+@media (max-width: $breakpoint-xl) {
   .project-details {
     &__lands {
       grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -401,7 +395,7 @@ $line: #ededed;
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-md) {
   .project-details {
     padding: px-to-rem(16) px-to-rem(16) px-to-rem(32);
     gap: px-to-rem(28);

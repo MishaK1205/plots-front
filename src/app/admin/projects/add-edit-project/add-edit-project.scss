@@ -1,4 +1,4 @@
-@use "../../../tools/_px-to-rem.scss" as *;
+@use "../../../tools/design-system" as *;
 
 .add-edit-container {
   width: 100%;
@@ -24,7 +24,7 @@
 
   .section-hint {
     margin: px-to-rem(-8) 0 px-to-rem(16);
-    color: #666;
+    color: $text-tertiary;
     font-size: px-to-rem(14);
   }
 
@@ -33,7 +33,7 @@
     gap: px-to-rem(16);
     align-items: flex-start;
 
-    @media (max-width: 768px) {
+    @media (max-width: $breakpoint-md) {
       flex-direction: column;
     }
   }
@@ -53,8 +53,8 @@
   }
 
   .faq-language {
-    border: 1px solid #e0e0e0;
-    border-radius: px-to-rem(8);
+    border: 1px solid $border-color-admin;
+    border-radius: $radius-sm;
     padding: px-to-rem(16);
     margin-bottom: px-to-rem(16);
 
@@ -76,7 +76,7 @@
     gap: px-to-rem(16);
     align-items: flex-start;
 
-    @media (max-width: 768px) {
+    @media (max-width: $breakpoint-md) {
       flex-direction: column;
     }
   }
@@ -91,9 +91,9 @@
     position: relative;
     width: px-to-rem(140);
     height: px-to-rem(140);
-    border-radius: px-to-rem(8);
+    border-radius: $radius-sm;
     overflow: hidden;
-    border: 1px solid #e0e0e0;
+    border: 1px solid $border-color-admin;
 
     img {
       width: 100%;
@@ -105,27 +105,27 @@
       position: absolute;
       top: px-to-rem(4);
       right: px-to-rem(4);
-      background: rgba(255, 255, 255, 0.85);
+      background: $overlay-white-85;
     }
   }
 
   .gallery-add {
     width: px-to-rem(140);
     height: px-to-rem(140);
-    border: 2px dashed #bdbdbd;
-    border-radius: px-to-rem(8);
+    border: 2px dashed $border-color-dashed;
+    border-radius: $radius-sm;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     gap: px-to-rem(8);
     cursor: pointer;
-    color: #666;
-    transition: border-color 0.2s ease;
+    color: $text-tertiary;
+    transition: border-color $transition-base;
 
     &:hover {
-      border-color: #3f51b5;
-      color: #3f51b5;
+      border-color: $color-indigo;
+      color: $color-indigo;
     }
   }
 
@@ -139,7 +139,7 @@
     gap: px-to-rem(16);
     margin-top: px-to-rem(24);
     padding-top: px-to-rem(16);
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid $border-color-admin;
   }
 
   .loading-container {
@@ -151,7 +151,7 @@
 
     p {
       margin-top: px-to-rem(16);
-      color: #666;
+      color: $text-tertiary;
     }
   }
 }

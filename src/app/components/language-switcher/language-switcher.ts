@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
+  HostListener,
   computed,
   inject,
 } from '@angular/core';
@@ -24,6 +26,7 @@ interface LanguageOption {
 })
 export class LanguageSwitcher {
   private readonly languageState = inject(LanguageStateService);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   languages: LanguageOption[] = [
     { label: 'ქარ', value: 'geo' },
@@ -40,6 +43,17 @@ export class LanguageSwitcher {
   );
 
   languageMenuOpen = false;
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+      this.languageMenuOpen = false;
+    }
+  }
+
+  toggleMenu(): void {
+    this.languageMenuOpen = !this.languageMenuOpen;
+  }
 
   selectLanguage(language: LanguageType): void {
     this.languageState.setLanguage(language);

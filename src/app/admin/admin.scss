@@ -1,6 +1,8 @@
+@use "../tools/design-system" as *;
+
 .container {
   height: calc(100vh - 64px);
-  border: 1px solid rgba(0, 0, 0, 0.5);
+  border: 1px solid $overlay-black-50;
 }
 
 .sidenav-content {
@@ -11,7 +13,7 @@
   width: 250px;
   padding: 0 5px;
   transition: width 300ms ease-in-out;
-  border-right: 1px solid rgba(0, 0, 0, 0.5);
+  border-right: 1px solid $overlay-black-50;
   border-radius: 0;
 
   &.collapsed {
@@ -30,11 +32,11 @@
   color: inherit;
 
   &:hover {
-    background-color: rgba(0, 0, 0, 0.04);
+    background-color: $overlay-black-04;
   }
 
   &.active {
-    background-color: rgba(0, 0, 0, 0.08);
-    font-weight: 500;
+    background-color: $overlay-black-08;
+    font-weight: $font-weight-medium;
   }
 }

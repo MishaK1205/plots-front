@@ -1,11 +1,8 @@
 <section class="projects-page">
   <form class="projects-page__search-bar" (ngSubmit)="applyFilters()">
-    <input
-      class="projects-page__search-input"
-      type="text"
-      name="locationName"
-      [placeholder]="'common.search.locationPlaceholder' | translate"
-      [(ngModel)]="locationName"
+    <app-location-autocomplete
+      [(locationName)]="locationName"
+      (locationSelect)="onLocationSelect($event)"
     />
 
     <input
@@ -26,83 +23,29 @@
   </form>
 
   <div class="projects-page__filters">
-    <div class="projects-page__filter">
-      <button
-        class="projects-page__filter-trigger"
-        type="button"
-        (click)="toggleDropdown('area')"
-      >
-        <span class="projects-page__filter-label">
-          {{ 'projects.filters.area' | translate }}
-        </span>
-        <span class="projects-page__filter-value">
-          {{ rangeLabel(minSquareMeters, maxSquareMeters, ('common.units.meter' | translate) + '²') }}
-          <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
-        </span>
-      </button>
+    <app-filter-dropdown
+      [labelKey]="'projects.filters.area'"
+      [valueLabel]="rangeLabel(minSquareMeters, maxSquareMeters, ('common.units.meter' | translate) + '²')"
+      [(min)]="minSquareMeters"
+      [(max)]="maxSquareMeters"
+      (apply)="applyFilters()"
+    />
 
-      @if (openDropdown() === 'area') {
-        <div class="projects-page__filter-panel">
-          <input type="number" name="minSquareMeters" [placeholder]="'common.search.from' | translate" [(ngModel)]="minSquareMeters" />
-          <input type="number" name="maxSquareMeters" [placeholder]="'common.search.to' | translate" [(ngModel)]="maxSquareMeters" />
-          <button type="button" (click)="applyFilters()">
-            {{ 'projects.filters.apply' | translate }}
-          </button>
-        </div>
-      }
-    </div>
+    <app-filter-dropdown
+      [labelKey]="'projects.filters.squareMeterPrice'"
+      [valueLabel]="rangeLabel(minSquareMeterPrice, maxSquareMeterPrice, ' $')"
+      [(min)]="minSquareMeterPrice"
+      [(max)]="maxSquareMeterPrice"
+      (apply)="applyFilters()"
+    />
 
-    <div class="projects-page__filter">
-      <button
-        class="projects-page__filter-trigger"
-        type="button"
-        (click)="toggleDropdown('sqmPrice')"
-      >
-        <span class="projects-page__filter-label">
-          {{ 'projects.filters.squareMeterPrice' | translate }}
-        </span>
-        <span class="projects-page__filter-value">
-          {{ rangeLabel(minSquareMeterPrice, maxSquareMeterPrice, ' $') }}
-          <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
-        </span>
-      </button>
-
-      @if (openDropdown() === 'sqmPrice') {
-        <div class="projects-page__filter-panel">
-          <input type="number" name="minSquareMeterPrice" [placeholder]="'common.search.from' | translate" [(ngModel)]="minSquareMeterPrice" />
-          <input type="number" name="maxSquareMeterPrice" [placeholder]="'common.search.to' | translate" [(ngModel)]="maxSquareMeterPrice" />
-          <button type="button" (click)="applyFilters()">
-            {{ 'projects.filters.apply' | translate }}
-          </button>
-        </div>
-      }
-    </div>
-
-    <div class="projects-page__filter">
-      <button
-        class="projects-page__filter-trigger"
-        type="button"
-        (click)="toggleDropdown('price')"
-      >
-        <span class="projects-page__filter-label">
-          {{ 'projects.filters.price' | translate }}
-        </span>
-        <span class="projects-page__filter-value">
-          {{ rangeLabel(minTotalPrice, maxTotalPrice, ' $') }}
-          <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
-        </span>
-      </button>
-
-      @if (openDropdown() === 'price') {
-        <div class="projects-page__filter-panel">
-          <input type="number" name="minTotalPrice" [placeholder]="'common.search.from' | translate" [(ngModel)]="minTotalPrice" />
-          <input type="number" name="maxTotalPrice" [placeholder]="'common.search.to' | translate" [(ngModel)]="maxTotalPrice" />
-          <button type="button" (click)="applyFilters()">
-            {{ 'projects.filters.apply' | translate }}
-          </button>
-        </div>
-      }
-    </div>
+    <app-filter-dropdown
+      [labelKey]="'projects.filters.price'"
+      [valueLabel]="rangeLabel(minTotalPrice, maxTotalPrice, ' $')"
+      [(min)]="minTotalPrice"
+      [(max)]="maxTotalPrice"
+      (apply)="applyFilters()"
+    />
 
     @if (hasActiveFilters()) {
       <button

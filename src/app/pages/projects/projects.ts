@@ -10,24 +10,28 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {
+  LocationResponseInterface,
   ProjectResponseInterface,
   ProjectsQueryParamsInterface,
 } from '../../api/interfaces';
 import {
   Button,
   DetailedProjectCard,
+  FilterDropdown,
+  LocationAutocomplete,
   Pagination,
   ProjectCard,
   ProjectsMap,
 } from '../../components';
 import { ProjectsService } from '../../api/services';
 import { applyKeywordToParams } from '../../shared/utils/keyword-params.util';
+import { localizeText } from '../../shared/utils/localize-text.util';
+import { LanguageStateService } from '../../shared/services/language-state.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 import { TranslationService } from '../../shared/i18n/translation.service';
 
 const PAGE_LIMIT = 10;
 
-type FilterDropdown = 'area' | 'sqmPrice' | 'price';
 type ProjectCollection = 'favourites' | 'new';
 
 @Component({
@@ -35,7 +39,9 @@ type ProjectCollection = 'favourites' | 'new';
   imports: [
     Button,
     DetailedProjectCard,
+    FilterDropdown,
     FormsModule,
+    LocationAutocomplete,
     Pagination,
     ProjectCard,
     ProjectsMap,
@@ -51,6 +57,7 @@ export class Projects implements OnInit {
   private readonly router = inject(Router);
   private readonly destroyRef$ = inject(DestroyRef);
   private readonly translation = inject(TranslationService);
+  private readonly languageState = inject(LanguageStateService);
 
   projects = signal<ProjectResponseInterface[]>([]);
   totalItems = signal(0);
@@ -60,7 +67,6 @@ export class Projects implements OnInit {
   collection = signal<ProjectCollection | null>(null);
 
   mapView = signal(true);
-  openDropdown = signal<FilterDropdown | null>(null);
 
   locationName = '';
   keyword = '';
@@ -71,6 +77,8 @@ export class Projects implements OnInit {
   minTotalPrice: number | null = null;
   maxTotalPrice: number | null = null;
 
+  private selectedLocation = signal<LocationResponseInterface | null>(null);
+
   ngOnInit(): void {
     this.route.queryParamMap
       .pipe(takeUntilDestroyed(this.destroyRef$))
@@ -80,10 +88,8 @@ export class Projects implements OnInit {
       });
   }
 
-  toggleDropdown(dropdown: FilterDropdown): void {
-    this.openDropdown.update((open) =>
-      open === dropdown ? null : dropdown,
-    );
+  onLocationSelect(location: LocationResponseInterface | null): void {
+    this.selectedLocation.set(location);
   }
 
   rangeLabel(
@@ -112,11 +118,9 @@ export class Projects implements OnInit {
   }
 
   applyFilters(): void {
-    this.openDropdown.set(null);
-
     const params: ProjectsQueryParamsInterface = {};
 
-    const locationName = this.locationName.trim();
+    const locationName = this.resolveLocationSearchValue();
     if (locationName) params.locationName = locationName;
 
     applyKeywordToParams(this.keyword, params);
@@ -140,6 +144,7 @@ export class Projects implements OnInit {
 
   clearFilters(): void {
     this.locationName = '';
+    this.selectedLocation.set(null);
     this.keyword = '';
     this.minSquareMeters = null;
     this.maxSquareMeters = null;
@@ -147,7 +152,6 @@ export class Projects implements OnInit {
     this.maxSquareMeterPrice = null;
     this.minTotalPrice = null;
     this.maxTotalPrice = null;
-    this.openDropdown.set(null);
 
     this.router.navigate([], {
       relativeTo: this.route,
@@ -165,6 +169,19 @@ export class Projects implements OnInit {
 
   openProject(project: ProjectResponseInterface): void {
     this.router.navigate(['/projects', project.id]);
+  }
+
+  private resolveLocationSearchValue(): string {
+    const selected = this.selectedLocation();
+
+    if (selected) {
+      return localizeText(
+        selected.locationName,
+        this.languageState.language(),
+      );
+    }
+
+    return this.locationName.trim();
   }
 
   private loadProjects(queryParams: ParamMap): void {
@@ -255,6 +272,7 @@ export class Projects implements OnInit {
 
   private syncFiltersFromQuery(queryParams: ParamMap): void {
     this.locationName = queryParams.get('locationName') ?? '';
+    this.selectedLocation.set(null);
     this.keyword =
       queryParams.get('projectName') ??
       queryParams.get('cadastralCode') ??

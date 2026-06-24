@@ -1,0 +1,99 @@
+@use "../../tools/design-system" as *;
+
+:host {
+  display: block;
+}
+
+.filter-dropdown {
+  position: relative;
+
+  &__trigger {
+    min-width: px-to-rem(150);
+    padding: px-to-rem(8) px-to-rem(14);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: px-to-rem(4);
+
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: $shadow-xs;
+    cursor: pointer;
+    transition: border-color $transition-base;
+
+    &:hover {
+      border-color: $color-primary;
+    }
+  }
+
+  &__label {
+    color: $text-muted;
+    font-size: px-to-rem(11);
+  }
+
+  &__value {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(8);
+
+    color: $text-heading;
+    font-size: px-to-rem(12);
+    font-weight: $font-weight-bold;
+
+    img {
+      width: px-to-rem(10);
+    }
+  }
+
+  &__panel {
+    position: absolute;
+    top: calc(100% + px-to-rem(8));
+    left: 0;
+    z-index: 20;
+
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(8);
+
+    padding: px-to-rem(12);
+
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: $shadow-dropdown;
+
+    input {
+      width: px-to-rem(100);
+      padding: px-to-rem(8) px-to-rem(10);
+
+      font-size: px-to-rem(12);
+
+      border: 1px solid $border-color;
+      border-radius: $radius-sm;
+
+      &:focus {
+        outline: none;
+        border-color: $color-primary;
+      }
+    }
+
+    button {
+      padding: px-to-rem(8) px-to-rem(14);
+
+      color: $text-inverse;
+      font-size: px-to-rem(12);
+      font-weight: $font-weight-semibold;
+
+      background-color: $color-primary;
+      border: 0;
+      border-radius: $radius-sm;
+      cursor: pointer;
+
+      &:hover {
+        background-color: $color-primary-hover;
+      }
+    }
+  }
+}

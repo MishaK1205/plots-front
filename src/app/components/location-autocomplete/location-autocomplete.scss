@@ -1,0 +1,85 @@
+@use "../../tools/design-system" as *;
+
+:host {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.location-autocomplete {
+  position: relative;
+  width: 100%;
+
+  &__input {
+    width: 100%;
+    padding: px-to-rem(12px) px-to-rem(14px);
+
+    color: $text-heading;
+    font-size: px-to-rem(12px);
+
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    transition: border-color $transition-base, background-color $transition-base;
+
+    &::placeholder {
+      color: $text-placeholder;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: $color-primary;
+    }
+  }
+
+  &--muted &__input {
+    padding: px-to-rem(12px) px-to-rem(16px);
+    background-color: $bg-surface;
+    border-color: $border-color-subtle;
+
+    &:focus {
+      background-color: $bg-white;
+    }
+  }
+
+  &__suggestions {
+    position: absolute;
+    top: calc(100% + px-to-rem(4px));
+    left: 0;
+    right: 0;
+    z-index: 20;
+
+    margin: 0;
+    padding: px-to-rem(6px);
+    list-style: none;
+
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: $shadow-dropdown;
+  }
+
+  &__suggestion {
+    width: 100%;
+    padding: px-to-rem(10px) px-to-rem(12px);
+
+    color: $text-heading;
+    font-size: px-to-rem(12px);
+    text-align: left;
+
+    background: none;
+    border: 0;
+    border-radius: $radius-sm;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $bg-hover;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  :host {
+    flex: 1 1 100%;
+  }
+}

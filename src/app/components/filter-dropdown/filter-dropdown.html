@@ -1,0 +1,36 @@
+<div class="filter-dropdown">
+  <button
+    class="filter-dropdown__trigger"
+    type="button"
+    [attr.aria-expanded]="open()"
+    (click)="toggle()"
+  >
+    <span class="filter-dropdown__label">
+      {{ labelKey() | translate }}
+    </span>
+    <span class="filter-dropdown__value">
+      {{ valueLabel() }}
+      <img src="assets/icons/arrow-down.svg" alt="" aria-hidden="true" />
+    </span>
+  </button>
+
+  @if (open()) {
+    <div class="filter-dropdown__panel">
+      <input
+        type="number"
+        [placeholder]="fromPlaceholderKey() | translate"
+        [ngModel]="min()"
+        (ngModelChange)="min.set($event)"
+      />
+      <input
+        type="number"
+        [placeholder]="toPlaceholderKey() | translate"
+        [ngModel]="max()"
+        (ngModelChange)="max.set($event)"
+      />
+      <button type="button" (click)="onApply()">
+        {{ applyLabelKey() | translate }}
+      </button>
+    </div>
+  }
+</div>

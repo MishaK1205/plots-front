@@ -1,4 +1,4 @@
-@use "../../tools/_px-to-rem.scss" as *;
+@use "../../tools/design-system" as *;
 
 :host {
   display: inline-block;
@@ -10,9 +10,9 @@
   gap: 0;
   height: px-to-rem(28);
   padding: px-to-rem(2);
-  border: 1px solid #eeeeee;
-  border-radius: px-to-rem(99);
-  background-color: #ffffff;
+  border: 1px solid $border-color-muted;
+  border-radius: $radius-pill;
+  background-color: $bg-white;
 }
 
 ::ng-deep .currency-toggle__option--gel {
@@ -24,6 +24,6 @@
 .currency-toggle__symbol {
   display: block;
   font-size: px-to-rem(12);
-  font-weight: 500;
+  font-weight: $font-weight-medium;
   line-height: 1;
 }

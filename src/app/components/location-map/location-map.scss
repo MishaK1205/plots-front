@@ -1,8 +1,10 @@
+@use "../../tools/design-system" as *;
+
 .location-map {
   width: 100%;
-  border-radius: 8px;
+  border-radius: $radius-sm;
   overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow-sm;
 
   &__map {
     width: 100%;
@@ -11,9 +13,9 @@
   }
 
   &__search {
-    background: white;
+    background: $bg-white;
     padding: 16px;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid $border-color-admin;
   }
 
   &__search-field {
@@ -28,7 +30,7 @@
   }
 
   &__suggestion-icon {
-    color: #666;
+    color: $text-tertiary;
     font-size: 20px;
     width: 20px;
     height: 20px;
@@ -41,8 +43,8 @@
 
   &__suggestion-main {
     font-size: 14px;
-    font-weight: 500;
-    color: #333;
+    font-weight: $font-weight-medium;
+    color: $text-dark;
     margin-bottom: 2px;
   }
 }

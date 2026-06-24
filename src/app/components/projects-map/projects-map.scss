@@ -1,4 +1,4 @@
-@use "../../tools/px-to-rem" as *;
+@use "../../tools/design-system" as *;
 
 :host {
   display: block;
@@ -17,7 +17,7 @@
   width: 100%;
   height: 100%;
   min-height: px-to-rem(420px);
-  border-radius: px-to-rem(16px);
+  border-radius: $radius-xl;
   overflow: hidden;
   z-index: 0;
 }
@@ -34,15 +34,15 @@
   transform: translate(-50%, calc(-#{$pin-clearance} - 100%)) scale(0.94);
   opacity: 0;
   pointer-events: auto;
-  background: #fff;
-  border-radius: px-to-rem(16px);
-  box-shadow: 0 px-to-rem(8px) px-to-rem(32px) rgba(0, 0, 0, 0.16);
+  background: $bg-white;
+  border-radius: $radius-xl;
+  box-shadow: $shadow-map-card;
   padding: px-to-rem(12px);
   cursor: pointer;
   transition:
     opacity 0.22s ease,
     transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1),
-    box-shadow 0.2s ease;
+    box-shadow $transition-base;
 
   &--visible {
     opacity: 1;
@@ -50,6 +50,6 @@
   }
 
   &:hover {
-    box-shadow: 0 px-to-rem(12px) px-to-rem(36px) rgba(0, 0, 0, 0.22);
+    box-shadow: $shadow-map-card-hover;
   }
 }

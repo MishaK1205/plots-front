@@ -1,10 +1,4 @@
-@use "../../tools/_px-to-rem.scss" as *;
-
-$green: #00b365;
-$ink: #1a1a1a;
-$muted: #484848;
-$soft: #7b7b7b;
-$line: #ededed;
+@use "../../tools/design-system" as *;
 
 :host {
   display: block;
@@ -19,19 +13,19 @@ $line: #ededed;
 
   padding: px-to-rem(12);
   border: 1px solid transparent;
-  border-radius: px-to-rem(16);
-  background: #ffffff;
-  transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  border-radius: $radius-xl;
+  background: $bg-white;
+  transition: border-color $transition-slow, box-shadow $transition-slow, background $transition-slow;
 
   &:hover {
-    border-color: rgba($green, 0.6);
-    background: rgba($green, 0.03);
-    box-shadow: 0 px-to-rem(8) px-to-rem(28) rgba($green, 0.12);
+    border-color: $overlay-primary-60;
+    background: $overlay-primary-03;
+    box-shadow: $shadow-primary-md;
   }
 
   // ---------- Media ----------
   &__media {
-    border-radius: px-to-rem(12);
+    border-radius: $radius-lg;
     overflow: hidden;
   }
 
@@ -46,7 +40,7 @@ $line: #ededed;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f4f5f6;
+      background: $bg-surface-alt;
 
       img {
         width: px-to-rem(48);
@@ -67,15 +61,15 @@ $line: #ededed;
 
   &__title {
     font-size: px-to-rem(20);
-    font-weight: 700;
-    color: $ink;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
     line-height: 1.2;
   }
 
   &__developer {
     margin-top: px-to-rem(4);
     font-size: px-to-rem(13);
-    color: $muted;
+    color: $text-body;
   }
 
   &__price {
@@ -87,8 +81,8 @@ $line: #ededed;
 
   &__land-size-value {
     font-size: px-to-rem(20);
-    font-weight: 700;
-    color: $ink;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
     line-height: 1.1;
 
     sup {
@@ -97,34 +91,34 @@ $line: #ededed;
 
     span {
       font-size: px-to-rem(13);
-      font-weight: 500;
-      color: $muted;
+      font-weight: $font-weight-medium;
+      color: $text-body;
     }
   }
 
   &__land-size-label {
     margin-top: px-to-rem(4);
     font-size: px-to-rem(13);
-    color: $soft;
+    color: $text-muted;
   }
 
   &__price-total {
     font-size: px-to-rem(20);
-    font-weight: 700;
-    color: $ink;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
     line-height: 1.1;
 
     span {
       font-size: px-to-rem(13);
-      font-weight: 500;
-      color: $muted;
+      font-weight: $font-weight-medium;
+      color: $text-body;
     }
   }
 
   &__price-sqm {
     margin-top: px-to-rem(4);
     font-size: px-to-rem(13);
-    color: $soft;
+    color: $text-muted;
 
     sup {
       font-size: px-to-rem(9);
@@ -139,14 +133,14 @@ $line: #ededed;
 
   &__description-label {
     font-size: px-to-rem(12);
-    font-weight: 600;
-    color: $ink;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
   }
 
   &__description-text {
     font-size: px-to-rem(13);
     line-height: 1.5;
-    color: $muted;
+    color: $text-body;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -168,7 +162,7 @@ $line: #ededed;
     align-items: center;
     gap: px-to-rem(6);
     font-size: px-to-rem(13);
-    color: $muted;
+    color: $text-body;
   }
 
   ::ng-deep .project-card__location {
@@ -195,20 +189,20 @@ $line: #ededed;
     gap: px-to-rem(12);
 
     padding: px-to-rem(20) px-to-rem(16);
-    border: 1px solid $line;
-    border-radius: px-to-rem(12);
+    border: 1px solid $border-color-light;
+    border-radius: $radius-lg;
     text-align: center;
   }
 
   &__logo {
     width: px-to-rem(56);
     height: px-to-rem(56);
-    border-radius: 50%;
+    border-radius: $radius-full;
     overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(135deg, #f0f0f0, #e2e2e2);
+    background: linear-gradient(135deg, $bg-gradient-light-start, $bg-gradient-light-end);
     flex-shrink: 0;
 
     img {
@@ -220,14 +214,14 @@ $line: #ededed;
 
   &__logo-initials {
     font-size: px-to-rem(18);
-    font-weight: 700;
-    color: $soft;
+    font-weight: $font-weight-bold;
+    color: $text-muted;
   }
 
   &__developer-name {
     font-size: px-to-rem(14);
-    font-weight: 600;
-    color: $ink;
+    font-weight: $font-weight-semibold;
+    color: $text-primary;
   }
 }
 

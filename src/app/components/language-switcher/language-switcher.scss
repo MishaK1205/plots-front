@@ -1,4 +1,4 @@
-@use "../../tools/px-to-rem" as *;
+@use "../../tools/design-system" as *;
 
 .language-switcher {
   position: relative;
@@ -9,8 +9,8 @@
     padding: 0 px-to-rem(16px);
     gap: px-to-rem(8px);
     font-size: px-to-rem(12px);
-    font-weight: 700;
-    box-shadow: 0 px-to-rem(1px) px-to-rem(2px) rgba(0, 0, 0, 0.04);
+    font-weight: $font-weight-bold;
+    box-shadow: $shadow-xs;
   }
 
   &__icon {
@@ -36,17 +36,17 @@
     padding: px-to-rem(6px);
     list-style: none;
 
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: px-to-rem(10px);
-    box-shadow: 0 px-to-rem(8px) px-to-rem(24px) rgba(0, 0, 0, 0.08);
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: $shadow-dropdown;
   }
 
   ::ng-deep .language-switcher__option {
     width: 100%;
     padding: px-to-rem(8px) px-to-rem(10px);
     font-size: px-to-rem(12px);
-    font-weight: 400;
+    font-weight: $font-weight-normal;
     text-align: left;
     justify-content: flex-start;
   }

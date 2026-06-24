@@ -1,4 +1,4 @@
-@use "../../tools/_px-to-rem.scss" as *;
+@use "../../tools/design-system" as *;
 
 :host {
   display: block;
@@ -33,7 +33,7 @@
 
     a {
       font-size: px-to-rem(11px);
-      color: #0090E3;
+      color: $color-link;
       cursor: pointer;
       white-space: nowrap;
     }
@@ -53,15 +53,15 @@
       width: px-to-rem(36px);
       height: px-to-rem(36px);
 
-      background-color: #fff;
-      border: 1px solid #e5e5e5;
-      border-radius: 50%;
+      background-color: $bg-white;
+      border: 1px solid $border-color;
+      border-radius: $radius-full;
       cursor: pointer;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
+      transition: border-color $transition-base, background-color $transition-base;
 
       &:hover {
-        border-color: #c4c4c4;
-        background-color: #f7f7f7;
+        border-color: $border-color-hover;
+        background-color: $bg-hover-light;
       }
 
       img {
@@ -97,7 +97,7 @@
       cursor: pointer;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: $breakpoint-md) {
       app-project-card {
         width: clamp(px-to-rem(220px), 80vw, px-to-rem(285px));
       }
@@ -124,7 +124,7 @@
 /* =====================
    Responsive
    ===================== */
-@media (max-width: 1200px) {
+@media (max-width: $breakpoint-2xl) {
   .home-container {
     padding: px-to-rem(0px) px-to-rem(70px);
 
@@ -135,7 +135,7 @@
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-md) {
   .home-container {
     padding: px-to-rem(0px) px-to-rem(16px);
 

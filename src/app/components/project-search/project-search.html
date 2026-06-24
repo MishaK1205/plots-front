@@ -8,38 +8,10 @@
 
   <div class="project-search__panel">
     <form class="project-search__bar" (ngSubmit)="onSearch()">
-      <div class="project-search__autocomplete">
-        <input
-          class="project-search__input"
-          type="text"
-          name="locationName"
-          [placeholder]="'common.search.locationPlaceholder' | translate"
-          [(ngModel)]="locationName"
-          (ngModelChange)="onLocationInput($event)"
-          (focus)="onLocationFocus()"
-          autocomplete="off"
-          role="combobox"
-          aria-autocomplete="list"
-          [attr.aria-expanded]="locationAutocompleteOpen()"
-        />
-
-        @if (locationAutocompleteOpen()) {
-          <ul class="project-search__suggestions" role="listbox">
-            @for (location of locationSuggestions(); track location.id) {
-              <li role="presentation">
-                <button
-                  type="button"
-                  class="project-search__suggestion"
-                  role="option"
-                  (mousedown)="selectLocation(location); $event.preventDefault()"
-                >
-                  {{ getLocationSuggestionLabel(location) }}
-                </button>
-              </li>
-            }
-          </ul>
-        }
-      </div>
+      <app-location-autocomplete
+        [(locationName)]="locationName"
+        (locationSelect)="onLocationSelect($event)"
+      />
 
       <input
         class="project-search__input"
@@ -136,17 +108,17 @@
 
     <div class="project-search__footer">
       <div class="project-search__quick-filters">
-        @for (filter of quickFilters; track filter.labelKey) {
+        @for (item of quickFilterItems(); track item.location.id) {
           <app-button
             variant="chip"
             type="button"
-            (click)="onQuickFilterClick(filter)"
+            (click)="onQuickFilterLocationClick(item.location)"
           >
             <svg width="12" height="12" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
               <circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.5" />
               <path d="M11 11l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
             </svg>
-            <span>{{ filter.labelKey | translate }}</span>
+            <span>{{ item.label }}</span>
           </app-button>
         }
       </div>

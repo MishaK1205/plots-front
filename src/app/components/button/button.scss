@@ -1,10 +1,4 @@
-@use "../../tools/px-to-rem" as *;
-
-$primary: #00b365;
-$primary-hover: #009e59;
-$ink: #202020;
-$muted: #555;
-$border: #e5e5e5;
+@use "../../tools/design-system" as *;
 
 :host {
   display: inline-flex;
@@ -21,7 +15,7 @@ $border: #e5e5e5;
   gap: px-to-rem(8px);
 
   font-family: inherit;
-  font-weight: 600;
+  font-weight: $font-weight-semibold;
   line-height: 1;
   white-space: nowrap;
   text-decoration: none;
@@ -29,10 +23,10 @@ $border: #e5e5e5;
   border: 0;
   cursor: pointer;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.1s ease;
+    background-color $transition-base,
+    border-color $transition-base,
+    color $transition-base,
+    transform $transition-fast;
 
   &:disabled {
     cursor: default;
@@ -66,29 +60,29 @@ $border: #e5e5e5;
   &--lg {
     padding: px-to-rem(18px) px-to-rem(16px);
     font-size: px-to-rem(12px);
-    font-weight: 700;
+    font-weight: $font-weight-bold;
   }
 
   // ---------- Shapes ----------
   &--rounded {
-    border-radius: px-to-rem(10px);
+    border-radius: $radius-md;
   }
 
   &--pill {
-    border-radius: px-to-rem(99px);
+    border-radius: $radius-pill;
   }
 
   &--circle {
-    border-radius: 50%;
+    border-radius: $radius-full;
   }
 
   // ---------- Variants ----------
   &--primary {
-    color: #fff;
-    background-color: $primary;
+    color: $text-inverse;
+    background-color: $color-primary;
 
     &:hover:not(:disabled) {
-      background-color: $primary-hover;
+      background-color: $color-primary-hover;
     }
 
     &:active:not(:disabled) {
@@ -97,50 +91,50 @@ $border: #e5e5e5;
   }
 
   &--outline {
-    color: $ink;
-    background-color: #fff;
-    border: 1px solid $border;
+    color: $text-heading;
+    background-color: $bg-white;
+    border: 1px solid $border-color;
 
     &:hover:not(:disabled),
     &.app-button--active {
-      color: $primary;
-      border-color: $primary;
+      color: $color-primary;
+      border-color: $color-primary;
     }
   }
 
   &--ghost {
-    color: $ink;
+    color: $text-heading;
     background: none;
 
     &:hover:not(:disabled):not(.app-button--active) {
-      background-color: #f3f3f3;
+      background-color: $bg-hover;
     }
 
     &:disabled {
-      color: #b5b5b5;
+      color: $text-disabled;
       opacity: 1;
     }
 
     &.app-button--active.app-button--active-muted {
-      background-color: #f3f3f3;
+      background-color: $bg-hover;
     }
 
     &.app-button--active.app-button--active-primary {
-      color: #fff;
-      background-color: $primary;
+      color: $text-inverse;
+      background-color: $color-primary;
       cursor: default;
     }
   }
 
   &--text {
     padding: 0;
-    color: #484848;
+    color: $text-body;
     font-size: px-to-rem(13px);
-    font-weight: 400;
+    font-weight: $font-weight-normal;
     background: none;
 
     &:hover:not(:disabled) {
-      color: $primary;
+      color: $color-primary;
     }
   }
 
@@ -149,29 +143,29 @@ $border: #e5e5e5;
     width: px-to-rem(44px);
     height: px-to-rem(44px);
     padding: 0;
-    color: $ink;
-    background-color: #fff;
-    border: 1px solid $border;
+    color: $text-heading;
+    background-color: $bg-white;
+    border: 1px solid $border-color;
 
     &:hover:not(:disabled),
     &.app-button--active {
-      color: $primary;
-      border-color: $primary;
+      color: $color-primary;
+      border-color: $color-primary;
     }
   }
 
   &--chip {
     padding: px-to-rem(7px) px-to-rem(12px);
-    color: $muted;
+    color: $text-secondary;
     font-size: px-to-rem(11px);
-    font-weight: 400;
-    background-color: #fff;
-    border: 1px solid $border;
+    font-weight: $font-weight-normal;
+    background-color: $bg-white;
+    border: 1px solid $border-color;
     border-radius: px-to-rem(20px);
 
     &:hover:not(:disabled) {
-      color: $primary;
-      border-color: $primary;
+      color: $color-primary;
+      border-color: $color-primary;
     }
   }
 
@@ -190,13 +184,13 @@ $border: #e5e5e5;
     min-width: px-to-rem(36px);
     height: px-to-rem(36px);
     padding: 0 px-to-rem(8px);
-    border-radius: px-to-rem(8px);
+    border-radius: $radius-sm;
   }
 
   &--primary.app-button--sm.app-button--pill {
     min-width: auto;
     height: auto;
     padding: px-to-rem(8px) px-to-rem(18px);
-    border-radius: px-to-rem(99px);
+    border-radius: $radius-pill;
   }
 }

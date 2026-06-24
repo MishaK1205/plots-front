@@ -1,3 +1,5 @@
+@use "../../tools/design-system" as *;
+
 .image-upload-container {
   display: flex;
   flex-direction: column;
@@ -7,15 +9,15 @@
     position: relative;
     width: 100%;
     min-height: 200px;
-    border: 2px dashed #ccc;
-    border-radius: 8px;
+    border: 2px dashed $border-color-gray;
+    border-radius: $radius-sm;
     overflow: hidden;
-    background-color: #fafafa;
-    transition: all 0.3s ease;
+    background-color: $bg-surface;
+    transition: all $transition-nav ease;
 
     &:hover {
-      border-color: #1976d2;
-      background-color: #f5f5f5;
+      border-color: $color-info;
+      background-color: $bg-admin-header;
       cursor: pointer;
     }
   }
@@ -28,30 +30,30 @@
     min-height: 200px;
     padding: 20px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all $transition-nav ease;
 
     &:hover {
-      background-color: #f0f0f0;
+      background-color: $bg-image-placeholder;
     }
 
     .upload-icon {
       font-size: 48px;
       width: 48px;
       height: 48px;
-      color: #666;
+      color: $text-tertiary;
       margin-bottom: 16px;
     }
 
     .upload-text {
       font-size: 16px;
-      font-weight: 500;
-      color: #333;
+      font-weight: $font-weight-medium;
+      color: $text-dark;
       margin: 0 0 8px 0;
     }
 
     .upload-hint {
       font-size: 12px;
-      color: #999;
+      color: $text-hint;
       margin: 0;
     }
   }
@@ -74,19 +76,19 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background-color: rgba(0, 0, 0, 0.5);
+      background-color: $overlay-black-50;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 12px;
       opacity: 0;
-      transition: opacity 0.3s ease;
+      transition: opacity $transition-nav ease;
 
       button {
-        background-color: rgba(255, 255, 255, 0.9);
+        background-color: $overlay-white-90;
 
         &:hover {
-          background-color: rgba(255, 255, 255, 1);
+          background-color: $bg-white;
         }
       }
     }
@@ -101,8 +103,8 @@
     align-items: center;
     gap: 8px;
     padding: 8px 12px;
-    background-color: #ffebee;
-    color: #c62828;
+    background-color: $bg-error;
+    color: $color-error;
     border-radius: 4px;
     font-size: 14px;
 
@@ -118,7 +120,7 @@
     align-items: center;
     gap: 8px;
     padding: 4px 8px;
-    color: #666;
+    color: $text-tertiary;
     font-size: 12px;
 
     mat-icon {
@@ -130,7 +132,7 @@
 }
 
 // Responsive design
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-md) {
   .image-upload-container {
     .upload-placeholder {
       min-height: 150px;

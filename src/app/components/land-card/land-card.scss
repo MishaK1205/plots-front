@@ -1,4 +1,4 @@
-@use "../../tools/px-to-rem" as *;
+@use "../../tools/design-system" as *;
 
 :host {
   display: block;
@@ -10,19 +10,19 @@
 
   padding: px-to-rem(12);
 
-  background-color: #fff;
-  border: 1px solid #ededed;
-  border-radius: px-to-rem(16);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  background-color: $bg-white;
+  border: 1px solid $border-color-light;
+  border-radius: $radius-xl;
+  transition: border-color $transition-slow, box-shadow $transition-slow;
 
   &:hover {
-    border-color: rgba(#16bc2e, 0.6);
-    box-shadow: 0 px-to-rem(8) px-to-rem(28) rgba(#16bc2e, 0.12);
+    border-color: $overlay-accent-60;
+    box-shadow: $shadow-accent-md;
   }
 
   &__media {
     position: relative;
-    border-radius: px-to-rem(12);
+    border-radius: $radius-lg;
     overflow: hidden;
     margin-bottom: px-to-rem(12);
   }
@@ -37,7 +37,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: #f4f5f6;
+      background: $bg-surface-alt;
 
       img {
         width: px-to-rem(40);
@@ -54,19 +54,19 @@
 
     padding: px-to-rem(4) px-to-rem(10);
 
-    color: #16bc2e;
+    color: $color-accent;
     font-size: px-to-rem(11);
-    font-weight: 600;
+    font-weight: $font-weight-semibold;
 
-    background-color: #e7f8e9;
-    border-radius: px-to-rem(99);
+    background-color: $bg-primary-tint;
+    border-radius: $radius-pill;
   }
 
   &__title {
     margin: 0 0 px-to-rem(10);
     font-size: px-to-rem(16);
-    font-weight: 700;
-    color: #1a1a1a;
+    font-weight: $font-weight-bold;
+    color: $text-primary;
   }
 
   &__details {
@@ -76,21 +76,21 @@
     gap: px-to-rem(8);
 
     padding-bottom: px-to-rem(10);
-    border-bottom: 1px dashed #ededed;
+    border-bottom: 1px dashed $border-color-light;
   }
 
   &__size {
     &-label {
       margin: 0 0 px-to-rem(4);
       font-size: px-to-rem(11);
-      color: #7b7b7b;
+      color: $text-muted;
     }
 
     &-value {
       margin: 0;
       font-size: px-to-rem(16);
-      font-weight: 700;
-      color: #1a1a1a;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
 
       sup {
         font-size: px-to-rem(9);
@@ -104,14 +104,14 @@
     &-total {
       margin: 0;
       font-size: px-to-rem(16);
-      font-weight: 700;
-      color: #1a1a1a;
+      font-weight: $font-weight-bold;
+      color: $text-primary;
     }
 
     &-sqm {
       margin: px-to-rem(4) 0 0;
       font-size: px-to-rem(12);
-      color: #7b7b7b;
+      color: $text-muted;
 
       sup {
         font-size: px-to-rem(8);
@@ -122,6 +122,6 @@
   &__cadastral {
     margin: px-to-rem(10) 0 0;
     font-size: px-to-rem(11);
-    color: #7b7b7b;
+    color: $text-muted;
   }
 }

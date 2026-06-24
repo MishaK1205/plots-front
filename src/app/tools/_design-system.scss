@@ -1,0 +1,165 @@
+@use "sass:color";
+@use "px-to-rem" as *;
+
+@forward "px-to-rem";
+
+// =============================================================================
+// Brand
+// =============================================================================
+
+$color-primary: #00b365;
+$color-primary-hover: #009e59;
+$color-accent: #16bc2e;
+
+// =============================================================================
+// Text
+// =============================================================================
+
+$text-primary: #1a1a1a;
+$text-heading: #202020;
+$text-title: #111111;
+$text-body: #484848;
+$text-secondary: #555;
+$text-muted: #7b7b7b;
+$text-tertiary: #666;
+$text-subtle: #606060;
+$text-placeholder: #a3a3a3;
+$text-disabled: #b5b5b5;
+$text-hint: #999;
+$text-dark: #333;
+$text-inverse: #ffffff;
+$text-footer-muted: #5e6465;
+
+// =============================================================================
+// Borders
+// =============================================================================
+
+$border-color: #e5e5e5;
+$border-color-light: #ededed;
+$border-color-subtle: #ececec;
+$border-color-muted: #eeeeee;
+$border-color-admin: #e0e0e0;
+$border-color-hover: #c4c4c4;
+$border-color-dashed: #bdbdbd;
+$border-color-divider: #f0f0f0;
+$border-color-primary: #b8e8cf;
+$border-color-primary-subtle: #e9f7ef;
+$border-color-header: #eee;
+$border-color-gray: #ccc;
+
+// =============================================================================
+// Backgrounds
+// =============================================================================
+
+$bg-white: #ffffff;
+$bg-surface: #fafafa;
+$bg-surface-alt: #f4f5f6;
+$bg-hover: #f3f3f3;
+$bg-hover-light: #f7f7f7;
+$bg-admin-header: #f5f5f5;
+$bg-image-placeholder: #f0f0f0;
+$bg-primary-tint: #e7f8e9;
+$bg-footer: #172021;
+$bg-dark: #2a2a2a;
+$bg-error: #ffebee;
+$bg-nav-hover: #ececec;
+$bg-nav-active: #dadada;
+$bg-toggle-off: #d8d8d8;
+$bg-gradient-light-start: #f0f0f0;
+$bg-gradient-light-end: #e2e2e2;
+
+// =============================================================================
+// Semantic colors
+// =============================================================================
+
+$color-link: #0090e3;
+$color-info: #1976d2;
+$color-indigo: #3f51b5;
+$color-error: #c62828;
+
+// =============================================================================
+// Overlays (rgba)
+// =============================================================================
+
+$overlay-white-10: rgba(255, 255, 255, 0.1);
+$overlay-white-85: rgba(255, 255, 255, 0.85);
+$overlay-white-90: rgba(255, 255, 255, 0.9);
+$overlay-black-04: rgba(0, 0, 0, 0.04);
+$overlay-black-05: rgba(0, 0, 0, 0.05);
+$overlay-black-08: rgba(0, 0, 0, 0.08);
+$overlay-black-10: rgba(0, 0, 0, 0.1);
+$overlay-black-12: rgba(0, 0, 0, 0.12);
+$overlay-black-16: rgba(0, 0, 0, 0.16);
+$overlay-black-22: rgba(0, 0, 0, 0.22);
+$overlay-black-45: rgba(0, 0, 0, 0.45);
+$overlay-black-50: rgba(0, 0, 0, 0.5);
+$overlay-black-55: rgba(0, 0, 0, 0.55);
+
+$overlay-primary-03: color.change($color-primary, $alpha: 0.03);
+$overlay-primary-07: color.change($color-primary, $alpha: 0.07);
+$overlay-primary-08: color.change($color-primary, $alpha: 0.08);
+$overlay-primary-12: color.change($color-primary, $alpha: 0.12);
+$overlay-primary-60: color.change($color-primary, $alpha: 0.6);
+$overlay-accent-60: color.change($color-accent, $alpha: 0.6);
+$overlay-accent-12: color.change($color-accent, $alpha: 0.12);
+$overlay-footer-85: color.change($bg-footer, $alpha: 0.85);
+$overlay-footer-20: color.change($bg-footer, $alpha: 0.2);
+$overlay-footer-00: color.change($bg-footer, $alpha: 0);
+
+// =============================================================================
+// Border radius
+// =============================================================================
+
+$radius-xs: px-to-rem(6);
+$radius-sm: px-to-rem(8);
+$radius-md: px-to-rem(10);
+$radius-lg: px-to-rem(12);
+$radius-xl: px-to-rem(16);
+$radius-2xl: px-to-rem(20);
+$radius-pill: px-to-rem(99);
+$radius-full: 50%;
+
+// =============================================================================
+// Shadows
+// =============================================================================
+
+$shadow-xs: 0 px-to-rem(1) px-to-rem(2) $overlay-black-04;
+$shadow-sm: 0 px-to-rem(2) px-to-rem(4) $overlay-black-10;
+$shadow-md: 0 4px 6px $overlay-black-10;
+$shadow-dropdown: 0 px-to-rem(8) px-to-rem(24) $overlay-black-08;
+$shadow-lg: 0 px-to-rem(8) px-to-rem(28) $overlay-primary-08;
+$shadow-primary-sm: 0 px-to-rem(6) px-to-rem(22) $overlay-primary-07;
+$shadow-primary-md: 0 px-to-rem(8) px-to-rem(28) $overlay-primary-12;
+$shadow-accent-md: 0 px-to-rem(8) px-to-rem(28) $overlay-accent-12;
+$shadow-card: 0 px-to-rem(8) px-to-rem(20) $overlay-black-12;
+$shadow-map-card: 0 px-to-rem(8) px-to-rem(32) $overlay-black-16;
+$shadow-map-card-hover: 0 px-to-rem(12) px-to-rem(36) $overlay-black-22;
+$shadow-nav: 0 px-to-rem(16) px-to-rem(32) $overlay-black-10;
+
+// =============================================================================
+// Typography
+// =============================================================================
+
+$font-weight-normal: 400;
+$font-weight-medium: 500;
+$font-weight-semibold: 600;
+$font-weight-bold: 700;
+
+// =============================================================================
+// Transitions
+// =============================================================================
+
+$transition-fast: 0.1s ease;
+$transition-base: 0.2s ease;
+$transition-slow: 0.25s ease;
+$transition-nav: 0.3s ease;
+
+// =============================================================================
+// Breakpoints
+// =============================================================================
+
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 800px;
+$breakpoint-xl: 1024px;
+$breakpoint-2xl: 1200px;

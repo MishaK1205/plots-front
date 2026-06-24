@@ -1,8 +1,8 @@
-@use "../../tools/px-to-rem" as *;
+@use "../../tools/design-system" as *;
 
 .footer {
-  background-color: #172021;
-  color: #606060;
+  background-color: $bg-footer;
+  color: $text-subtle;
 
   &__container {
     max-width: 1200px;
@@ -27,8 +27,8 @@
 
   &__title {
     font-size: px-to-rem(12px);
-    font-weight: 600;
-    color: #ffffff;
+    font-weight: $font-weight-semibold;
+    color: $text-inverse;
     margin-bottom: px-to-rem(12px);
   }
 
@@ -54,7 +54,7 @@
 
     li {
       font-size: px-to-rem(14px);
-      color: #5e6465;
+      color: $text-footer-muted;
     }
 
     a {
@@ -62,7 +62,7 @@
       text-decoration: none;
 
       &:hover {
-        color: #ffffff;
+        color: $text-inverse;
       }
     }
   }
@@ -85,7 +85,7 @@
   &__bottom {
     margin-top: px-to-rem(32px);
     padding-top: px-to-rem(16px);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid $overlay-white-10;
     font-size: px-to-rem(12px);
     text-align: center;
   }
@@ -94,7 +94,7 @@
 /* =====================
    Responsive
    ===================== */
-@media (max-width: 800px) {
+@media (max-width: $breakpoint-lg) {
   .footer {
     &__content {
       grid-template-columns: repeat(2, 1fr);
@@ -102,7 +102,7 @@
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: $breakpoint-sm) {
   .footer {
     &__content {
       grid-template-columns: 1fr;

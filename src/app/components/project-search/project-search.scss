@@ -1,4 +1,4 @@
-@use "../../tools/px-to-rem" as *;
+@use "../../tools/design-system" as *;
 
 :host {
   display: block;
@@ -15,14 +15,14 @@
 
   &__title {
     margin: 0 0 px-to-rem(10px);
-    color: #00b365;
+    color: $color-primary;
     font-size: px-to-rem(28px);
-    font-weight: 700;
+    font-weight: $font-weight-bold;
   }
 
   &__subtitle {
     margin: 0;
-    color: #7b7b7b;
+    color: $text-muted;
     font-size: px-to-rem(13px);
   }
 
@@ -31,10 +31,10 @@
     z-index: 1;
     padding: px-to-rem(16px);
 
-    background-color: #fff;
-    border: 1px solid #b8e8cf;
-    border-radius: px-to-rem(16px);
-    box-shadow: 0 px-to-rem(8px) px-to-rem(28px) rgba(0, 179, 101, 0.08);
+    background-color: $bg-white;
+    border: 1px solid $border-color-primary;
+    border-radius: $radius-xl;
+    box-shadow: $shadow-lg;
   }
 
   &__bar {
@@ -43,67 +43,26 @@
     gap: px-to-rem(12px);
   }
 
-  &__autocomplete {
-    position: relative;
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  &__suggestions {
-    position: absolute;
-    top: calc(100% + px-to-rem(4px));
-    left: 0;
-    right: 0;
-    z-index: 20;
-
-    margin: 0;
-    padding: px-to-rem(6px);
-    list-style: none;
-
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: px-to-rem(10px);
-    box-shadow: 0 px-to-rem(8px) px-to-rem(24px) rgba(0, 0, 0, 0.08);
-  }
-
-  &__suggestion {
-    width: 100%;
-    padding: px-to-rem(10px) px-to-rem(12px);
-
-    color: #202020;
-    font-size: px-to-rem(12px);
-    text-align: left;
-
-    background: none;
-    border: 0;
-    border-radius: px-to-rem(8px);
-    cursor: pointer;
-
-    &:hover {
-      background-color: #f3f3f3;
-    }
-  }
-
   &__input {
     flex: 1 1 0;
     min-width: 0;
     width: 100%;
     padding: px-to-rem(12px) px-to-rem(14px);
 
-    color: #202020;
+    color: $text-heading;
     font-size: px-to-rem(12px);
 
-    background-color: #fff;
-    border: 1px solid #e5e5e5;
-    border-radius: px-to-rem(10px);
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
 
     &::placeholder {
-      color: #a3a3a3;
+      color: $text-placeholder;
     }
 
     &:focus {
       outline: none;
-      border-color: #00b365;
+      border-color: $color-primary;
     }
   }
 
@@ -118,7 +77,7 @@
 
     margin-top: px-to-rem(16px);
     padding-top: px-to-rem(16px);
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid $border-color-divider;
   }
 
   &__filter-group {
@@ -128,7 +87,7 @@
   }
 
   &__filter-label {
-    color: #7b7b7b;
+    color: $text-muted;
     font-size: px-to-rem(11px);
   }
 
@@ -142,12 +101,12 @@
 
       font-size: px-to-rem(12px);
 
-      border: 1px solid #e5e5e5;
-      border-radius: px-to-rem(8px);
+      border: 1px solid $border-color;
+      border-radius: $radius-sm;
 
       &:focus {
         outline: none;
-        border-color: #00b365;
+        border-color: $color-primary;
       }
     }
   }
@@ -172,20 +131,20 @@
     align-items: center;
     gap: px-to-rem(6px);
 
-    color: #202020;
+    color: $text-heading;
     font-size: px-to-rem(11px);
     white-space: nowrap;
 
     &-dot {
       width: px-to-rem(8px);
       height: px-to-rem(8px);
-      border-radius: 50%;
-      background-color: #00b365;
+      border-radius: $radius-full;
+      background-color: $color-primary;
     }
   }
 }
 
-@media (max-width: 768px) {
+@media (max-width: $breakpoint-md) {
   .project-search {
     &__title {
       font-size: px-to-rem(22px);
@@ -196,10 +155,6 @@
     }
 
     &__input {
-      flex: 1 1 100%;
-    }
-
-    &__autocomplete {
       flex: 1 1 100%;
     }
 

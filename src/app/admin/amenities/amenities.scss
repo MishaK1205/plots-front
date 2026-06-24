@@ -1,3 +1,5 @@
+@use "../../tools/design-system" as *;
+
 .amenities-container {
   .toolbar {
     display: flex;
@@ -13,7 +15,7 @@
 
   .table-card {
     margin-top: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: $shadow-md;
   }
 
   .table-container {
@@ -25,14 +27,14 @@
     min-width: 600px;
 
     .mat-mdc-header-cell {
-      font-weight: 600;
-      color: #333;
-      background-color: #f5f5f5;
+      font-weight: $font-weight-semibold;
+      color: $text-dark;
+      background-color: $bg-admin-header;
     }
 
     .mat-mdc-cell {
       padding: 12px 16px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid $border-color-admin;
     }
 
     .localized-name {
@@ -41,7 +43,7 @@
       gap: 4px;
 
       small {
-        color: #666;
+        color: $text-tertiary;
       }
     }
 
@@ -70,12 +72,12 @@
 
     p {
       margin-top: 16px;
-      color: #666;
+      color: $text-tertiary;
     }
   }
 
   mat-paginator {
     margin-top: 16px;
-    border-top: 1px solid #e0e0e0;
+    border-top: 1px solid $border-color-admin;
   }
 }
