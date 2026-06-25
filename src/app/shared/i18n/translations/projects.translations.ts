@@ -9,6 +9,17 @@ export const projectsTranslations = {
       rus: 'Цена за м²',
     },
     price: { geo: 'ფასი', eng: 'Price', rus: 'Цена' },
+    company: { geo: 'კომპანია', eng: 'Company', rus: 'Компания' },
+    allCompanies: {
+      geo: 'ყველა კომპანია',
+      eng: 'All companies',
+      rus: 'Все компании',
+    },
+    searchCompany: {
+      geo: 'მოძებნე კომპანია',
+      eng: 'Search company',
+      rus: 'Поиск компании',
+    },
     apply: { geo: 'არჩევა', eng: 'Apply', rus: 'Применить' },
     any: { geo: 'ყველა', eng: 'All', rus: 'Все' },
     clear: {

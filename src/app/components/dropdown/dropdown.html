@@ -1,0 +1,101 @@
+<div class="dropdown" [class.dropdown--open]="open()">
+  <button
+    class="dropdown__trigger"
+    type="button"
+    [disabled]="disabled()"
+    [attr.aria-label]="ariaLabel()"
+    aria-haspopup="listbox"
+    [attr.aria-expanded]="open()"
+    (click)="toggle()"
+  >
+    @if (label()) {
+      <span class="dropdown__label">{{ label() }}</span>
+    }
+
+    <span class="dropdown__value-row">
+      <span
+        class="dropdown__value"
+        [class.dropdown__value--placeholder]="!selectedLabel()"
+      >
+        {{ selectedLabel() || placeholder() }}
+      </span>
+
+      <span class="dropdown__action">
+        @if (clearable() && value() != null) {
+          <span
+            class="dropdown__clear"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="clearLabel()"
+            (click)="clear($event)"
+            (keydown.enter)="clear($event)"
+          >
+            <img src="assets/icons/close.svg" alt="" width="10" height="10" />
+          </span>
+        } @else {
+          <img
+            class="dropdown__chevron"
+            src="assets/icons/arrow-down.svg"
+            alt=""
+            width="10"
+            height="10"
+            aria-hidden="true"
+          />
+        }
+      </span>
+    </span>
+  </button>
+
+  @if (open()) {
+    <div class="dropdown__panel">
+      @if (searchable()) {
+        <div class="dropdown__search">
+          <img
+            class="dropdown__search-icon"
+            src="assets/icons/search.svg"
+            alt=""
+            width="14"
+            height="14"
+            aria-hidden="true"
+          />
+          <input
+            class="dropdown__search-field"
+            type="text"
+            [placeholder]="searchPlaceholder()"
+            [ngModel]="query()"
+            (ngModelChange)="query.set($event)"
+            autocomplete="off"
+          />
+        </div>
+      }
+
+      <ul class="dropdown__options" role="listbox">
+        @for (option of filteredOptions(); track option.value) {
+          <li role="presentation">
+            <button
+              class="dropdown__option"
+              type="button"
+              role="option"
+              [attr.aria-selected]="option.value === value()"
+              [class.dropdown__option--active]="option.value === value()"
+              (click)="select(option)"
+            >
+              <span class="dropdown__option-label">{{ option.label }}</span>
+              @if (option.value === value()) {
+                <img
+                  src="assets/icons/check.svg"
+                  alt=""
+                  width="14"
+                  height="14"
+                  aria-hidden="true"
+                />
+              }
+            </button>
+          </li>
+        } @empty {
+          <li class="dropdown__empty">{{ emptyLabel() }}</li>
+        }
+      </ul>
+    </div>
+  }
+</div>

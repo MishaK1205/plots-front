@@ -43,29 +43,6 @@
     gap: px-to-rem(12px);
   }
 
-  &__input {
-    flex: 1 1 0;
-    min-width: 0;
-    width: 100%;
-    padding: px-to-rem(12px) px-to-rem(14px);
-
-    color: $text-heading;
-    font-size: px-to-rem(12px);
-
-    background-color: $bg-white;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-
-    &::placeholder {
-      color: $text-placeholder;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: $color-primary;
-    }
-  }
-
   &__submit {
     flex: 0 0 auto;
   }
@@ -154,7 +131,8 @@
       flex-wrap: wrap;
     }
 
-    &__input {
+    &__location,
+    &__keyword {
       flex: 1 1 100%;
     }
 

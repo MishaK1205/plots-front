@@ -9,6 +9,7 @@ import { TranslationKey } from '../../shared/i18n/translations';
 interface HeaderItem {
   labelKey: TranslationKey;
   path: string;
+  exact?: boolean;
 }
 
 @Component({
@@ -21,20 +22,28 @@ interface HeaderItem {
 export class Header {
   headerItems: HeaderItem[] = [
     {
+      labelKey: 'common.nav.companies',
+      path: '/companies',
+      exact: true,
+    },
+    {
       labelKey: 'common.nav.projects',
       path: '/projects',
     },
     {
       labelKey: 'common.nav.statistics',
       path: '/statistics',
+      exact: true,
     },
     {
       labelKey: 'common.nav.blog',
       path: '/blog',
+      exact: true,
     },
     {
       labelKey: 'common.nav.contact',
       path: '/contact',
+      exact: true,
     },
   ];
   menuOpen = false;

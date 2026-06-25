@@ -1,0 +1,92 @@
+---
+description: Coding standards for this Angular project (HTML, SCSS, TS, components, services, pipes, directives, utils)
+alwaysApply: true
+---
+
+# Coding Standards
+
+Read this fully before writing or changing any code. Match existing patterns; when in doubt, copy the closest existing file.
+
+## Project Structure & File Naming
+
+- Use **kebab-case** for every file and folder name.
+- **No `.component` / `.directive` suffix** on component/directive files. A component lives in its own folder with three files sharing the folder name: `foo-bar.ts`, `foo-bar.html`, `foo-bar.scss`.
+- Suffix files by role: `*.service.ts`, `*.pipe.ts`, `*.interface.ts`, `*.util.ts`, `*.enum.ts`.
+- One declaration per file (one interface/enum/util per file).
+- Re-export every public symbol from a barrel `index.ts` (see `src/app/components/index.ts`, `src/app/api/services/index.ts`). Import from the barrel, not deep paths.
+- Layout: reusable UI in `src/app/components/`, routed views in `src/app/pages/`, HTTP layer in `src/app/api/` (`services/`, `interfaces/`), cross-cutting code in `src/app/shared/` (`services/`, `pipes/`, `utils/`, `enums/`, `i18n/`), design tokens in `src/app/tools/`.
+
+## TypeScript & Components
+
+- **Standalone components only.** Always set `changeDetection: ChangeDetectionStrategy.OnPush`.
+- Selector prefix is `app-` (e.g. `app-project-search`).
+- Always use external templates/styles: `templateUrl` + `styleUrl`. Never inline `template`/`styles`.
+- **Dependency injection:** use the `inject()` function, never constructor params. Mark injected deps `private readonly`.
+
+```typescript
+private readonly locationsService = inject(LocationsService);
+private readonly destroyRef = inject(DestroyRef);
+```
+
+- **State is signals.** Use `signal()` / `computed()` for reactive state, `input()` / `output()` / `model()` for component IO. Use plain class fields only for `[(ngModel)]`-bound form values.
+- **Subscriptions** must be torn down with `takeUntilDestroyed(this.destroyRef)`. Prefer the async pipe / signals over manual subscription where practical.
+- Member order inside a class: injected deps → public IO (`input`/`output`/`model`) → public signals/computed → plain form fields → private signals/state → lifecycle hooks (`ngOnInit`, …) → public handlers → private helpers.
+- Prefer pure helper functions extracted to `*.util.ts` over private methods when logic is reusable and stateless (see `keyword-params.util.ts`, `localize-text.util.ts`).
+- Avoid `any`. Type everything; use the shared interfaces.
+- Do NOT add narrating comments. Only comment non-obvious intent/trade-offs (e.g. why `TranslatePipe` is `pure: false`).
+
+## Interfaces
+
+- Name them `XxxInterface` and file `xxx.interface.ts` (e.g. `LocationResponseInterface`). Group by domain folder under `api/interfaces/` and export via the barrel.
+
+## Services
+
+- `@Injectable({ providedIn: 'root' })`, named `XxxService` in `xxx.service.ts`.
+- All HTTP goes through the central `ApiService` (`get/post/put/delete<T>()`); never call `HttpClient` directly from feature services.
+- Service methods return `Observable<T>`. Keep services free of UI/state concerns.
+
+## Pipes
+
+- Create a pipe for reusable view-layer transformations (formatting, localization). Name `XxxPipe` in `xxx.pipe.ts`, standalone, imported where used.
+- Keep pipes `pure: true` unless they must react to a signal/global state change; if impure, add a one-line comment explaining why (see `translate.pipe.ts`).
+
+## Directives
+
+- Create an attribute directive (not a wrapper component) for cross-cutting DOM/behavior concerns reused across elements (e.g. focus, click-outside, autofocus). Name `XxxDirective` in `xxx.directive.ts`, standalone, selector in `[appCamelCase]` form. Prefer a directive over duplicating `@HostListener` logic in multiple components.
+
+## Utilities & Enums
+
+- Pure, side-effect-free functions in `*.util.ts` with `camelCase` names. Enums in `*.enum.ts`.
+
+## HTML Templates
+
+- Use the **new control flow**: `@if`, `@for`, `@switch`. Never use `*ngIf` / `*ngFor`. Always provide `track` on `@for`.
+- All user-facing text goes through i18n: `{{ 'some.key' | translate }}` (with params object when needed). No hardcoded copy.
+- Two-way bind with `[(ngModel)]` for inputs and `[(prop)]` for `model()` inputs.
+- Include accessibility attributes: `role`, `aria-*`, `ariaLabel`, `type="button"` on non-submit buttons.
+- Keep class names in **BEM** matching the SCSS (see below). One root block element per component template.
+
+## SCSS
+
+- Start every component stylesheet with `@use "../../tools/design-system" as *;` (adjust depth) to access tokens. Add `:host { display: block; }` when the host needs box layout.
+- **BEM naming** with nesting: `.block`, `&__element`, `&--modifier`.
+
+```scss
+.land-card {
+  &__media { ... }
+  &__image {
+    &--placeholder { ... }
+  }
+  &:hover { ... }
+}
+```
+
+- **No hardcoded values.** Use design tokens from `_design-system.scss` for every color, shadow, radius, font-weight, transition, and breakpoint (`$color-primary`, `$bg-white`, `$radius-lg`, `$shadow-card`, `$transition-base`, `$breakpoint-md`, …). If a needed token is missing, add it to `_design-system.scss` rather than hardcoding.
+- Wrap all px sizing in `px-to-rem(…)`.
+- Declaration order within a rule: positioning → display/flex/grid → box model (margin/padding/size) → typography/color → background/border/radius → shadow/transition.
+- Keep styles scoped to the component; do not reach into other components' classes.
+
+## Before Finishing
+
+- Run lint checks on edited files and fix any introduced errors.
+- Keep changes consistent with the nearest existing example file.

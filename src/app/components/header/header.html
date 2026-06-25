@@ -26,7 +26,10 @@
             <li class="nav__item">
               <a
                 class="nav__link"
-                routerLink="{{ item.path }}"
+                [routerLink]="item.path"
+                routerLinkActive="nav__link--active"
+                [routerLinkActiveOptions]="{ exact: item.exact ?? false }"
+                ariaCurrentWhenActive="page"
                 (click)="menuOpen = false"
               >
                 {{ item.labelKey | translate }}

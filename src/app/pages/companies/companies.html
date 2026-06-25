@@ -1,0 +1,43 @@
+<section class="companies-page">
+  <header class="companies-page__hero">
+    <h1 class="companies-page__title">{{ "companies.title" | translate }}</h1>
+    <p class="companies-page__subtitle">
+      {{ "companies.subtitle" | translate }}
+    </p>
+
+    @if (totalItems() > 0) {
+      <span class="companies-page__count">
+        <span class="companies-page__count-dot"></span>
+        {{ "companies.count" | translate: { count: totalItems() } }}
+      </span>
+    }
+  </header>
+
+  @if (companies().length > 0) {
+    <div class="companies-page__grid">
+      @for (company of companies(); track company.id) {
+        <app-company-card [company]="company" (view)="openCompany($event)" />
+      }
+    </div>
+  }
+
+  @if (!isLoading() && companies().length === 0) {
+    <div class="companies-page__empty">
+      <span class="companies-page__empty-icon" aria-hidden="true">
+        <img src="assets/icons/building.svg" alt="" width="28" height="28" />
+      </span>
+      <p class="companies-page__empty-text">
+        {{ "companies.empty" | translate }}
+      </p>
+    </div>
+  }
+
+  @if (totalPages() > 1) {
+    <app-pagination
+      class="companies-page__pagination"
+      [currentPage]="currentPage()"
+      [totalPages]="totalPages()"
+      (pageChange)="onPageChange($event)"
+    />
+  }
+</section>

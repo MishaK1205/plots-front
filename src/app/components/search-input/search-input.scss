@@ -1,0 +1,168 @@
+@use "../../tools/design-system" as *;
+
+:host {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.search-input {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: px-to-rem(8);
+
+  width: 100%;
+  padding: px-to-rem(11) px-to-rem(14);
+
+  background-color: $bg-white;
+  border: 1px solid $border-color;
+  border-radius: $radius-md;
+  box-shadow: 0 0 0 px-to-rem(3) transparent;
+  transition:
+    border-color $transition-base,
+    background-color $transition-base,
+    box-shadow $transition-base;
+  cursor: text;
+
+  &:hover {
+    border-color: $border-color-hover;
+  }
+
+  &:focus-within {
+    background-color: $bg-white;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 px-to-rem(3) $overlay-primary-12;
+  }
+
+  &--open {
+    border-color: $color-primary;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  &--muted {
+    background-color: $bg-surface;
+    border-color: $border-color-subtle;
+
+    &:focus-within {
+      background-color: $bg-white;
+    }
+  }
+
+  &__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    img {
+      display: block;
+    }
+  }
+
+  &__field {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 0;
+
+    color: $text-heading;
+    font-size: px-to-rem(13);
+
+    background: none;
+    border: 0;
+
+    &::placeholder {
+      color: $text-placeholder;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: px-to-rem(20);
+    height: px-to-rem(20);
+    padding: 0;
+
+    background-color: $bg-hover;
+    border: 0;
+    border-radius: $radius-full;
+    cursor: pointer;
+    transition: background-color $transition-base;
+
+    img {
+      display: block;
+    }
+
+    &:hover {
+      background-color: $bg-nav-hover;
+    }
+  }
+
+  &__suggestions {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: px-to-rem(-1);
+    right: px-to-rem(-1);
+    z-index: 30;
+
+    margin: 0;
+    padding: px-to-rem(6);
+    list-style: none;
+
+    background-color: $bg-white;
+    border: 1px solid $color-primary;
+    border-top: 1px solid $border-color-divider;
+    border-radius: 0 0 $radius-md $radius-md;
+    box-shadow: $shadow-dropdown;
+
+    max-height: px-to-rem(280);
+    overflow-y: auto;
+  }
+
+  &__suggestion {
+    display: flex;
+    align-items: center;
+    gap: px-to-rem(10);
+
+    width: 100%;
+    padding: px-to-rem(10) px-to-rem(12);
+
+    color: $text-heading;
+    font-size: px-to-rem(13);
+    text-align: left;
+
+    background: none;
+    border: 0;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition:
+      background-color $transition-base,
+      color $transition-base;
+
+    &:hover,
+    &:focus-visible {
+      outline: none;
+      color: $color-primary;
+      background-color: $bg-primary-tint;
+    }
+
+    &-icon {
+      flex-shrink: 0;
+      display: block;
+    }
+  }
+}
+
+@media (max-width: $breakpoint-md) {
+  :host {
+    flex: 1 1 100%;
+  }
+}

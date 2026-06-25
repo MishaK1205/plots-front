@@ -4,6 +4,7 @@ import { TranslationGroup } from '../translation-group.interface';
 export const commonTranslations = {
   nav: {
     projects: { geo: 'პროექტები', eng: 'Projects', rus: 'Проекты' },
+    companies: { geo: 'კომპანიები', eng: 'Companies', rus: 'Компании' },
     statistics: { geo: 'სტატისტიკა', eng: 'Statistics', rus: 'Статистика' },
     blog: { geo: 'ბლოგი', eng: 'Blog', rus: 'Блог' },
     contact: { geo: 'კონტაქტი', eng: 'Contact', rus: 'Контакты' },
@@ -78,6 +79,7 @@ export const commonTranslations = {
       rus: 'ID, название проекта, кадастровый код, телефон',
     },
     search: { geo: 'ძებნა', eng: 'Search', rus: 'Поиск' },
+    clear: { geo: 'გასუფთავება', eng: 'Clear', rus: 'Очистить' },
     from: { geo: 'დან', eng: 'From', rus: 'От' },
     to: { geo: 'მდე', eng: 'To', rus: 'До' },
   },

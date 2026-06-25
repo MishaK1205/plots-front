@@ -10,7 +10,7 @@
   flex-direction: column;
   gap: px-to-rem(20);
 
-  padding: px-to-rem(24) px-to-rem(150) 0;
+  padding: px-to-rem(24) px-to-rem(150) px-to-rem(40);
 
   // ---------- Search bar ----------
   &__search-bar {
@@ -26,30 +26,6 @@
     box-shadow: $shadow-primary-sm;
   }
 
-  &__search-input {
-    flex: 1 1 0;
-    min-width: 0;
-    padding: px-to-rem(12) px-to-rem(16);
-
-    color: $text-heading;
-    font-size: px-to-rem(12);
-
-    background-color: $bg-surface;
-    border: 1px solid $border-color-subtle;
-    border-radius: $radius-md;
-    transition: border-color $transition-base, background-color $transition-base;
-
-    &::placeholder {
-      color: $text-placeholder;
-    }
-
-    &:focus {
-      outline: none;
-      background-color: $bg-white;
-      border-color: $color-primary;
-    }
-  }
-
   &__search-submit {
     flex: 0 0 auto;
   }
@@ -60,6 +36,10 @@
     align-items: center;
     flex-wrap: wrap;
     gap: px-to-rem(12);
+  }
+
+  &__company-filter {
+    width: px-to-rem(240);
   }
 
   &__clear-filters {
@@ -192,14 +172,14 @@
   }
 
   &__pagination {
-    margin: px-to-rem(16) 0 px-to-rem(32);
+    margin: px-to-rem(16) 0 0;
   }
 }
 
 // ---------- Responsive ----------
 @media (max-width: $breakpoint-2xl) {
   .projects-page {
-    padding: px-to-rem(20) px-to-rem(70) 0;
+    padding: px-to-rem(20) px-to-rem(70) px-to-rem(40);
   }
 }
 
@@ -225,13 +205,14 @@
 
 @media (max-width: $breakpoint-md) {
   .projects-page {
-    padding: px-to-rem(16) px-to-rem(16) 0;
+    padding: px-to-rem(16) px-to-rem(16) px-to-rem(32);
 
     &__search-bar {
       flex-wrap: wrap;
     }
 
-    &__search-input {
+    &__search-location,
+    &__search-keyword {
       flex: 1 1 100%;
     }
 
@@ -242,6 +223,10 @@
       ::ng-deep .app-button {
         width: 100%;
       }
+    }
+
+    &__company-filter {
+      width: 100%;
     }
 
     &__clear-filters {

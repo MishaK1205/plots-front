@@ -28,16 +28,16 @@
             <p class="project-details__project-name">{{ project.name }}</p>
             @if (companyName()) {
               <p class="project-details__company-name">
-                {{ 'common.card.developer' | translate }}: {{ companyName() }}
+                {{ "common.card.developer" | translate }}: {{ companyName() }}
               </p>
             }
           </div>
         </div>
 
         <div class="project-details__cover-contact">
-          <span>{{ 'projectDetails.cover.visitQuestion' | translate }}</span>
+          <span>{{ "projectDetails.cover.visitQuestion" | translate }}</span>
           <button type="button" (click)="onContactClick()">
-            {{ 'common.card.contact' | translate }}
+            {{ "common.card.contact" | translate }}
           </button>
         </div>
       </div>
@@ -46,7 +46,7 @@
     <!-- Lands -->
     <div class="project-details__section">
       <h2 class="project-details__section-title">
-        {{ 'projectDetails.lands.title' | translate }}
+        {{ "projectDetails.lands.title" | translate }}
       </h2>
 
       @if (lands().length > 0) {
@@ -62,13 +62,13 @@
             type="button"
             (click)="showAllLands.set(true)"
           >
-            {{ 'projectDetails.lands.viewAll' | translate }}
+            {{ "projectDetails.lands.viewAll" | translate }}
             <span aria-hidden="true">&rarr;</span>
           </button>
         }
       } @else {
         <p class="project-details__empty">
-          {{ 'projectDetails.lands.empty' | translate }}
+          {{ "projectDetails.lands.empty" | translate }}
         </p>
       }
     </div>
@@ -78,7 +78,7 @@
       <div class="project-details__section project-details__about">
         <div class="project-details__about-text">
           <h2 class="project-details__section-title">
-            {{ 'projectDetails.about.title' | translate }}
+            {{ "projectDetails.about.title" | translate }}
           </h2>
           <p>{{ description() }}</p>
         </div>
@@ -99,10 +99,12 @@
         @if (amenityName()) {
           <div class="project-details__amenity">
             <span class="project-details__amenity-icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.4" />
-                <path d="M6.5 10l2.4 2.4L13.5 7.8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
+              <img
+                src="assets/icons/check-circle.svg"
+                alt=""
+                width="20"
+                height="20"
+              />
             </span>
             <span>{{ amenityName() }}</span>
           </div>
@@ -111,10 +113,7 @@
         @if (minutesToLocation()) {
           <div class="project-details__amenity">
             <span class="project-details__amenity-icon">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="10" cy="10" r="7.5" stroke="currentColor" stroke-width="1.4" />
-                <path d="M10 6v4l2.5 1.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-              </svg>
+              <img src="assets/icons/clock.svg" alt="" width="20" height="20" />
             </span>
             <span>{{ minutesToLocation() }}</span>
           </div>
@@ -131,7 +130,7 @@
     @if (galleryUrls().length > 0) {
       <div class="project-details__section">
         <h2 class="project-details__section-title">
-          {{ 'projectDetails.gallery.title' | translate }}
+          {{ "projectDetails.gallery.title" | translate }}
         </h2>
         <div class="project-details__gallery">
           @for (imageUrl of galleryUrls(); track imageUrl) {
@@ -150,7 +149,7 @@
     <div class="project-details__footer">
       @if (project.companyInfo; as company) {
         <aside class="project-details__contact">
-          <h3>{{ 'projectDetails.contact.title' | translate }}</h3>
+          <h3>{{ "projectDetails.contact.title" | translate }}</h3>
 
           @if (companyName()) {
             <p class="project-details__contact-company">{{ companyName() }}</p>
@@ -209,13 +208,15 @@
       @if (faqItems().length > 0) {
         <div class="project-details__faq">
           <h2 class="project-details__section-title">
-            {{ 'projectDetails.faq.title' | translate }}
+            {{ "projectDetails.faq.title" | translate }}
           </h2>
 
           @for (item of faqItems(); track $index) {
             <div
               class="project-details__faq-item"
-              [class.project-details__faq-item--open]="openFaqIndex() === $index"
+              [class.project-details__faq-item--open]="
+                openFaqIndex() === $index
+              "
             >
               <button
                 class="project-details__faq-question"
@@ -224,7 +225,7 @@
               >
                 <span>{{ item.question }}</span>
                 <span class="project-details__faq-icon" aria-hidden="true">
-                  {{ openFaqIndex() === $index ? '−' : '+' }}
+                  {{ openFaqIndex() === $index ? "−" : "+" }}
                 </span>
               </button>
 

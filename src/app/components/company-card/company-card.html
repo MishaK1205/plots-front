@@ -1,0 +1,55 @@
+<article class="company-card" (click)="onView()">
+  <div class="company-card__media">
+    @if (logoUrl()) {
+      <img
+        class="company-card__logo-image"
+        [src]="logoUrl()"
+        [alt]="companyName()"
+      />
+    } @else {
+      <div class="company-card__logo-placeholder">
+        <span class="company-card__logo-initials">{{ initials() }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="company-card__content">
+    <h3 class="company-card__name">{{ companyName() }}</h3>
+
+    @if (websiteLabel()) {
+      <span class="company-card__website">
+        <img src="assets/icons/website.svg" alt="" width="13" height="13" />
+        <span>{{ websiteLabel() }}</span>
+      </span>
+    }
+
+    @if (address()) {
+      <p class="company-card__address">
+        <img
+          src="assets/icons/location-pin-primary.svg"
+          alt=""
+          width="14"
+          height="14"
+        />
+        <span>{{ address() }}</span>
+      </p>
+    }
+
+    <app-button
+      class="company-card__cta"
+      variant="outline"
+      type="button"
+      [fullWidth]="true"
+      (click)="$event.stopPropagation(); onView()"
+    >
+      <span>{{ "companies.viewProjects" | translate }}</span>
+      <img
+        class="company-card__cta-arrow"
+        src="assets/icons/arrow-forward.svg"
+        alt=""
+        width="14"
+        height="14"
+      />
+    </app-button>
+  </div>
+</article>

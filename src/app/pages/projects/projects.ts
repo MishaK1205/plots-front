@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   OnInit,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -10,6 +11,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import {
+  CompanyResponseInterface,
   LocationResponseInterface,
   ProjectResponseInterface,
   ProjectsQueryParamsInterface,
@@ -17,13 +19,15 @@ import {
 import {
   Button,
   DetailedProjectCard,
+  Dropdown,
+  DropdownOption,
   FilterDropdown,
-  LocationAutocomplete,
   Pagination,
   ProjectCard,
   ProjectsMap,
+  SearchInput,
 } from '../../components';
-import { ProjectsService } from '../../api/services';
+import { CompaniesService, ProjectsService } from '../../api/services';
 import { applyKeywordToParams } from '../../shared/utils/keyword-params.util';
 import { localizeText } from '../../shared/utils/localize-text.util';
 import { LanguageStateService } from '../../shared/services/language-state.service';
@@ -39,12 +43,13 @@ type ProjectCollection = 'favourites' | 'new';
   imports: [
     Button,
     DetailedProjectCard,
+    Dropdown,
     FilterDropdown,
     FormsModule,
-    LocationAutocomplete,
     Pagination,
     ProjectCard,
     ProjectsMap,
+    SearchInput,
     TranslatePipe,
   ],
   templateUrl: './projects.html',
@@ -53,6 +58,7 @@ type ProjectCollection = 'favourites' | 'new';
 })
 export class Projects implements OnInit {
   private readonly projectsService = inject(ProjectsService);
+  private readonly companiesService = inject(CompaniesService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly destroyRef$ = inject(DestroyRef);
@@ -68,8 +74,16 @@ export class Projects implements OnInit {
 
   mapView = signal(true);
 
+  readonly companyOptions = computed<DropdownOption[]>(() =>
+    this.companies().map((company) => ({
+      value: company.id,
+      label: localizeText(company.companyName, this.languageState.language()),
+    })),
+  );
+
   locationName = '';
   keyword = '';
+  companyId: string | null = null;
   minSquareMeters: number | null = null;
   maxSquareMeters: number | null = null;
   minSquareMeterPrice: number | null = null;
@@ -78,8 +92,11 @@ export class Projects implements OnInit {
   maxTotalPrice: number | null = null;
 
   private selectedLocation = signal<LocationResponseInterface | null>(null);
+  private companies = signal<CompanyResponseInterface[]>([]);
 
   ngOnInit(): void {
+    this.loadCompanies();
+
     this.route.queryParamMap
       .pipe(takeUntilDestroyed(this.destroyRef$))
       .subscribe((queryParams) => {
@@ -92,11 +109,12 @@ export class Projects implements OnInit {
     this.selectedLocation.set(location);
   }
 
-  rangeLabel(
-    min: number | null,
-    max: number | null,
-    suffix: string,
-  ): string {
+  onCompanyChange(companyId: string | null): void {
+    this.companyId = companyId;
+    this.applyFilters();
+  }
+
+  rangeLabel(min: number | null, max: number | null, suffix: string): string {
     if (min == null && max == null) {
       return this.translation.translate('projects.filters.any');
     }
@@ -108,6 +126,7 @@ export class Projects implements OnInit {
       this.collection() != null ||
       !!this.locationName.trim() ||
       !!this.keyword.trim() ||
+      this.companyId != null ||
       this.minSquareMeters != null ||
       this.maxSquareMeters != null ||
       this.minSquareMeterPrice != null ||
@@ -124,6 +143,8 @@ export class Projects implements OnInit {
     if (locationName) params.locationName = locationName;
 
     applyKeywordToParams(this.keyword, params);
+
+    if (this.companyId != null) params.companyId = this.companyId;
 
     if (this.minSquareMeters != null)
       params.minSquareMeters = this.minSquareMeters;
@@ -146,6 +167,7 @@ export class Projects implements OnInit {
     this.locationName = '';
     this.selectedLocation.set(null);
     this.keyword = '';
+    this.companyId = null;
     this.minSquareMeters = null;
     this.maxSquareMeters = null;
     this.minSquareMeterPrice = null;
@@ -175,13 +197,19 @@ export class Projects implements OnInit {
     const selected = this.selectedLocation();
 
     if (selected) {
-      return localizeText(
-        selected.locationName,
-        this.languageState.language(),
-      );
+      return localizeText(selected.locationName, this.languageState.language());
     }
 
     return this.locationName.trim();
+  }
+
+  private loadCompanies(): void {
+    this.companiesService
+      .getAll({ page: 1, limit: 100 })
+      .pipe(takeUntilDestroyed(this.destroyRef$))
+      .subscribe({
+        next: (response) => this.companies.set(response.data),
+      });
   }
 
   private loadProjects(queryParams: ParamMap): void {
@@ -273,6 +301,7 @@ export class Projects implements OnInit {
   private syncFiltersFromQuery(queryParams: ParamMap): void {
     this.locationName = queryParams.get('locationName') ?? '';
     this.selectedLocation.set(null);
+    this.companyId = queryParams.get('companyId');
     this.keyword =
       queryParams.get('projectName') ??
       queryParams.get('cadastralCode') ??

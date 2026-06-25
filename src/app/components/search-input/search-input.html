@@ -1,0 +1,67 @@
+<div
+  class="search-input"
+  [class.search-input--muted]="variant() === 'muted'"
+  [class.search-input--open]="autocomplete() && autocompleteOpen()"
+  [class.search-input--has-icon]="icon() !== 'none'"
+>
+  @if (icon() === "search") {
+    <span class="search-input__icon" aria-hidden="true">
+      <img src="assets/icons/search.svg" alt="" width="16" height="16" />
+    </span>
+  } @else if (icon() === "location") {
+    <span class="search-input__icon" aria-hidden="true">
+      <img src="assets/icons/location-pin.svg" alt="" width="16" height="16" />
+    </span>
+  }
+
+  <input
+    class="search-input__field"
+    type="text"
+    [name]="name()"
+    [placeholder]="placeholder()"
+    [value]="value()"
+    (input)="onInput($any($event.target).value)"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    autocomplete="off"
+    [attr.aria-label]="ariaLabel()"
+    [attr.role]="autocomplete() ? 'combobox' : null"
+    [attr.aria-autocomplete]="autocomplete() ? 'list' : null"
+    [attr.aria-expanded]="autocomplete() ? autocompleteOpen() : null"
+  />
+
+  @if (clearable() && value()) {
+    <button
+      class="search-input__clear"
+      type="button"
+      [attr.aria-label]="'common.search.clear' | translate"
+      (click)="clear()"
+    >
+      <img src="assets/icons/close.svg" alt="" width="12" height="12" />
+    </button>
+  }
+
+  @if (autocomplete() && autocompleteOpen()) {
+    <ul class="search-input__suggestions" role="listbox">
+      @for (location of suggestions(); track location.id) {
+        <li role="presentation">
+          <button
+            class="search-input__suggestion"
+            type="button"
+            role="option"
+            (mousedown)="selectLocation(location); $event.preventDefault()"
+          >
+            <img
+              class="search-input__suggestion-icon"
+              src="assets/icons/location-pin.svg"
+              alt=""
+              width="14"
+              height="14"
+            />
+            <span>{{ getSuggestionLabel(location) }}</span>
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

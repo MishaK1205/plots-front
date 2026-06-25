@@ -17,12 +17,12 @@ import { applyKeywordToParams } from '../../shared/utils/keyword-params.util';
 import { localizeText } from '../../shared/utils/localize-text.util';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { Button } from '../button/button';
-import { LocationAutocomplete } from '../location-autocomplete/location-autocomplete';
+import { SearchInput } from '../search-input/search-input';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
   selector: 'app-project-search',
-  imports: [FormsModule, Button, LocationAutocomplete, TranslatePipe],
+  imports: [FormsModule, Button, SearchInput, TranslatePipe],
   templateUrl: './project-search.html',
   styleUrl: './project-search.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,8 +33,8 @@ export class ProjectSearch implements OnInit {
   private readonly languageState = inject(LanguageStateService);
   private readonly destroyRef = inject(DestroyRef);
 
-  @ViewChild(LocationAutocomplete)
-  private locationAutocomplete?: LocationAutocomplete;
+  @ViewChild('locationInput')
+  private locationInput?: SearchInput;
 
   search = output<ProjectsQueryParamsInterface>();
 
@@ -84,7 +84,7 @@ export class ProjectSearch implements OnInit {
   }
 
   onQuickFilterLocationClick(location: LocationResponseInterface): void {
-    this.locationAutocomplete?.selectLocation(location);
+    this.locationInput?.selectLocation(location);
     this.onSearch();
   }
 

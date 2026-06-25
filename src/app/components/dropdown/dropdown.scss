@@ -1,0 +1,250 @@
+@use "../../tools/design-system" as *;
+
+:host {
+  display: block;
+}
+
+.dropdown {
+  position: relative;
+
+  &__trigger {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: px-to-rem(4);
+
+    width: 100%;
+    min-width: px-to-rem(180);
+    padding: px-to-rem(8) px-to-rem(14);
+
+    font: inherit;
+    text-align: left;
+
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: $shadow-xs;
+    cursor: pointer;
+    transition:
+      border-color $transition-base,
+      box-shadow $transition-base;
+
+    &:hover {
+      border-color: $color-primary;
+    }
+
+    &:disabled {
+      color: $text-disabled;
+      background-color: $bg-surface;
+      cursor: not-allowed;
+    }
+  }
+
+  &--open &__trigger {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 px-to-rem(3) $overlay-primary-12;
+  }
+
+  &__label {
+    color: $text-muted;
+    font-size: px-to-rem(11);
+  }
+
+  &__value-row {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: px-to-rem(8);
+    width: 100%;
+    min-height: px-to-rem(12);
+  }
+
+  &__value {
+    flex: 1 1 0;
+    min-width: 0;
+
+    color: $text-heading;
+    font-size: px-to-rem(12);
+    font-weight: $font-weight-bold;
+    line-height: 1.25;
+    text-align: left;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    &--placeholder {
+      color: $text-placeholder;
+      font-weight: $font-weight-normal;
+    }
+  }
+
+  &__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: px-to-rem(12);
+    height: px-to-rem(12);
+    margin-left: auto;
+  }
+
+  &__chevron {
+    display: block;
+    flex-shrink: 0;
+    transition: transform $transition-base;
+  }
+
+  &--open &__chevron {
+    transform: rotate(180deg);
+  }
+
+  &__clear {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: px-to-rem(12);
+    height: px-to-rem(12);
+
+    background-color: $bg-hover;
+    border-radius: $radius-full;
+    cursor: pointer;
+    transition: background-color $transition-base;
+
+    img {
+      display: block;
+    }
+
+    &:hover {
+      background-color: $bg-nav-hover;
+    }
+  }
+
+  &__panel {
+    position: absolute;
+    top: calc(100% + px-to-rem(8));
+    left: 0;
+    right: 0;
+    z-index: 30;
+
+    display: flex;
+    flex-direction: column;
+
+    padding: px-to-rem(6);
+
+    background-color: $bg-white;
+    border: 1px solid $border-color;
+    border-radius: $radius-md;
+    box-shadow: $shadow-dropdown;
+  }
+
+  &__search {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    margin-bottom: px-to-rem(6);
+  }
+
+  &__search-icon {
+    position: absolute;
+    left: px-to-rem(10);
+    display: block;
+    pointer-events: none;
+  }
+
+  &__search-field {
+    width: 100%;
+    padding: px-to-rem(8) px-to-rem(10) px-to-rem(8) px-to-rem(30);
+
+    color: $text-heading;
+    font-size: px-to-rem(12);
+
+    background-color: $bg-surface;
+    border: 1px solid $border-color-subtle;
+    border-radius: $radius-sm;
+    transition:
+      border-color $transition-base,
+      background-color $transition-base;
+
+    &::placeholder {
+      color: $text-placeholder;
+    }
+
+    &:focus {
+      outline: none;
+      background-color: $bg-white;
+      border-color: $color-primary;
+    }
+  }
+
+  &__options {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(2);
+
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    max-height: px-to-rem(240);
+    overflow-y: auto;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: px-to-rem(10);
+
+    width: 100%;
+    padding: px-to-rem(9) px-to-rem(12);
+
+    color: $text-heading;
+    font-size: px-to-rem(12);
+    text-align: left;
+
+    background: none;
+    border: 0;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition:
+      background-color $transition-base,
+      color $transition-base;
+
+    &-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    img {
+      flex-shrink: 0;
+      display: block;
+    }
+
+    &:hover {
+      background-color: $bg-hover;
+    }
+
+    &--active {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+      background-color: $bg-primary-tint;
+
+      &:hover {
+        background-color: $bg-primary-tint;
+      }
+    }
+  }
+
+  &__empty {
+    padding: px-to-rem(12);
+    color: $text-muted;
+    font-size: px-to-rem(12);
+    text-align: center;
+  }
+}

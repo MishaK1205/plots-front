@@ -91,8 +91,10 @@
     font-size: px-to-rem(14px);
     color: $text-dark;
     padding: px-to-rem(6px) px-to-rem(10px);
-    border-radius: px-to-rem(6px);
-    transition: background-color 0.5s ease;
+    border-radius: $radius-xs;
+    transition:
+      background-color $transition-base,
+      color $transition-base;
 
     &:hover {
       background-color: $bg-nav-hover;
@@ -100,6 +102,12 @@
 
     &:active {
       background-color: $bg-nav-active;
+    }
+
+    &--active {
+      color: $color-primary;
+      font-weight: $font-weight-semibold;
+      background-color: $bg-primary-tint;
     }
   }
 }

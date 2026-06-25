@@ -22,22 +22,32 @@ import {
 } from '../../shared/services/language-state.service';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
+export type SearchInputIcon = 'none' | 'search' | 'location';
+
+export type SearchInputVariant = 'default' | 'muted';
+
 @Component({
-  selector: 'app-location-autocomplete',
+  selector: 'app-search-input',
   imports: [TranslatePipe],
-  templateUrl: './location-autocomplete.html',
-  styleUrl: './location-autocomplete.scss',
+  templateUrl: './search-input.html',
+  styleUrl: './search-input.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LocationAutocomplete implements OnInit {
+export class SearchInput implements OnInit {
   private readonly locationsService = inject(LocationsService);
   private readonly languageState = inject(LanguageStateService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 
-  variant = input<'default' | 'muted'>('default');
+  autocomplete = input(false);
+  icon = input<SearchInputIcon>('none');
+  variant = input<SearchInputVariant>('default');
+  name = input('search');
+  placeholder = input('');
+  clearable = input(true);
+  ariaLabel = input<string | undefined>(undefined);
 
-  locationName = model('');
+  value = model('');
   locationSelect = output<LocationResponseInterface | null>();
 
   suggestions = signal<LocationResponseInterface[]>([]);
@@ -50,7 +60,9 @@ export class LocationAutocomplete implements OnInit {
   private locationsLoaded = false;
 
   ngOnInit(): void {
-    this.loadLocationsIfNeeded();
+    if (this.autocomplete()) {
+      this.loadLocationsIfNeeded();
+    }
   }
 
   @HostListener('document:click', ['$event'])
@@ -62,8 +74,11 @@ export class LocationAutocomplete implements OnInit {
 
   onFocus(): void {
     this.inputFocused.set(true);
+    if (!this.autocomplete()) {
+      return;
+    }
     this.loadLocationsIfNeeded();
-    this.updateSuggestions(this.locationName());
+    this.updateSuggestions(this.value());
   }
 
   onBlur(): void {
@@ -71,46 +86,37 @@ export class LocationAutocomplete implements OnInit {
   }
 
   onInput(value: string): void {
-    this.locationName.set(value);
+    this.value.set(value);
+
+    if (!this.autocomplete()) {
+      return;
+    }
+
     this.selectedLocation.set(null);
     this.locationSelect.emit(null);
     this.loadLocationsIfNeeded();
     this.updateSuggestions(value);
   }
 
+  clear(): void {
+    this.value.set('');
+    this.selectedLocation.set(null);
+
+    if (this.autocomplete()) {
+      this.locationSelect.emit(null);
+      this.closeAutocomplete();
+    }
+  }
+
   selectLocation(location: LocationResponseInterface): void {
     this.selectedLocation.set(location);
-    this.locationName.set(this.getSuggestionLabel(location));
+    this.value.set(this.getSuggestionLabel(location));
     this.locationSelect.emit(location);
     this.closeAutocomplete();
-  }
-
-  applySelection(
-    location: LocationResponseInterface | null,
-    displayName: string,
-  ): void {
-    this.selectedLocation.set(location);
-    this.locationName.set(displayName);
-    this.locationSelect.emit(location);
-    this.closeAutocomplete();
-  }
-
-  selectByGeoName(geoName: string): void {
-    this.loadLocationsIfNeeded();
-
-    const location =
-      this.allLocations().find(
-        (item) => item.locationName.geo === geoName,
-      ) ?? null;
-
-    this.applySelection(location, geoName);
   }
 
   getSuggestionLabel(location: LocationResponseInterface): string {
-    return localizeText(
-      location.locationName,
-      this.suggestionLanguage(),
-    );
+    return localizeText(location.locationName, this.suggestionLanguage());
   }
 
   private closeAutocomplete(): void {
@@ -131,7 +137,7 @@ export class LocationAutocomplete implements OnInit {
       .subscribe({
         next: (response) => {
           this.allLocations.set(response.data);
-          this.updateSuggestions(this.locationName());
+          this.updateSuggestions(this.value());
         },
         error: () => {
           this.locationsLoaded = false;
@@ -139,7 +145,7 @@ export class LocationAutocomplete implements OnInit {
       });
   }
 
-  private updateSuggestions(queryValue: string = this.locationName()): void {
+  private updateSuggestions(queryValue: string = this.value()): void {
     const query = this.normalizeSearchText(queryValue);
 
     if (!query) {
