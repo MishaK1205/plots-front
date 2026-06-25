@@ -16,4 +16,4 @@ export * from './search-input/search-input';
 export * from './dropdown/dropdown';
 export * from './filter-dropdown/filter-dropdown';
 export * from './language-switcher/language-switcher';
-export * from './loader/loader';
+export * from './skeleton/skeleton';

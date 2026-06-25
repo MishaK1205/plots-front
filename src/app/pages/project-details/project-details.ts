@@ -20,7 +20,7 @@ import {
   LandsService,
   ProjectsService,
 } from '../../api/services';
-import { LandCard, Loader, ProjectsMap } from '../../components';
+import { LandCard, ProjectsMap, Skeleton } from '../../components';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { localizeText } from '../../shared/utils/localize-text.util';
 import { resolveImageUrl } from '../../shared/utils/resolve-image-url.util';
@@ -30,7 +30,7 @@ const INITIAL_LANDS_COUNT = 3;
 
 @Component({
   selector: 'app-project-details',
-  imports: [LandCard, Loader, ProjectsMap, TranslatePipe],
+  imports: [LandCard, ProjectsMap, Skeleton, TranslatePipe],
   templateUrl: './project-details.html',
   styleUrl: './project-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

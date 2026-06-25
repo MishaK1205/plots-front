@@ -1,0 +1,259 @@
+@use "../../tools/design-system" as *;
+
+:host {
+  display: block;
+}
+
+.skeleton {
+  display: block;
+  width: 100%;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(px-to-rem(260), 1fr));
+    gap: px-to-rem(20);
+    align-content: start;
+
+    &--company {
+      grid-template-columns: repeat(auto-fill, minmax(px-to-rem(240), 1fr));
+    }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(24);
+  }
+
+  // Animated shimmer placeholder shared by every skeleton element.
+  &__block {
+    position: relative;
+    overflow: hidden;
+    background: $bg-image-placeholder;
+    border-radius: $radius-sm;
+
+    &::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      transform: translateX(-100%);
+      background: linear-gradient(
+        90deg,
+        transparent,
+        $overlay-white-85,
+        transparent
+      );
+      animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    }
+  }
+
+  &__line {
+    display: block;
+    width: 100%;
+    height: px-to-rem(14);
+
+    &--title {
+      width: 70%;
+      height: px-to-rem(20);
+    }
+
+    &--md {
+      width: 60%;
+    }
+
+    &--sm {
+      width: 45%;
+    }
+
+    &--xs {
+      width: px-to-rem(80);
+    }
+  }
+
+  &__circle {
+    display: block;
+    width: px-to-rem(56);
+    height: px-to-rem(56);
+    border-radius: $radius-full;
+  }
+
+  &__pill {
+    display: block;
+    width: px-to-rem(96);
+    height: px-to-rem(32);
+    border-radius: $radius-pill;
+  }
+
+  &__button {
+    display: block;
+    width: 100%;
+    height: px-to-rem(40);
+    margin-top: px-to-rem(8);
+    border-radius: $radius-md;
+  }
+}
+
+.skeleton-project {
+  display: flex;
+  flex-direction: column;
+  gap: px-to-rem(10);
+
+  &__image {
+    width: 100%;
+    height: px-to-rem(200);
+    border-radius: $radius-xl;
+  }
+
+  &__price {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: px-to-rem(12);
+    margin-top: px-to-rem(6);
+  }
+
+  &__meta {
+    display: flex;
+    gap: px-to-rem(16);
+  }
+}
+
+.skeleton-detailed {
+  display: grid;
+  grid-template-columns: px-to-rem(340) minmax(0, 1fr) px-to-rem(200);
+  gap: px-to-rem(20);
+
+  padding: px-to-rem(12);
+  border: 1px solid $border-color-light;
+  border-radius: $radius-xl;
+  background: $bg-white;
+
+  &__media {
+    min-height: px-to-rem(220);
+    border-radius: $radius-lg;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(14);
+    padding: px-to-rem(4) 0;
+  }
+
+  &__price {
+    display: flex;
+    gap: px-to-rem(20);
+  }
+
+  &__meta {
+    display: flex;
+    gap: px-to-rem(20);
+    margin-top: auto;
+  }
+
+  &__panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: px-to-rem(12);
+
+    padding: px-to-rem(20) px-to-rem(16);
+    border: 1px solid $border-color-light;
+    border-radius: $radius-lg;
+  }
+
+  @media (max-width: 1100px) {
+    grid-template-columns: px-to-rem(260) minmax(0, 1fr) px-to-rem(180);
+    gap: px-to-rem(16);
+  }
+
+  @media (max-width: 880px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.skeleton-company {
+  display: flex;
+  flex-direction: column;
+
+  border: 1px solid $border-color-light;
+  border-radius: $radius-xl;
+  background: $bg-white;
+  box-shadow: $shadow-xs;
+  overflow: hidden;
+
+  &__media {
+    width: 100%;
+    height: px-to-rem(140);
+    border-radius: 0;
+  }
+
+  &__content {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    gap: px-to-rem(10);
+
+    padding: px-to-rem(20) px-to-rem(20) px-to-rem(24);
+  }
+}
+
+.skeleton-details {
+  display: flex;
+  flex-direction: column;
+  gap: px-to-rem(32);
+
+  &__cover {
+    width: 100%;
+    height: px-to-rem(360);
+    border-radius: $radius-2xl;
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(16);
+  }
+
+  &__lands {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(px-to-rem(220), 1fr));
+    gap: px-to-rem(16);
+  }
+
+  &__land {
+    height: px-to-rem(180);
+    border-radius: $radius-lg;
+  }
+
+  &__about {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) px-to-rem(320);
+    gap: px-to-rem(24);
+    align-items: start;
+
+    @media (max-width: $breakpoint-lg) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__about-text {
+    display: flex;
+    flex-direction: column;
+    gap: px-to-rem(12);
+  }
+
+  &__about-image {
+    width: 100%;
+    height: px-to-rem(200);
+    border-radius: $radius-lg;
+  }
+}
+
+@keyframes skeleton-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}

@@ -9,9 +9,9 @@ import {
 import { Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 import {
-  Loader,
   ProjectCard,
   ProjectSearch,
+  Skeleton,
   SponsoredProjectCard,
 } from '../../components';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
@@ -24,10 +24,10 @@ import {
 @Component({
   selector: 'app-home',
   imports: [
-    Loader,
     ProjectCard,
     ProjectSearch,
     RouterLink,
+    Skeleton,
     SponsoredProjectCard,
     TranslatePipe,
   ],

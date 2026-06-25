@@ -117,10 +117,19 @@
   </div>
 
   @if (isLoading()) {
-    <app-loader
-      class="projects-page__loader"
-      [label]="'common.loading' | translate"
-    />
+    @if (mapView()) {
+      <app-skeleton
+        class="projects-page__loader"
+        variant="project-card"
+        [count]="6"
+      />
+    } @else {
+      <app-skeleton
+        class="projects-page__loader"
+        variant="detailed-card"
+        [count]="4"
+      />
+    }
   } @else {
     @if (mapView()) {
       <div class="projects-page__map-layout">

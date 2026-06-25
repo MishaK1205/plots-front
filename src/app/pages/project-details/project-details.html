@@ -1,5 +1,5 @@
 @if (isLoading()) {
-  <app-loader [fullscreen]="true" [label]="'common.loading' | translate" />
+  <app-skeleton class="project-details__loading" variant="project-details" />
 } @else if (project(); as project) {
   <section class="project-details">
     <!-- Cover -->

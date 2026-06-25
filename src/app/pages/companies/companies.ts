@@ -10,14 +10,14 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { CompanyResponseInterface } from '../../api/interfaces';
 import { CompaniesService } from '../../api/services';
-import { CompanyCard, Loader, Pagination } from '../../components';
+import { CompanyCard, Pagination, Skeleton } from '../../components';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 const PAGE_LIMIT = 12;
 
 @Component({
   selector: 'app-companies',
-  imports: [CompanyCard, Loader, Pagination, TranslatePipe],
+  imports: [CompanyCard, Pagination, Skeleton, TranslatePipe],
   templateUrl: './companies.html',
   styleUrl: './companies.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

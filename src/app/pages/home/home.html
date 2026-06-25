@@ -4,9 +4,10 @@
   </section>
 
   @if (isLoading()) {
-    <app-loader
+    <app-skeleton
       class="home-container__loader"
-      [label]="'common.loading' | translate"
+      variant="project-card"
+      [count]="4"
     />
   } @else {
   <section class="home-container__favourite-new-projects">

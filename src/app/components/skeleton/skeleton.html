@@ -1,0 +1,100 @@
+<div
+  class="skeleton"
+  role="status"
+  aria-live="polite"
+  [attr.aria-label]="'common.loading' | translate"
+>
+  @switch (variant()) {
+    @case ('detailed-card') {
+      <div class="skeleton__list">
+        @for (item of items(); track $index) {
+          <article class="skeleton-detailed">
+            <div class="skeleton-detailed__media skeleton__block"></div>
+
+            <div class="skeleton-detailed__info">
+              <span class="skeleton__line skeleton__line--title skeleton__block"></span>
+              <span class="skeleton__line skeleton__line--sm skeleton__block"></span>
+              <div class="skeleton-detailed__price">
+                <span class="skeleton__line skeleton__line--md skeleton__block"></span>
+                <span class="skeleton__line skeleton__line--md skeleton__block"></span>
+              </div>
+              <span class="skeleton__line skeleton__block"></span>
+              <span class="skeleton__line skeleton__line--sm skeleton__block"></span>
+              <div class="skeleton-detailed__meta">
+                <span class="skeleton__line skeleton__line--xs skeleton__block"></span>
+                <span class="skeleton__line skeleton__line--xs skeleton__block"></span>
+              </div>
+            </div>
+
+            <aside class="skeleton-detailed__panel">
+              <span class="skeleton__circle skeleton__block"></span>
+              <span class="skeleton__line skeleton__line--sm skeleton__block"></span>
+              <span class="skeleton__pill skeleton__block"></span>
+            </aside>
+          </article>
+        }
+      </div>
+    }
+
+    @case ('company-card') {
+      <div class="skeleton__grid skeleton__grid--company">
+        @for (item of items(); track $index) {
+          <article class="skeleton-company">
+            <div class="skeleton-company__media skeleton__block"></div>
+            <div class="skeleton-company__content">
+              <span class="skeleton__line skeleton__line--title skeleton__block"></span>
+              <span class="skeleton__line skeleton__line--sm skeleton__block"></span>
+              <span class="skeleton__line skeleton__line--md skeleton__block"></span>
+              <span class="skeleton__block skeleton__button"></span>
+            </div>
+          </article>
+        }
+      </div>
+    }
+
+    @case ('project-details') {
+      <div class="skeleton-details">
+        <div class="skeleton-details__cover skeleton__block"></div>
+
+        <div class="skeleton-details__section">
+          <span class="skeleton__line skeleton__line--title skeleton__block"></span>
+          <div class="skeleton-details__lands">
+            @for (land of [0, 1, 2]; track land) {
+              <div class="skeleton-details__land skeleton__block"></div>
+            }
+          </div>
+        </div>
+
+        <div class="skeleton-details__about">
+          <div class="skeleton-details__about-text">
+            <span class="skeleton__line skeleton__line--title skeleton__block"></span>
+            <span class="skeleton__line skeleton__block"></span>
+            <span class="skeleton__line skeleton__block"></span>
+            <span class="skeleton__line skeleton__line--sm skeleton__block"></span>
+          </div>
+          <div class="skeleton-details__about-image skeleton__block"></div>
+        </div>
+      </div>
+    }
+
+    @default {
+      <div class="skeleton__grid">
+        @for (item of items(); track $index) {
+          <article class="skeleton-project">
+            <div class="skeleton-project__image skeleton__block"></div>
+            <span class="skeleton__line skeleton__line--title skeleton__block"></span>
+            <span class="skeleton__line skeleton__line--sm skeleton__block"></span>
+            <div class="skeleton-project__price">
+              <span class="skeleton__line skeleton__line--md skeleton__block"></span>
+              <span class="skeleton__pill skeleton__block"></span>
+            </div>
+            <div class="skeleton-project__meta">
+              <span class="skeleton__line skeleton__line--xs skeleton__block"></span>
+              <span class="skeleton__line skeleton__line--xs skeleton__block"></span>
+            </div>
+          </article>
+        }
+      </div>
+    }
+  }
+</div>

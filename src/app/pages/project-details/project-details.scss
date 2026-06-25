@@ -5,6 +5,19 @@
   width: 100%;
 }
 
+.project-details__loading {
+  display: block;
+  padding: px-to-rem(24) px-to-rem(150) px-to-rem(48);
+
+  @media (max-width: $breakpoint-2xl) {
+    padding: px-to-rem(20) px-to-rem(70) px-to-rem(40);
+  }
+
+  @media (max-width: $breakpoint-md) {
+    padding: px-to-rem(16) px-to-rem(16) px-to-rem(32);
+  }
+}
+
 .project-details {
   display: flex;
   flex-direction: column;

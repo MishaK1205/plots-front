@@ -22,11 +22,11 @@ import {
   Dropdown,
   DropdownOption,
   FilterDropdown,
-  Loader,
   Pagination,
   ProjectCard,
   ProjectsMap,
   SearchInput,
+  Skeleton,
 } from '../../components';
 import { CompaniesService, ProjectsService } from '../../api/services';
 import { applyKeywordToParams } from '../../shared/utils/keyword-params.util';
@@ -47,11 +47,11 @@ type ProjectCollection = 'favourites' | 'new';
     Dropdown,
     FilterDropdown,
     FormsModule,
-    Loader,
     Pagination,
     ProjectCard,
     ProjectsMap,
     SearchInput,
+    Skeleton,
     TranslatePipe,
   ],
   templateUrl: './projects.html',

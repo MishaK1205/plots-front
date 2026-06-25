@@ -14,9 +14,10 @@
   </header>
 
   @if (isLoading()) {
-    <app-loader
+    <app-skeleton
       class="companies-page__loader"
-      [label]="'common.loading' | translate"
+      variant="company-card"
+      [count]="6"
     />
   } @else if (companies().length > 0) {
     <div class="companies-page__grid">
