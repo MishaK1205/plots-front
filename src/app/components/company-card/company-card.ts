@@ -10,8 +10,8 @@ import { CompanyResponseInterface } from '../../api/interfaces';
 import { Button } from '../button/button';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { localizeText } from '../../shared/utils/localize-text.util';
+import { resolveImageUrl } from '../../shared/utils/resolve-image-url.util';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
-import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-company-card',
@@ -27,11 +27,7 @@ export class CompanyCard {
 
   view = output<CompanyResponseInterface>();
 
-  readonly logoUrl = computed(() => {
-    const logoId = this.company().logoId;
-    if (!logoId) return '';
-    return `${environment.apiUrl}/images/${logoId}`;
-  });
+  readonly logoUrl = computed(() => resolveImageUrl(this.company().logoId));
 
   readonly companyName = computed(() =>
     localizeText(this.company().companyName, this.languageState.language()),

@@ -13,7 +13,12 @@
     }
   </header>
 
-  @if (companies().length > 0) {
+  @if (isLoading()) {
+    <app-loader
+      class="companies-page__loader"
+      [label]="'common.loading' | translate"
+    />
+  } @else if (companies().length > 0) {
     <div class="companies-page__grid">
       @for (company of companies(); track company.id) {
         <app-company-card [company]="company" (view)="openCompany($event)" />

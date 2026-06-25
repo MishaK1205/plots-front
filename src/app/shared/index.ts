@@ -8,4 +8,5 @@ export * from './pipes/localized.pipe';
 export * from './pipes/translate.pipe';
 export * from './utils/localize-text.util';
 export * from './utils/keyword-params.util';
+export * from './utils/resolve-image-url.util';
 export * from './enums/communications.enum';

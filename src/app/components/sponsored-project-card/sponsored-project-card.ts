@@ -8,6 +8,7 @@ import { ProjectResponseInterface } from '../../api/interfaces';
 import { Button } from '../button/button';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { resolveImageUrl } from '../../shared/utils/resolve-image-url.util';
 
 @Component({
   selector: 'app-sponsored-project-card',
@@ -21,16 +22,11 @@ export class SponsoredProjectCard {
   view = output<void>();
 
   get cardImageBackground(): string {
-    return `url(${this.resolveImageUrl(this.project().photoId)})`;
+    return `url(${resolveImageUrl(this.project().photoId)})`;
   }
 
   viewProject() {
     this.view.emit();
-  }
-
-  private resolveImageUrl(image?: string): string {
-    if (!image) return '';
-    return `http://localhost:3000/api/images/${image}`;
   }
 }
 

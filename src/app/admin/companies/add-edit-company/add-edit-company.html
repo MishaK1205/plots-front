@@ -221,11 +221,7 @@
               <app-image-upload
                 label="Company Logo"
                 [maxSizeMB]="5"
-                [existingImageUrl]="
-                  companyForm.get('logoId')?.value
-                    ? `http://localhost:3000/api/images/${companyForm.get('logoId')?.value}`
-                    : undefined
-                "
+                [existingImageUrl]="logoPreviewUrl"
                 (imageSelected)="onLogoSelected($event)"
                 (imageRemoved)="onLogoRemoved()"
               >

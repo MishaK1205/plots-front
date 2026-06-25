@@ -171,6 +171,10 @@
     color: $text-muted;
   }
 
+  &__loader {
+    min-height: px-to-rem(360);
+  }
+
   &__pagination {
     margin: px-to-rem(16) 0 0;
   }

@@ -17,6 +17,7 @@ import { CurrencyStateService } from '../../shared/services/currency-state.servi
 import { ExchangeRateService } from '../../shared/services/exchange-rate.service';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { localizeText } from '../../shared/utils/localize-text.util';
+import { resolveImageUrl } from '../../shared/utils/resolve-image-url.util';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
 
 @Component({
@@ -35,11 +36,11 @@ export class DetailedProjectCard {
   currencyChanged = output<CurrencyType>();
 
   readonly cardImageUrl = computed(() =>
-    this.resolveImageUrl(this.project().photoId),
+    resolveImageUrl(this.project().photoId),
   );
 
   readonly developerLogoUrl = computed(() =>
-    this.resolveImageUrl(this.project().companyInfo?.logoId),
+    resolveImageUrl(this.project().companyInfo?.logoId),
   );
 
   readonly developerName = computed(() =>
@@ -116,10 +117,5 @@ export class DetailedProjectCard {
 
   private localized(value?: LocalizedTextInterface): string {
     return localizeText(value, this.languageState.language());
-  }
-
-  private resolveImageUrl(image?: string): string {
-    if (!image) return '';
-    return `http://localhost:3000/api/images/${image}`;
   }
 }

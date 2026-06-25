@@ -3,6 +3,12 @@
     <app-project-search (search)="onSearch($event)"></app-project-search>
   </section>
 
+  @if (isLoading()) {
+    <app-loader
+      class="home-container__loader"
+      [label]="'common.loading' | translate"
+    />
+  } @else {
   <section class="home-container__favourite-new-projects">
     <div class="home-container__favourite-new-projects-header">
       <h2>{{ 'home.sections.featuredProjects' | translate }}</h2>
@@ -94,4 +100,5 @@
       }
     </div>
   </section>
+  }
 </div>

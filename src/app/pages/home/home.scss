@@ -20,6 +20,10 @@
     background-size: 100% auto;
   }
 
+  &__loader {
+    min-height: px-to-rem(420);
+  }
+
   &__favourite-new-projects-header {
     display: flex;
     align-items: center;

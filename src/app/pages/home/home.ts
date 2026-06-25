@@ -1,12 +1,15 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   OnInit,
   signal,
 } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
+import { finalize } from 'rxjs';
 import {
+  Loader,
   ProjectCard,
   ProjectSearch,
   SponsoredProjectCard,
@@ -21,6 +24,7 @@ import {
 @Component({
   selector: 'app-home',
   imports: [
+    Loader,
     ProjectCard,
     ProjectSearch,
     RouterLink,
@@ -39,24 +43,44 @@ export class Home implements OnInit {
   sponsoredProjects = signal<ProjectResponseInterface[]>([]);
   newProjects = signal<ProjectResponseInterface[]>([]);
 
+  private readonly favouritesLoaded = signal(false);
+  private readonly sponsoredLoaded = signal(false);
+  private readonly newLoaded = signal(false);
+
+  readonly isLoading = computed(
+    () =>
+      !this.favouritesLoaded() ||
+      !this.sponsoredLoaded() ||
+      !this.newLoaded(),
+  );
+
   ngOnInit() {
-    this.projectsService.getFavourites().subscribe({
-      next: (data) => {
-        this.favouriteProjects.set(data);
-      },
-    });
+    this.projectsService
+      .getFavourites()
+      .pipe(finalize(() => this.favouritesLoaded.set(true)))
+      .subscribe({
+        next: (data) => {
+          this.favouriteProjects.set(data);
+        },
+      });
 
-    this.projectsService.getSponsored().subscribe({
-      next: (data) => {
-        this.sponsoredProjects.set(data);
-      },
-    });
+    this.projectsService
+      .getSponsored()
+      .pipe(finalize(() => this.sponsoredLoaded.set(true)))
+      .subscribe({
+        next: (data) => {
+          this.sponsoredProjects.set(data);
+        },
+      });
 
-    this.projectsService.getNew().subscribe({
-      next: (data) => {
-        this.newProjects.set(data);
-      },
-    });
+    this.projectsService
+      .getNew()
+      .pipe(finalize(() => this.newLoaded.set(true)))
+      .subscribe({
+        next: (data) => {
+          this.newProjects.set(data);
+        },
+      });
   }
 
   onSearch(params: ProjectsQueryParamsInterface): void {

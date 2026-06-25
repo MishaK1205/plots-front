@@ -20,17 +20,17 @@ import {
   LandsService,
   ProjectsService,
 } from '../../api/services';
-import { LandCard, ProjectsMap } from '../../components';
+import { LandCard, Loader, ProjectsMap } from '../../components';
 import { LanguageStateService } from '../../shared/services/language-state.service';
 import { localizeText } from '../../shared/utils/localize-text.util';
+import { resolveImageUrl } from '../../shared/utils/resolve-image-url.util';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
-import { environment } from '../../../environments/environment';
 
 const INITIAL_LANDS_COUNT = 3;
 
 @Component({
   selector: 'app-project-details',
-  imports: [LandCard, ProjectsMap, TranslatePipe],
+  imports: [LandCard, Loader, ProjectsMap, TranslatePipe],
   templateUrl: './project-details.html',
   styleUrl: './project-details.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,6 +46,7 @@ export class ProjectDetails implements OnInit {
   project = signal<ProjectResponseInterface | null>(null);
   lands = signal<LandResponseInterface[]>([]);
   amenity = signal<AmenityResponseInterface | null>(null);
+  isLoading = signal(false);
 
   showAllLands = signal(false);
   openFaqIndex = signal<number | null>(null);
@@ -53,11 +54,11 @@ export class ProjectDetails implements OnInit {
   readonly coverImageUrl = computed(() => {
     const project = this.project();
     if (!project) return '';
-    return this.resolveImageUrl(project.coverPhotoId ?? project.photoId);
+    return resolveImageUrl(project.coverPhotoId ?? project.photoId);
   });
 
   readonly companyLogoUrl = computed(() =>
-    this.resolveImageUrl(this.project()?.companyInfo?.logoId),
+    resolveImageUrl(this.project()?.companyInfo?.logoId),
   );
 
   readonly companyName = computed(() =>
@@ -97,9 +98,7 @@ export class ProjectDetails implements OnInit {
   });
 
   readonly galleryUrls = computed(() =>
-    (this.project()?.gallery ?? []).map((imageId) =>
-      this.resolveImageUrl(imageId),
-    ),
+    (this.project()?.gallery ?? []).map((imageId) => resolveImageUrl(imageId)),
   );
 
   readonly mapProjects = computed(() => {
@@ -108,7 +107,7 @@ export class ProjectDetails implements OnInit {
   });
 
   readonly descriptionImageUrl = computed(() =>
-    this.resolveImageUrl(this.project()?.photoId),
+    resolveImageUrl(this.project()?.photoId),
   );
 
   ngOnInit(): void {
@@ -119,6 +118,7 @@ export class ProjectDetails implements OnInit {
         if (!id) return;
         this.showAllLands.set(false);
         this.openFaqIndex.set(null);
+        this.isLoading.set(true);
         this.loadProject(id);
         this.loadLands(id);
       });
@@ -143,8 +143,12 @@ export class ProjectDetails implements OnInit {
         next: (project) => {
           this.project.set(project);
           this.loadAmenity(project.amenityId);
+          this.isLoading.set(false);
         },
-        error: (error) => console.error('Error loading project:', error),
+        error: (error) => {
+          console.error('Error loading project:', error);
+          this.isLoading.set(false);
+        },
       });
   }
 
@@ -177,10 +181,5 @@ export class ProjectDetails implements OnInit {
     value?: { geo: string; eng: string; rus: string } | null,
   ): string {
     return localizeText(value, this.languageState.language());
-  }
-
-  private resolveImageUrl(image?: string): string {
-    if (!image) return '';
-    return `${environment.apiUrl}/images/${image}`;
   }
 }

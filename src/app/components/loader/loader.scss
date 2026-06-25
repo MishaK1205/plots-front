@@ -1,0 +1,102 @@
+@use "../../tools/design-system" as *;
+
+:host {
+  display: block;
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: px-to-rem(18);
+  padding: px-to-rem(48) px-to-rem(24);
+
+  &--overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 20;
+    background: $overlay-white-85;
+    backdrop-filter: blur(px-to-rem(3));
+  }
+
+  &--fullscreen {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: $overlay-white-90;
+    backdrop-filter: blur(px-to-rem(3));
+  }
+
+  &__spinner {
+    position: relative;
+    display: block;
+    width: px-to-rem(56);
+    height: px-to-rem(56);
+  }
+
+  &__ring {
+    position: absolute;
+    border-radius: $radius-full;
+    -webkit-mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - #{px-to-rem(5)}),
+      #000 calc(100% - #{px-to-rem(5)})
+    );
+    mask: radial-gradient(
+      farthest-side,
+      transparent calc(100% - #{px-to-rem(5)}),
+      #000 calc(100% - #{px-to-rem(5)})
+    );
+
+    &--outer {
+      inset: 0;
+      background: conic-gradient(from 90deg, transparent 0%, $color-primary 100%);
+      animation: loader-spin 0.9s linear infinite;
+    }
+
+    &--inner {
+      inset: px-to-rem(11);
+      background: conic-gradient(from 270deg, transparent 0%, $color-accent 100%);
+      animation: loader-spin 0.7s linear infinite reverse;
+    }
+  }
+
+  &__core {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: px-to-rem(8);
+    height: px-to-rem(8);
+    transform: translate(-50%, -50%);
+    background: $color-primary;
+    border-radius: $radius-full;
+    animation: loader-pulse 0.9s ease-in-out infinite;
+  }
+
+  &__label {
+    font-size: px-to-rem(14);
+    font-weight: $font-weight-medium;
+    color: $text-muted;
+    letter-spacing: px-to-rem(0.2);
+  }
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loader-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}

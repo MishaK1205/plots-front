@@ -38,6 +38,7 @@ export const commonTranslations = {
     previous: { geo: 'უკან', eng: 'Back', rus: 'Назад' },
     next: { geo: 'შემდეგი', eng: 'Next', rus: 'Далее' },
   },
+  loading: { geo: 'იტვირთება...', eng: 'Loading...', rus: 'Загрузка...' },
   card: {
     developer: { geo: 'დეველოპერი', eng: 'Developer', rus: 'Девелопер' },
     contact: { geo: 'დაკავშირება', eng: 'Contact', rus: 'Связаться' },

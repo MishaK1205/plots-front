@@ -22,6 +22,7 @@ import {
 } from '../../../api/interfaces';
 import { ImageUpload } from '../../../components/image-upload/image-upload';
 import { ImagesService, CompaniesService } from '../../../api/services';
+import { resolveImageUrl } from '../../../shared/utils/resolve-image-url.util';
 
 @Component({
   selector: 'app-add-edit-company',
@@ -54,6 +55,10 @@ export class AddEditCompany implements OnInit {
   isLoading = signal(false);
   companyId = signal<string | null>(null);
   logoImageId = signal<string | null>(null);
+
+  get logoPreviewUrl(): string | undefined {
+    return resolveImageUrl(this.companyForm.get('logoId')?.value) || undefined;
+  }
 
   ngOnInit(): void {
     this.initializeForm();

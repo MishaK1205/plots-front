@@ -1,4 +1,6 @@
-@if (project(); as project) {
+@if (isLoading()) {
+  <app-loader [fullscreen]="true" [label]="'common.loading' | translate" />
+} @else if (project(); as project) {
   <section class="project-details">
     <!-- Cover -->
     <div class="project-details__cover">

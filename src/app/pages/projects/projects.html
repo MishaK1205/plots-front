@@ -116,39 +116,46 @@
     </label>
   </div>
 
-  @if (mapView()) {
-    <div class="projects-page__map-layout">
-      <div class="projects-page__cards-grid">
+  @if (isLoading()) {
+    <app-loader
+      class="projects-page__loader"
+      [label]="'common.loading' | translate"
+    />
+  } @else {
+    @if (mapView()) {
+      <div class="projects-page__map-layout">
+        <div class="projects-page__cards-grid">
+          @for (project of projects(); track project.id) {
+            <app-project-card
+              [project]="project"
+              (click)="openProject(project)"
+            ></app-project-card>
+          }
+        </div>
+
+        <div class="projects-page__map">
+          <app-projects-map
+            [projects]="projects()"
+            (projectClick)="openProject($event)"
+          ></app-projects-map>
+        </div>
+      </div>
+    } @else {
+      <div class="projects-page__list">
         @for (project of projects(); track project.id) {
-          <app-project-card
+          <app-detailed-project-card
             [project]="project"
             (click)="openProject(project)"
-          ></app-project-card>
+          ></app-detailed-project-card>
         }
       </div>
+    }
 
-      <div class="projects-page__map">
-        <app-projects-map
-          [projects]="projects()"
-          (projectClick)="openProject($event)"
-        ></app-projects-map>
-      </div>
-    </div>
-  } @else {
-    <div class="projects-page__list">
-      @for (project of projects(); track project.id) {
-        <app-detailed-project-card
-          [project]="project"
-          (click)="openProject(project)"
-        ></app-detailed-project-card>
-      }
-    </div>
-  }
-
-  @if (!isLoading() && projects().length === 0) {
-    <p class="projects-page__empty">
-      {{ "projects.results.empty" | translate }}
-    </p>
+    @if (projects().length === 0) {
+      <p class="projects-page__empty">
+        {{ "projects.results.empty" | translate }}
+      </p>
+    }
   }
 
   @if (totalPages() > 1) {

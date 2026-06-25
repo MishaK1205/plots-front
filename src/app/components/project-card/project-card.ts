@@ -13,6 +13,7 @@ import { CurrencyStateService } from '../../shared/services/currency-state.servi
 import { ExchangeRateService } from '../../shared/services/exchange-rate.service';
 import { LocalizedPipe } from '../../shared/pipes/localized.pipe';
 import { TranslatePipe } from '../../shared/pipes/translate.pipe';
+import { resolveImageUrl } from '../../shared/utils/resolve-image-url.util';
 
 @Component({
   selector: 'app-project-card',
@@ -47,7 +48,7 @@ export class ProjectCard {
   );
 
   get cardImageUrl(): string {
-    return this.resolveImageUrl(this.project().photoId);
+    return resolveImageUrl(this.project().photoId);
   }
 
   onCurrencyChange(currency: CurrencyType) {
@@ -59,9 +60,5 @@ export class ProjectCard {
     const location = this.project().location;
     const googleMapsUrl = `https://www.google.com/maps?q=${location.latitude},${location.longitude}`;
     window.open(googleMapsUrl, '_blank');
-  }
-
-  private resolveImageUrl(image?: string): string {
-    return `http://localhost:3000/api/images/${image}`;
   }
 }
