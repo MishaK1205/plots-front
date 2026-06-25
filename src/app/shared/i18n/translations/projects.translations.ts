@@ -4,7 +4,7 @@ export const projectsTranslations = {
   filters: {
     area: { geo: 'ფართობი', eng: 'Area', rus: 'Площадь' },
     squareMeterPrice: {
-      geo: 'კვმ ფასი',
+      geo: 'მ² ფასი',
       eng: 'Price per m²',
       rus: 'Цена за м²',
     },
